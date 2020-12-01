@@ -9,7 +9,7 @@
     "start": "node ./src/app/index.js",
     "lint": "eslint ./src/**/*.js --max-warnings 0",
     "lint-fix": "eslint ./src/**/*.js --fix",
-    "prettier": "prettier ./src/**/*.js --write",
+    "prettier": "prettier . --write",
     "postinstall": "husky install"
   },
   "repository": {
@@ -67,6 +67,7 @@
   "lint-staged": {
     "./src/**/*.js": [
       "npm run lint",
+      "npm run prettier",
       "git add"
     ]
   }

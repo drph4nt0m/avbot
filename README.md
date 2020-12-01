@@ -29,33 +29,32 @@
 
 ## Commands
 
-|   command   |   example   |   description   |
-|-------------|-------------|-----------------|
-| metar  | !metar VABB | Gives you the live METAR for the chosen airport |
-| taf    | !taf VABB   | Gives you the live TAF for the chosen airport |
-| brief  | !brief VABB | Gives you the live METAR, zulu time and the latest chart for the chosen airport |
-| atis  | !atis VABB | Gives you the live ATIS for the chosen airport |
-| atis-voice  | !atis VABB | Gives you the live ATIS as voice for the chosen airport |
-| icao  | !icao VABB | Gives you the station information for the chosen airport |
-| chart [wip]  | !chart VABB | Gives you the the latest chart for the chosen airport |
-| ivao  | !ivao AIC001 | Gives you the information for the chosen call sign on the IVAO network |
-| ivao-online  | !ivao-online VABB | Gives you the information for all ATCs which match the given partial callsign on the IVAO network |
-| vatsim  | !vatsim VABB | Gives you the information for the chosen call sign on the VATSIM network |
-| vatsim-online  | !vatsim-online VABB | Gives you the information for all ATCs which match the given partial callsign on the VATSIM network |
-| zulu  | !zulu | Gives you the current zulu time |
-| zulu  | !zulu VABB 1900 | Gives you the specific zulu time for the given local Time and ICAO |
-| local  | !local VABB 1900 | Gives you the specific local time for the given zulu Time and ICAO |
-| invite  | !invite | Gives you the AvBot invite link to add it to your Discord server |
-| prefix  | !prefix | Change or view AvBot's prefix |
-| help  | !help | Displays a list of available commands |
-| help  | !help metar | Displays a detailed information for a specified command |
-| ping  | !ping | Checks the AvBot's ping to the Discord server |
-| donate  | !donate | Support AvBot by donating |
+| command       | example             | description                                                                                         |
+| ------------- | ------------------- | --------------------------------------------------------------------------------------------------- |
+| metar         | !metar VABB         | Gives you the live METAR for the chosen airport                                                     |
+| taf           | !taf VABB           | Gives you the live TAF for the chosen airport                                                       |
+| brief         | !brief VABB         | Gives you the live METAR, zulu time and the latest chart for the chosen airport                     |
+| atis          | !atis VABB          | Gives you the live ATIS for the chosen airport                                                      |
+| atis-voice    | !atis VABB          | Gives you the live ATIS as voice for the chosen airport                                             |
+| icao          | !icao VABB          | Gives you the station information for the chosen airport                                            |
+| chart [wip]   | !chart VABB         | Gives you the the latest chart for the chosen airport                                               |
+| ivao          | !ivao AIC001        | Gives you the information for the chosen call sign on the IVAO network                              |
+| ivao-online   | !ivao-online VABB   | Gives you the information for all ATCs which match the given partial callsign on the IVAO network   |
+| vatsim        | !vatsim VABB        | Gives you the information for the chosen call sign on the VATSIM network                            |
+| vatsim-online | !vatsim-online VABB | Gives you the information for all ATCs which match the given partial callsign on the VATSIM network |
+| zulu          | !zulu               | Gives you the current zulu time                                                                     |
+| zulu          | !zulu VABB 1900     | Gives you the specific zulu time for the given local Time and ICAO                                  |
+| local         | !local VABB 1900    | Gives you the specific local time for the given zulu Time and ICAO                                  |
+| invite        | !invite             | Gives you the AvBot invite link to add it to your Discord server                                    |
+| prefix        | !prefix             | Change or view AvBot's prefix                                                                       |
+| help          | !help               | Displays a list of available commands                                                               |
+| help          | !help metar         | Displays a detailed information for a specified command                                             |
+| ping          | !ping               | Checks the AvBot's ping to the Discord server                                                       |
+| donate        | !donate             | Support AvBot by donating                                                                           |
 
 ## License
 
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fdrph4nt0m%2Favbot-v3?ref=badge_large"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdrph4nt0m%2Favbot-v3.svg?type=large" alt="FOSSA Status"/></a>
-
 
 ## A note to aspiring developers/aviation enthusiasts who want to self host AvBot
 
@@ -65,8 +64,8 @@ Plus, as AvBot grows we will continue to rely on MANY, MANY more external servic
 
 ## Contributing
 
-Pull requests are welcome. 
-See the [CONTRIBUTING](./CONTRIBUTING.md) file for more instructions. 
+Pull requests are welcome.
+See the [CONTRIBUTING](./CONTRIBUTING.md) file for more instructions.
 For major changes, please open an issue first to
 discuss what you would like to change.
 
@@ -89,6 +88,7 @@ Thanks goes to these wonderful people
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the
