@@ -8,14 +8,17 @@
 <p align="center">
   <a href="#"><img src="https://img.shields.io/github/package-json/v/drph4nt0m/avbot-v3/main?style=for-the-badge" alt="Version"></a>
   <a href="https://github.com/drph4nt0m/avbot-v3/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--only-orange?style=for-the-badge" alt="License"></a>
-  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3ACodeQL"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/CodeQL?style=for-the-badge" alt="CodeQL"></a>
-  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3A%22Codacy+Security+Scan%22"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/Codacy%20Security%20Scan?style=for-the-badge" alt="Codacy Security Scan"></a>
+  <a href="https://depfu.com/repos/github/drph4nt0m/avbot-v3"><img src="https://img.shields.io/depfu/drph4nt0m/avbot-v3?style=for-the-badge" alt="Dependencies"></a>
 </p>
 
 <p align="center">
-  <a href="https://depfu.com/repos/github/drph4nt0m/avbot-v3"><img src="https://img.shields.io/depfu/drph4nt0m/avbot-v3?style=for-the-badge" alt="Dependencies"></a>
   <a href="https://lgtm.com/projects/g/drph4nt0m/avbot-v3"><img src="https://img.shields.io/lgtm/grade/javascript/github/drph4nt0m/avbot-v3?style=for-the-badge" alt="LGTM grade"></a>
   <a href="https://app.codacy.com/gh/drph4nt0m/avbot-v3/dashboard"><img src="https://img.shields.io/codacy/grade/90894e1b201e460b853eb1ba915b90d4?style=for-the-badge" alt="Codacy grade"></a> 
+</p>
+
+<p align="center">
+  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3ACodeQL"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/CodeQL?style=for-the-badge" alt="CodeQL"></a>
+  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3A%22Codacy+Security+Scan%22"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/Codacy%20Security%20Scan?style=for-the-badge" alt="Codacy Security Scan"></a>
 </p>
 
 <p align="center">
