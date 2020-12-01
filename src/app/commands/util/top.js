@@ -25,6 +25,7 @@ module.exports = class TopCommand extends (
   }
 
   async run(msg, { count }) {
+    const x;
     const topServers = await this.client.shard
       .broadcastEval(
         `this.guilds.cache
