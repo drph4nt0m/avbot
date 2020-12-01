@@ -14,8 +14,8 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/depfu/drph4nt0m/avbot-v3?style=for-the-badge" alt="Dependencies"></a>
-  <a href="#"><img src="https://img.shields.io/lgtm/grade/javascript/github/drph4nt0m/avbot-v3?style=for-the-badge" alt="LGTM Grade"></a>
-  
+  <a href="#"><img src="https://img.shields.io/lgtm/grade/javascript/github/drph4nt0m/avbot-v3?style=for-the-badge" alt="LGTM grade"></a>
+  <a href="#"><img src="https://img.shields.io/codacy/grade/90894e1b201e460b853eb1ba915b90d4?style=for-the-badge" alt="Codacy grade"></a> 
 </p>
 
 ## Commands
