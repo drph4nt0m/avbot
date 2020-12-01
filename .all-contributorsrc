@@ -1,0 +1,53 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "drph4nt0m",
+      "name": "Rahul Singh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22918499?v=4",
+      "profile": "http://dr.ph4nt0m.me",
+      "contributions": [
+        "infra",
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "radiantly",
+      "name": "Joshua T.",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/44368997?v=4",
+      "profile": "https://xkcd.com/1597/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Fedelaus",
+      "name": "Nathan Dawson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/43784056?v=4",
+      "profile": "https://github.com/Fedelaus",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ransbachm",
+      "name": "ransbachm",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/25692733?v=4",
+      "profile": "https://github.com/ransbachm",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "avbot-v3",
+  "projectOwner": "drph4nt0m",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
