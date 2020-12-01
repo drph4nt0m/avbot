@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "nodemon ./src/app/index.js",
     "start": "node ./src/app/index.js",
-    "lint": "eslint ./src/**/*.js",
+    "lint": "eslint './src/**/*.js' --max-warnings 0",
     "lint-fix": "eslint ./src/**/*.js --fix",
+    "prettier": "prettier ./src/**/*.js --write",
     "postinstall": "husky install"
   },
   "repository": {
@@ -57,15 +58,18 @@
   },
   "husky": {
     "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "lint-staged": {
-    "./**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write",
-      "npm lint",
+    "*.{js,tsx}": [
+      "npm run lint",
+      "git add"
+    ],
+    "*.{js}": [
+      "npm run prettier",
       "git add"
     ]
-  },
+  }
 }
