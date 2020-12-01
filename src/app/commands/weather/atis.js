@@ -17,9 +17,9 @@ module.exports = class AtisCommand extends Command {
           key: 'icao',
           prompt: 'What ICAO would you like the bot to give ATIS for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -38,9 +38,7 @@ module.exports = class AtisCommand extends Command {
         const { speech } = await Avwx.getMetar(icao);
         atisEmbed.setDescription(speech);
       } catch (err) {
-        atisEmbed
-          .setColor('#ff0000')
-          .setDescription(`${msg.author}, ${err.message}`);
+        atisEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }
 

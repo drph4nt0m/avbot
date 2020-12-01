@@ -8,8 +8,7 @@ module.exports = class HelpCommand extends Command {
       group: 'util',
       memberName: 'help',
       aliases: ['commands', 'commands'],
-      description:
-        'Displays a list of available commands, or detailed information for a specified command',
+      description: 'Displays a list of available commands, or detailed information for a specified command',
       examples: ['help', 'help <command>'],
       hidden: true,
       args: [
@@ -17,18 +16,14 @@ module.exports = class HelpCommand extends Command {
           key: 'command',
           prompt: 'Which command would you like to view the help for?',
           type: 'string',
-          default: '',
-        },
-      ],
+          default: ''
+        }
+      ]
     });
   }
 
   async run(msg, args) {
-    const commands = this.client.registry.findCommands(
-      args.command,
-      false,
-      msg
-    );
+    const commands = this.client.registry.findCommands(args.command, false, msg);
     const showAll = args.command && args.command.toLowerCase() === 'all';
 
     if (args.command && !showAll) {
@@ -37,25 +32,25 @@ module.exports = class HelpCommand extends Command {
 
         fields.push({
           name: 'Command',
-          value: commands[0].name,
+          value: commands[0].name
         });
 
         if (commands[0].aliases && commands[0].aliases.length > 0) {
           fields.push({
             name: 'Aliases',
-            value: commands[0].aliases.join(', '),
+            value: commands[0].aliases.join(', ')
           });
         }
 
         fields.push({
           name: 'Description',
-          value: commands[0].description,
+          value: commands[0].description
         });
 
         if (commands[0].examples && commands[0].examples.length > 0) {
           fields.push({
             name: 'Examples',
-            value: commands[0].examples.join('\n'),
+            value: commands[0].examples.join('\n')
           });
         }
 
@@ -88,7 +83,7 @@ module.exports = class HelpCommand extends Command {
       if (!command.ownerOnly && !command.hidden) {
         fields.push({
           name: command.name,
-          value: command.description,
+          value: command.description
         });
       }
     });

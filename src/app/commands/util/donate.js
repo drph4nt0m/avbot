@@ -9,7 +9,7 @@ module.exports = class DonateCommand extends Command {
       memberName: 'donate',
       aliases: ['support'],
       description: 'Support AvBot by donating.',
-      examples: ['donate', 'support'],
+      examples: ['donate', 'support']
     });
   }
 
@@ -17,9 +17,7 @@ module.exports = class DonateCommand extends Command {
     const donateEmbed = new MessageEmbed()
       .setTitle('Donate')
       .setColor('#1a8fe3')
-      .setDescription(
-        '[Click here to support avbot](https://link.avbot.in/donate)'
-      )
+      .setDescription('[Click here to support avbot](https://link.avbot.in/donate)')
       .setFooter(this.client.user.username)
       .setTimestamp();
 

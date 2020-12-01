@@ -9,18 +9,16 @@ module.exports = class VatsimOnlineCommand extends Command {
       group: 'vatsim',
       memberName: 'vatsim-online',
       aliases: ['vatsimonline'],
-      description:
-        'Gives you the information for all ATCs which match the given partial callsign on the VATSIM network',
+      description: 'Gives you the information for all ATCs which match the given partial callsign on the VATSIM network',
       examples: ['vatsim-online <partial_icao_code>'],
       args: [
         {
           key: 'partialCallSign',
-          prompt:
-            'What partial call sign would you like the bot to give information for?',
+          prompt: 'What partial call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -37,15 +35,10 @@ module.exports = class VatsimOnlineCommand extends Command {
       vatsimEmbed.setTitle(`VATSIM : ${partialCallSign}`);
 
       atcList.forEach((atc) => {
-        vatsimEmbed.addField(
-          `${atc.callSign}`,
-          `VID: ${atc.vid}, Frequency: ${atc.frequency}`
-        );
+        vatsimEmbed.addField(`${atc.callSign}`, `VID: ${atc.vid}, Frequency: ${atc.frequency}`);
       });
     } catch (error) {
-      vatsimEmbed
-        .setColor('#ff0000')
-        .setDescription(`${msg.author}, ${error.message}`);
+      vatsimEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 
     return msg.embed(vatsimEmbed);

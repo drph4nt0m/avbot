@@ -8,9 +8,8 @@ module.exports = class InviteCommand extends Command {
       group: 'util',
       memberName: 'invite',
       aliases: ['link'],
-      description:
-        'Gives you the AvBot invite link to add it to your Discord server',
-      examples: ['invite', 'link'],
+      description: 'Gives you the AvBot invite link to add it to your Discord server',
+      examples: ['invite', 'link']
     });
   }
 
@@ -18,9 +17,7 @@ module.exports = class InviteCommand extends Command {
     const donateEmbed = new MessageEmbed()
       .setTitle('AvBot')
       .setColor('#1a8fe3')
-      .setDescription(
-        '[Click here to add AvBot to you Discord server](https://link.avbot.in/addme)'
-      )
+      .setDescription('[Click here to add AvBot to you Discord server](https://link.avbot.in/addme)')
       .setFooter(this.client.user.username)
       .setTimestamp();
 

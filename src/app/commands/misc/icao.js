@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const accents = require('remove-accents');
 const { Command } = require('discord.js-commando');
 const Avwx = require('../../utils/Avwx');
+const logger = require('../../utils/Logger');
 
 module.exports = class IcaoCommand extends Command {
   constructor(client) {
@@ -17,9 +18,9 @@ module.exports = class IcaoCommand extends Command {
           key: 'icao',
           prompt: 'What ICAO would you like the bot to give Station for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -37,47 +38,47 @@ module.exports = class IcaoCommand extends Command {
         {
           name: 'ICAO',
           value: station.icao || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'IATA',
           value: station.iata || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Name',
           value: accents.remove(station.name) || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'City',
           value: accents.remove(station.city) || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Country',
           value: accents.remove(station.country) || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Type',
           value: station.type.split('_')[0] || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Latitude',
           value: station.latitude || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Longitude',
           value: station.longitude || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Elevation',
           value: `${station.elevation_ft} ft` || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'Runways',
@@ -94,7 +95,7 @@ module.exports = class IcaoCommand extends Command {
               });
               return runways;
             })() || 'Unknown',
-          inline: true,
+          inline: true
         },
         {
           name: 'More Info',
@@ -110,14 +111,12 @@ module.exports = class IcaoCommand extends Command {
                 links += `\nWikipedia: ${station.wiki}`;
               }
               return links;
-            })() || 'Unknown',
+            })() || 'Unknown'
         }
       );
     } catch (error) {
-      console.log(error);
-      stationEmbed
-        .setColor('#ff0000')
-        .setDescription(`${msg.author}, ${error.message}`);
+      logger.error(`[${this.client.shard.ids}] ${error}`);
+      stationEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 
     return msg.embed(stationEmbed);

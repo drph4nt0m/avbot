@@ -3,7 +3,7 @@ const axios = require('axios').default;
 module.exports = class Chart {
   static api = axios.create({
     baseURL: 'https://charts.avbot.in/',
-    timeout: 10000,
+    timeout: 10000
   });
 
   static getChartURL(icao) {
@@ -16,7 +16,7 @@ module.exports = class Chart {
         await this.api.get(`${icao}.pdf`).catch((err) => {
           reject(err);
         });
-        return resolve(this.getChartURL(icao));
+        resolve(this.getChartURL(icao));
       } catch (err) {
         reject(err);
       }

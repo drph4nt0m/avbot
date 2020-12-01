@@ -17,9 +17,9 @@ module.exports = class TafCommand extends Command {
           key: 'icao',
           prompt: 'What ICAO would you like the bot to give TAF for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -36,11 +36,11 @@ module.exports = class TafCommand extends Command {
       tafEmbed.addFields(
         {
           name: 'Raw Report',
-          value: raw,
+          value: raw
         },
         {
           name: 'Readable Report',
-          value: readable,
+          value: readable
         }
       );
     } catch (error) {
@@ -49,12 +49,10 @@ module.exports = class TafCommand extends Command {
 
         tafEmbed.addFields({
           name: 'Raw Report',
-          value: raw,
+          value: raw
         });
       } catch (err) {
-        tafEmbed
-          .setColor('#ff0000')
-          .setDescription(`${msg.author}, ${err.message}`);
+        tafEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }
 

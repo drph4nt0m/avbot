@@ -4,6 +4,7 @@ const accents = require('remove-accents');
 const axios = require('axios').default;
 
 const services = require('../../config/services');
+const logger = require('./Logger');
 
 dayjs.extend(utc);
 
@@ -12,8 +13,8 @@ module.exports = class Avwx {
     baseURL: 'https://avwx.rest/api/',
     timeout: 10000,
     headers: {
-      Authorization: services.avwx.token,
-    },
+      Authorization: services.avwx.token
+    }
   });
 
   static async getStation(icao) {
@@ -21,22 +22,16 @@ module.exports = class Avwx {
       try {
         const response = await this.api.get(`/station/${icao}`);
 
-        if (response.status !== 200)
-          return reject(
-            new Error(`no station available at the moment near ${icao}`)
-          );
+        if (response.status !== 200) {
+          reject(new Error(`no station available at the moment near ${icao}`));
+        }
         const station = response.data;
 
-        return resolve({
-          station,
+        resolve({
+          station
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no station available at the moment near ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
   }
@@ -44,14 +39,11 @@ module.exports = class Avwx {
   static async getTaf(icao) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await this.api.get(
-          `/taf/${icao}?options=info,translate,speech`
-        );
+        const response = await this.api.get(`/taf/${icao}?options=info,translate,speech`);
 
-        if (response.status !== 200)
-          return reject(
-            new Error(`no station available at the moment near ${icao}`)
-          );
+        if (response.status !== 200) {
+          reject(new Error(`no station available at the moment near ${icao}`));
+        }
         const taf = response.data;
 
         let readable = '';
@@ -72,7 +64,7 @@ module.exports = class Avwx {
                 try {
                   station += `, ${accents.remove(taf.info.city)}`;
                 } catch (err) {
-                  console.log(err);
+                  logger.error(`[x] ${err}`);
                 }
               }
             } catch (error) {
@@ -80,7 +72,7 @@ module.exports = class Avwx {
                 try {
                   station += `${accents.remove(taf.info.city)}`;
                 } catch (err) {
-                  console.log(err);
+                  logger.error(`[x] ${err}`);
                 }
               }
             }
@@ -93,24 +85,17 @@ module.exports = class Avwx {
 
         readable += '\n';
 
-        readable += `**Observed at : ** ${dayjs
-          .utc(taf.time.dt)
-          .format('YYYY-MM-DD HH:mm:ss [Z]')} \n`;
+        readable += `**Observed at : ** ${dayjs.utc(taf.time.dt).format('YYYY-MM-DD HH:mm:ss [Z]')} \n`;
 
         readable += `**Report : ** ${taf.speech}`;
 
-        return resolve({
+        resolve({
           raw: taf.raw,
           readable,
-          speech: taf.speech,
+          speech: taf.speech
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no station available at the moment near ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
   }
@@ -118,14 +103,11 @@ module.exports = class Avwx {
   static async getMetar(icao) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await this.api.get(
-          `/metar/${icao}?options=info,translate,speech`
-        );
+        const response = await this.api.get(`/metar/${icao}?options=info,translate,speech`);
 
-        if (response.status !== 200)
-          return reject(
-            new Error(`no station available at the moment near ${icao}`)
-          );
+        if (response.status !== 200) {
+          reject(new Error(`no station available at the moment near ${icao}`));
+        }
         const metar = response.data;
         let readable = '';
         readable += '**Station : ** ';
@@ -145,7 +127,7 @@ module.exports = class Avwx {
                 try {
                   station += `, ${accents.remove(metar.info.city)}`;
                 } catch (err) {
-                  console.log(err);
+                  logger.error(`[x] ${err}`);
                 }
               }
             } catch (error) {
@@ -153,7 +135,7 @@ module.exports = class Avwx {
                 try {
                   station += `${accents.remove(metar.info.city)}`;
                 } catch (err) {
-                  console.log(err);
+                  logger.error(`[x] ${err}`);
                 }
               }
             }
@@ -166,9 +148,7 @@ module.exports = class Avwx {
 
         readable += '\n';
 
-        readable += `**Observed at : ** ${dayjs
-          .utc(metar.time.dt)
-          .format('YYYY-MM-DD HH:mm:ss [Z]')} \n`;
+        readable += `**Observed at : ** ${dayjs.utc(metar.time.dt).format('YYYY-MM-DD HH:mm:ss [Z]')} \n`;
 
         if (metar.translate.wind) {
           readable += `**Wind : ** ${metar.translate.wind} \n`;
@@ -202,18 +182,13 @@ module.exports = class Avwx {
           readable += `**Flight Rules : ** ${metar.flight_rules}`;
         }
 
-        return resolve({
+        resolve({
           raw: metar.raw,
           readable,
-          speech: metar.speech,
+          speech: metar.speech
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no station available at the moment near ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
   }

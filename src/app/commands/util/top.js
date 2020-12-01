@@ -15,10 +15,10 @@ module.exports = class TopCommand extends Command {
           key: 'count',
           default: '1000',
           prompt: 'What would you like the minimum member count to be?',
-          type: 'string',
-        },
+          type: 'string'
+        }
       ],
-      ownerOnly: true,
+      ownerOnly: true
     });
   }
 
@@ -50,20 +50,20 @@ module.exports = class TopCommand extends Command {
         .addFields([
           {
             name: 'Name',
-            value: s.name,
+            value: s.name
           },
           {
             name: 'Id',
-            value: `[${s.id}](https://top.gg/servers/${s.id})`,
+            value: `[${s.id}](https://top.gg/servers/${s.id})`
           },
           {
             name: 'Owner',
-            value: s.owner,
+            value: s.owner
           },
           {
             name: '# of members',
-            value: s.memberCount,
-          },
+            value: s.memberCount
+          }
         ]);
       msg.embed(topsEmbed);
     });

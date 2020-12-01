@@ -15,15 +15,14 @@ module.exports = class ZuluCommand extends Command {
       name: 'zulu',
       group: 'time',
       memberName: 'zulu',
-      description:
-        'Gives you the current zulu time or specific zulu time for the given local Time and ICAO',
+      description: 'Gives you the current zulu time or specific zulu time for the given local Time and ICAO',
       args: [
         {
           key: 'icao',
           type: 'string',
           prompt: 'Enter ICAO code',
           default: '',
-          parse: (val) => val.toUpperCase(),
+          parse: (val) => val.toUpperCase()
         },
         {
           key: 'localtime',
@@ -31,24 +30,28 @@ module.exports = class ZuluCommand extends Command {
           prompt: 'Enter Local time',
           default: '',
           validate: (val) => {
-            if (!val) return true;
-            if (val.length !== 4) return 'Local time must be in HHMM format';
+            if (!val) {
+              return true;
+            }
+            if (val.length !== 4) {
+              return 'Local time must be in HHMM format';
+            }
             const [HH, MM] = [val.substr(0, 2), val.substr(2)];
-            if (HH > 23 || HH < 0) return 'Invalid HH';
-            if (MM > 59 || MM < 0) return 'Invalid MM';
+            if (HH > 23 || HH < 0) {
+              return 'Invalid HH';
+            }
+            if (MM > 59 || MM < 0) {
+              return 'Invalid MM';
+            }
             return true;
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
   }
 
   async run(msg, { icao, localtime }) {
-    const zuluEmbed = new MessageEmbed()
-      .setTitle('ZULU Time')
-      .setColor('#1a8fe3')
-      .setFooter(this.client.user.username)
-      .setTimestamp();
+    const zuluEmbed = new MessageEmbed().setTitle('ZULU Time').setColor('#1a8fe3').setFooter(this.client.user.username).setTimestamp();
 
     if (!(icao || localtime)) {
       const timestring = dayjs.utc().format('DD/MM HH:mm');
@@ -56,30 +59,18 @@ module.exports = class ZuluCommand extends Command {
     } else if (icao && localtime) {
       try {
         const {
-          station: { latitude, longitude },
+          station: { latitude, longitude }
         } = await Avwx.getStation(icao);
         const { gmtOffset } = await Geonames.getTimezone(latitude, longitude);
-        console.log(await Geonames.getTimezone(latitude, longitude));
         const [HH, MM] = [localtime.substr(0, 2), localtime.substr(2)];
-        const timestring = dayjs()
-          .utcOffset(gmtOffset)
-          .hour(HH)
-          .minute(MM)
-          .utc()
-          .format('DD/MM HHmm');
+        const timestring = dayjs().utcOffset(gmtOffset).hour(HH).minute(MM).utc().format('DD/MM HHmm');
 
-        zuluEmbed
-          .setTitle(`Zulu Time at ${icao} when local time is ${localtime}hrs`)
-          .setDescription(`${timestring}z`);
+        zuluEmbed.setTitle(`Zulu Time at ${icao} when local time is ${localtime}hrs`).setDescription(`${timestring}z`);
       } catch (error) {
-        zuluEmbed
-          .setColor('#ff0000')
-          .setDescription(`${msg.author}, ${error.message}`);
+        zuluEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
       }
     } else {
-      zuluEmbed
-        .setColor('#ff0000')
-        .setDescription('Command syntax: zulu [ICAO] [Local time]');
+      zuluEmbed.setColor('#ff0000').setDescription('Command syntax: zulu [ICAO] [Local time]');
     }
     return msg.embed(zuluEmbed);
   }

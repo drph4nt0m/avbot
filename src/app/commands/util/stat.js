@@ -10,14 +10,12 @@ module.exports = class StatCommand extends Command {
       aliases: ['stats'],
       description: 'Gives you the AvBot stats.',
       examples: ['stat'],
-      ownerOnly: true,
+      ownerOnly: true
     });
   }
 
   async run(msg) {
-    const guilds = await this.client.shard.fetchClientValues(
-      'guilds.cache.size'
-    );
+    const guilds = await this.client.shard.fetchClientValues('guilds.cache.size');
     const statsEmbed = new Discord.MessageEmbed()
       .setColor('#0099ff')
       .setTitle('AvBot Stats!')
@@ -28,11 +26,11 @@ module.exports = class StatCommand extends Command {
       .addFields(
         {
           name: 'Server Count',
-          value: guilds.reduce((acc, guildCount) => acc + guildCount, 0),
+          value: guilds.reduce((acc, guildCount) => acc + guildCount, 0)
         },
         {
           name: 'Uptime',
-          value: this.dhms(process.uptime()),
+          value: this.dhms(process.uptime())
         }
       );
     return msg.embed(statsEmbed);
@@ -46,7 +44,7 @@ module.exports = class StatCommand extends Command {
     let h = Math.floor((t - d * cd) / ch);
     let m = Math.floor((t - d * cd - h * ch) / cm);
     let s = Math.floor(t - d * cd - h * ch - m * cm);
-    const pad = function (n) {
+    const pad = (n) => {
       return n < 10 ? `0${n}` : n;
     };
     if (s === 60) {
@@ -61,8 +59,6 @@ module.exports = class StatCommand extends Command {
       d += 1;
       h = 0;
     }
-    return `${pad(d)} days \n${pad(h)} hours \n${pad(m)} minutes \n${pad(
-      s
-    )} seconds`;
+    return `${pad(d)} days \n${pad(h)} hours \n${pad(m)} minutes \n${pad(s)} seconds`;
   };
 };

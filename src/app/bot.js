@@ -5,22 +5,25 @@ const MongoDBProvider = require('commando-provider-mongo');
 const DBL = require('dblapi.js');
 const { MessageEmbed } = require('discord.js');
 const services = require('../config/services');
+const logger = require('./utils/Logger');
 
 const client = new CommandoClient({
   commandPrefix: '!',
   owner: services.discord.owners,
   invite: services.discord.supportServerInvite,
-  nonCommandEditable: true,
+  nonCommandEditable: true
 });
 
 client
   .setProvider(
     MongoClient.connect(services.mongodb.uri, {
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     }).then((cl) => new MongoDBProvider(cl, 'avbot'))
   )
-  .then(() => console.log('MongoDB Connected!'))
-  .catch(console.error);
+  .then(() => {
+    logger.info(`[${client.shard.ids}] MongoDB Connected!`);
+  })
+  .catch((error) => logger.error(`[${client.shard.ids}] ${error}`));
 
 client.registry
   .registerDefaultTypes()
@@ -30,19 +33,17 @@ client.registry
     ['ivao', 'IVAO commands'],
     ['vatsim', 'VATSIM commands'],
     ['time', 'Time commands'],
-    ['misc', 'Miscellaneous commands'],
+    ['misc', 'Miscellaneous commands']
   ])
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
 const dbl = new DBL(services.dbl.token, client);
 
 client.once('ready', () => {
-  console.log(
-    `[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`
-  );
+  logger.info(`[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`);
   client.user.setActivity({
     type: 'WATCHING',
-    name: '!help',
+    name: '!help'
   });
 
   setInterval(() => {
@@ -60,9 +61,7 @@ client.on('guildCreate', (guild) => {
         To get started try \`!help\`.
         [Buy me a coffee](https://link.avbot.in/donate)`
       )
-      .setFooter(
-        `${client.user.username} • @dr_ph4nt0m#6615 • Thank you for showing your support by using AvBot`
-      )
+      .setFooter(`${client.user.username} • @dr_ph4nt0m#6615 • Thank you for showing your support by using AvBot`)
       .setTimestamp();
 
     guild.channels.cache
@@ -70,20 +69,19 @@ client.on('guildCreate', (guild) => {
       .first()
       .send(welcomeEmbed);
   } catch (error) {
-    console.log(error);
+    logger.error(`[${client.shard.ids}] ${error}`);
   }
-  console.log(guild);
 });
 
-client.on('error', console.error);
+client.on('error', (error) => logger.error(`[${client.shard.ids}] ${error}`));
 
 client.login(services.discord.token);
 
 // Optional events
 dbl.on('posted', () => {
-  console.log(`[${client.shard.ids}] Server count posted!`);
+  logger.info(`[${client.shard.ids}] Server count posted!`);
 });
 
-dbl.on('error', (e) => {
-  console.log(`[${client.shard.ids}] Oops! ${e}`);
+dbl.on('error', (error) => {
+  logger.error(`[${client.shard.ids}] Oops! ${error}`);
 });

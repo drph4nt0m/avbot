@@ -9,18 +9,16 @@ module.exports = class VatsimCommand extends Command {
       group: 'vatsim',
       memberName: 'vatsim',
       aliases: [],
-      description:
-        'Gives you the information for the chosen call sign on the VATSIM network',
+      description: 'Gives you the information for the chosen call sign on the VATSIM network',
       examples: ['vatsim <call_sign>'],
       args: [
         {
           key: 'callSign',
-          prompt:
-            'What call sign would you like the bot to give information for?',
+          prompt: 'What call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -42,82 +40,82 @@ module.exports = class VatsimCommand extends Command {
           {
             name: `Call Sign`,
             value: vatsimClient.callSign,
-            inline: true,
+            inline: true
           },
           {
             name: `CID`,
             value: vatsimClient.cid,
-            inline: true,
+            inline: true
           },
           {
             name: `Name`,
             value: vatsimClient.name,
-            inline: true,
+            inline: true
           },
           {
             name: `Departure`,
             value: vatsimClient.departureAerodrome,
-            inline: true,
+            inline: true
           },
           {
             name: `Destination`,
             value: vatsimClient.destinationAerodrome,
-            inline: true,
+            inline: true
           },
           {
             name: `Transponder`,
             value: vatsimClient.transponderCode,
-            inline: true,
+            inline: true
           },
           {
             name: `Latitude`,
             value: vatsimClient.latitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Longitude`,
             value: vatsimClient.longitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Altitude`,
             value: vatsimClient.altitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Groundspeed`,
             value: vatsimClient.groundSpeed,
-            inline: true,
+            inline: true
           },
           {
             name: `Cruising Speed`,
             value: vatsimClient.cruisingSpeed,
-            inline: true,
+            inline: true
           },
           {
             name: `Cruising Level`,
             value: vatsimClient.cruisingLevel,
-            inline: true,
+            inline: true
           },
           {
             name: `Departure Time`,
             value: vatsimClient.departureTime,
-            inline: true,
+            inline: true
           },
           {
             name: `EET`,
             value: `${vatsimClient.eetHours}:${vatsimClient.eetMinutes}`,
-            inline: true,
+            inline: true
           },
           {
             name: `Aircraft`,
             value: vatsimClient.aircraft,
-            inline: true,
+            inline: true
           },
           {
             name: `Route`,
             value: vatsimClient.route,
-            inline: true,
+            inline: true
           }
         );
       } else if (vatsimClient.clientType === 'ATC') {
@@ -125,39 +123,37 @@ module.exports = class VatsimCommand extends Command {
           {
             name: `Call Sign`,
             value: vatsimClient.callSign,
-            inline: true,
+            inline: true
           },
           {
             name: `CID`,
             value: vatsimClient.cid,
-            inline: true,
+            inline: true
           },
           {
             name: `Name`,
             value: vatsimClient.name,
-            inline: true,
+            inline: true
           },
           {
             name: `Position`,
             value: vatsimClient.facilityType,
-            inline: true,
+            inline: true
           },
           {
             name: `Frequency`,
             value: vatsimClient.frequency,
-            inline: true,
+            inline: true
           },
           {
             name: `ATIS`,
             value: vatsimClient.atis,
-            inline: true,
+            inline: true
           }
         );
       }
     } catch (error) {
-      vatsimEmbed
-        .setColor('#ff0000')
-        .setDescription(`${msg.author}, ${error.message}`);
+      vatsimEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 
     return msg.embed(vatsimEmbed);

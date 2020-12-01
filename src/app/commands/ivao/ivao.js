@@ -9,18 +9,16 @@ module.exports = class IvaoCommand extends Command {
       group: 'ivao',
       memberName: 'ivao',
       aliases: [],
-      description:
-        'Gives you the information for the chosen call sign on the IVAO network',
+      description: 'Gives you the information for the chosen call sign on the IVAO network',
       examples: ['ivao <call_sign>'],
       args: [
         {
           key: 'callSign',
-          prompt:
-            'What call sign would you like the bot to give information for?',
+          prompt: 'What call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase(),
-        },
-      ],
+          parse: (val) => val.toUpperCase()
+        }
+      ]
     });
   }
 
@@ -34,91 +32,89 @@ module.exports = class IvaoCommand extends Command {
     try {
       const { ivaoClient } = await Ivao.getClientInfo(callSign);
 
-      ivaoEmbed
-        .setTitle(`IVAO : ${callSign} (open on Webeye)`)
-        .setURL(`https://webeye.ivao.aero/?callsign=${ivaoClient.callSign}`);
+      ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`).setURL(`https://webeye.ivao.aero/?callsign=${ivaoClient.callSign}`);
 
       if (ivaoClient.clientType === 'PILOT') {
         ivaoEmbed.addFields(
           {
             name: `Call Sign`,
             value: ivaoClient.callSign,
-            inline: true,
+            inline: true
           },
           {
             name: `VID`,
             value: ivaoClient.vid,
-            inline: true,
+            inline: true
           },
           {
             name: `Rating`,
             value: ivaoClient.atcPilotRating,
-            inline: true,
+            inline: true
           },
           {
             name: `Departure`,
             value: ivaoClient.departureAerodrome,
-            inline: true,
+            inline: true
           },
           {
             name: `Destination`,
             value: ivaoClient.destinationAerodrome,
-            inline: true,
+            inline: true
           },
           {
             name: `Transponder`,
             value: ivaoClient.transponderCode,
-            inline: true,
+            inline: true
           },
           {
             name: `Latitude`,
             value: ivaoClient.latitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Longitude`,
             value: ivaoClient.longitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Altitude`,
             value: ivaoClient.altitude,
-            inline: true,
+            inline: true
           },
           {
             name: `Groundspeed`,
             value: ivaoClient.groundSpeed,
-            inline: true,
+            inline: true
           },
           {
             name: `Cruising Speed`,
             value: ivaoClient.cruisingSpeed,
-            inline: true,
+            inline: true
           },
           {
             name: `Cruising Level`,
             value: ivaoClient.cruisingLevel,
-            inline: true,
+            inline: true
           },
           {
             name: `Departure Time`,
             value: ivaoClient.departureTime,
-            inline: true,
+            inline: true
           },
           {
             name: `EET`,
             value: `${ivaoClient.eetHours}:${ivaoClient.eetMinutes}`,
-            inline: true,
+            inline: true
           },
           {
             name: `Aircraft`,
             value: ivaoClient.aircraft.split('/')[1],
-            inline: true,
+            inline: true
           },
           {
             name: `Route`,
             value: ivaoClient.route,
-            inline: true,
+            inline: true
           }
         );
       } else if (ivaoClient.clientType === 'ATC') {
@@ -126,39 +122,37 @@ module.exports = class IvaoCommand extends Command {
           {
             name: `Call Sign`,
             value: ivaoClient.callSign,
-            inline: true,
+            inline: true
           },
           {
             name: `VID`,
             value: ivaoClient.vid,
-            inline: true,
+            inline: true
           },
           {
             name: `Rating`,
             value: ivaoClient.atcPilotRating,
-            inline: true,
+            inline: true
           },
           {
             name: `Position`,
             value: ivaoClient.facilityType,
-            inline: true,
+            inline: true
           },
           {
             name: `Frequency`,
             value: ivaoClient.frequency,
-            inline: true,
+            inline: true
           },
           {
             name: `ATIS`,
             value: ivaoClient.atis,
-            inline: true,
+            inline: true
           }
         );
       }
     } catch (error) {
-      ivaoEmbed
-        .setColor('#ff0000')
-        .setDescription(`${msg.author}, ${error.message}`);
+      ivaoEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 
     return msg.embed(ivaoEmbed);

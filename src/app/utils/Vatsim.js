@@ -8,7 +8,7 @@ dayjs.extend(utc);
 module.exports = class Avwx {
   static api = axios.create({
     baseURL: 'http://us.data.vatsim.net/vatsim-data.txt',
-    timeout: 10000,
+    timeout: 10000
   });
 
   static facilityType = {
@@ -19,7 +19,7 @@ module.exports = class Avwx {
     4: 'Tower',
     5: 'Approach',
     6: 'ACC',
-    7: 'Departure',
+    7: 'Departure'
   };
 
   static administrativeRating = {
@@ -27,7 +27,7 @@ module.exports = class Avwx {
     1: 'Observer',
     2: 'User',
     11: 'Supervisor',
-    12: 'Administrator',
+    12: 'Administrator'
   };
 
   static atcRating = {
@@ -40,7 +40,7 @@ module.exports = class Avwx {
     7: 'Center Controller (ACC)',
     8: 'Senior Controller (SEC)',
     9: 'Senior ATC Instructor (SAI)',
-    10: 'Chief ATC Instructor (CAI)',
+    10: 'Chief ATC Instructor (CAI)'
   };
 
   static pilotRating = {
@@ -53,7 +53,7 @@ module.exports = class Avwx {
     7: 'Commercial Pilot (CP)',
     8: 'Airline Transport Pilot (ATP)',
     9: 'Senior Flight Instructor (SFI)',
-    10: 'Chief Flight Instructor (CFI)',
+    10: 'Chief Flight Instructor (CFI)'
   };
 
   static flightSimulators = {
@@ -78,39 +78,27 @@ module.exports = class Avwx {
     21: 'Fly! 2',
     25: 'FlightGear',
     30: 'Prepar3D 1.x',
-    40: 'Microsoft Flight Simulator 2020',
+    40: 'Microsoft Flight Simulator 2020'
   };
 
   static vatsim = {
     general: {},
     clients: {},
-    servers: {},
+    servers: {}
   };
 
   static formatDate(date) {
-    return dayjs(
-      `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}T${date.slice(
-        8,
-        10
-      )}:${date.slice(10, 12)}:${date.slice(12, 14)}Z`
-    );
+    return dayjs(`${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}T${date.slice(8, 10)}:${date.slice(10, 12)}:${date.slice(12, 14)}Z`);
   }
 
   static async download() {
-    if (
-      this.vatsim.general.UPDATE &&
-      this.formatDate(this.vatsim.general.UPDATE)
-        .add(4, 'minute')
-        .isAfter(dayjs())
-    ) {
+    if (this.vatsim.general.UPDATE && this.formatDate(this.vatsim.general.UPDATE).add(4, 'minute').isAfter(dayjs())) {
       return;
     }
 
     const { data } = await this.api.get(null);
 
-    const [, general, clients, servers] = data
-      .split(/!GENERAL:|!CLIENTS:|!SERVERS:|!PREFILE:/g)
-      .map((r) => r.trim());
+    const [, general, clients, servers] = data.split(/!GENERAL:|!CLIENTS:|!SERVERS:|!PREFILE:/g).map((r) => r.trim());
 
     general
       .split('\n')
@@ -130,7 +118,7 @@ module.exports = class Avwx {
           location: t[2],
           name: t[3],
           clientConnectionsAllowed: t[4],
-          maximumConnection: t[5],
+          maximumConnection: t[5]
         };
       });
 
@@ -158,9 +146,7 @@ module.exports = class Avwx {
           protocol: t[15] || undefined,
           combinedRating: t[16] || undefined,
           transponderCode: t[17] || undefined,
-          facilityType: t[18]
-            ? this.facilityType[t[18]]
-            : undefined || undefined,
+          facilityType: t[18] ? this.facilityType[t[18]] : undefined || undefined,
           visualRange: t[19] ? `${t[19]} NM` : undefined || undefined,
           revision: t[20] || undefined,
           flightRules: t[21] || undefined,
@@ -172,58 +158,27 @@ module.exports = class Avwx {
               : `${t[22].substring(0, 2)}:${t[22].substring(2, 4)}z`
             : undefined || undefined,
           actualDepartureTime: t[23] || undefined,
-          eetHours: t[24]
-            ? t[24].length === 1
-              ? `0${t[24]}`
-              : t[24]
-            : undefined || undefined,
-          eetMinutes: t[25]
-            ? t[25].length === 1
-              ? `0${t[25]}`
-              : t[25]
-            : undefined || undefined,
-          enduranceHours: t[26]
-            ? t[26].length === 1
-              ? `0${t[26]}`
-              : t[26]
-            : undefined || undefined,
-          enduranceMinutes: t[27]
-            ? t[27].length === 1
-              ? `0${t[27]}`
-              : t[27]
-            : undefined || undefined,
+          eetHours: t[24] ? (t[24].length === 1 ? `0${t[24]}` : t[24]) : undefined || undefined,
+          eetMinutes: t[25] ? (t[25].length === 1 ? `0${t[25]}` : t[25]) : undefined || undefined,
+          enduranceHours: t[26] ? (t[26].length === 1 ? `0${t[26]}` : t[26]) : undefined || undefined,
+          enduranceMinutes: t[27] ? (t[27].length === 1 ? `0${t[27]}` : t[27]) : undefined || undefined,
           alternateAerodrome: t[28] || undefined,
           otherInfo: t[29] || undefined,
           route: t[30] || undefined,
-          atis:
-            S(t[35])
-              .replaceAll('^�', ' ')
-              .replaceAll('^§', ' ')
-              .s.replace(/\s+/g, ' ') || undefined,
-          atisTime: t[36]
-            ? this.formatDate(t[36]).toDate()
-            : undefined || undefined,
-          connectionTime: t[37]
-            ? this.formatDate(t[37]).toDate()
-            : undefined || undefined,
+          atis: S(t[35]).replaceAll('^�', ' ').replaceAll('^§', ' ').s.replace(/\s+/g, ' ') || undefined,
+          atisTime: t[36] ? this.formatDate(t[36]).toDate() : undefined || undefined,
+          connectionTime: t[37] ? this.formatDate(t[37]).toDate() : undefined || undefined,
           softwareName: t[38] || undefined,
           softwareVersion: t[39] || undefined,
           administrativeVersion: t[40] || undefined,
-          atcPilotRating:
-            t[3] === 'ATC'
-              ? this.atcRating[t[41]]
-              : t[3] === 'PILOT'
-              ? this.pilotRating[t[41]]
-              : undefined || undefined,
+          atcPilotRating: t[3] === 'ATC' ? this.atcRating[t[41]] : t[3] === 'PILOT' ? this.pilotRating[t[41]] : undefined || undefined,
           alternateAerodrome2: t[42] || undefined,
           typeOfFlight: t[43] || undefined,
           personsOnBoard: t[44] || undefined,
           heading: t[45] ? `${t[45]}°` : undefined || undefined,
           onGround: t[46] === '1' ? true : false || undefined,
-          simulator: t[47]
-            ? this.flightSimulators[t[47]]
-            : undefined || undefined,
-          plane: t[48] || undefined,
+          simulator: t[47] ? this.flightSimulators[t[47]] : undefined || undefined,
+          plane: t[48] || undefined
         };
       });
   }
@@ -234,22 +189,13 @@ module.exports = class Avwx {
         await this.download();
 
         if (this.vatsim.clients[callSign]) {
-          return resolve({
-            vatsimClient: this.vatsim.clients[callSign],
+          resolve({
+            vatsimClient: this.vatsim.clients[callSign]
           });
         }
-        return reject(
-          new Error(
-            `no client available at the moment with call sign ${callSign}`
-          )
-        );
+        reject(new Error(`no client available at the moment with call sign ${callSign}`));
       } catch (error) {
-        return reject(
-          new Error(
-            error.response ||
-              `no client available at the moment with call sign ${callSign}`
-          )
-        );
+        reject(new Error(error.response || `no client available at the moment with call sign ${callSign}`));
       }
     });
   }
@@ -262,31 +208,19 @@ module.exports = class Avwx {
         const atcList = [];
 
         Object.keys(this.vatsim.clients).forEach((callSign) => {
-          if (
-            this.vatsim.clients[callSign].clientType === 'ATC' &&
-            callSign.match(partialCallSign)
-          ) {
+          if (this.vatsim.clients[callSign].clientType === 'ATC' && callSign.match(partialCallSign)) {
             atcList.push(this.vatsim.clients[callSign]);
           }
         });
 
         if (atcList.length > 0) {
-          return resolve({
-            atcList,
+          resolve({
+            atcList
           });
         }
-        return reject(
-          new Error(
-            `no client available at the moment matching call sign ${partialCallSign}`
-          )
-        );
+        reject(new Error(`no client available at the moment matching call sign ${partialCallSign}`));
       } catch (error) {
-        return reject(
-          new Error(
-            error.response ||
-              `no client available at the moment matching call sign ${partialCallSign}`
-          )
-        );
+        reject(new Error(error.response || `no client available at the moment matching call sign ${partialCallSign}`));
       }
     });
   }

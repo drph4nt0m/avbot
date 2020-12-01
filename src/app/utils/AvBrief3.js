@@ -7,8 +7,8 @@ module.exports = class AvBrief3 {
     baseURL: `https://avbrief3.el.r.appspot.com/api`,
     timeout: 10000,
     params: {
-      key: services.avbrief3.token,
-    },
+      key: services.avbrief3.token
+    }
   });
 
   static async getAtis(icao) {
@@ -16,25 +16,19 @@ module.exports = class AvBrief3 {
       try {
         const response = await this.api.get(null, {
           params: {
-            icao,
-          },
+            icao
+          }
         });
 
-        if (response.status !== 200 || !response.data || !response.data.a_text)
-          return reject(
-            new Error(`no atis available at the moment for ${icao}`)
-          );
+        if (response.status !== 200 || !response.data || !response.data.a_text) {
+          reject(new Error(`no atis available at the moment for ${icao}`));
+        }
 
-        return resolve({
-          speech: response.data.a_text,
+        resolve({
+          speech: response.data.a_text
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no atis available at the moment for ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no atis available at the moment for ${icao}`));
       }
     });
   }
@@ -44,25 +38,19 @@ module.exports = class AvBrief3 {
       try {
         const response = await this.api.get(null, {
           params: {
-            icao,
-          },
+            icao
+          }
         });
 
-        if (response.status !== 200 || !response.data || !response.data.m_text)
-          return reject(
-            new Error(`no station available at the moment near ${icao}`)
-          );
+        if (response.status !== 200 || !response.data || !response.data.m_text) {
+          reject(new Error(`no station available at the moment near ${icao}`));
+        }
 
-        return resolve({
-          raw: response.data.m_text,
+        resolve({
+          raw: response.data.m_text
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no station available at the moment near ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
   }
@@ -72,25 +60,19 @@ module.exports = class AvBrief3 {
       try {
         const response = await this.api.get(null, {
           params: {
-            icao,
-          },
+            icao
+          }
         });
 
-        if (response.status !== 200 || !response.data || !response.data.t_text)
-          return reject(
-            new Error(`no station available at the moment near ${icao}`)
-          );
+        if (response.status !== 200 || !response.data || !response.data.t_text) {
+          reject(new Error(`no station available at the moment near ${icao}`));
+        }
 
-        return resolve({
-          raw: response.data.t_text,
+        resolve({
+          raw: response.data.t_text
         });
       } catch (error) {
-        return reject(
-          new Error(
-            error.response.data.error ||
-              `no station available at the moment near ${icao}`
-          )
-        );
+        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
   }
