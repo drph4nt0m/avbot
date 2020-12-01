@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon ./src/app/index.js",
     "start": "node ./src/app/index.js",
-    "lint": "eslint './src/**/*.js' --max-warnings 0",
+    "lint": "eslint ./src/**/*.js --max-warnings 0",
     "lint-fix": "eslint ./src/**/*.js --fix",
     "prettier": "prettier ./src/**/*.js --write",
     "postinstall": "husky install"
@@ -39,6 +39,7 @@
     "string": "^3.3.3"
   },
   "devDependencies": {
+    "@mapbox/secret-shield": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.14.0",
@@ -58,17 +59,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "lint-staged && secret-shield --check-and-run",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "lint-staged": {
-    "*.{js,tsx}": [
+    "./src/**/*.js": [
       "npm run lint",
-      "git add"
-    ],
-    "*.{js}": [
-      "npm run prettier",
       "git add"
     ]
   }
