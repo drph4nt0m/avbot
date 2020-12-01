@@ -19,6 +19,8 @@
 <p align="center">
   <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3ACodeQL"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/CodeQL?style=for-the-badge" alt="CodeQL"></a>
   <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3A%22Codacy+Security+Scan%22"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/Codacy%20Security%20Scan?style=for-the-badge" alt="Codacy Security Scan"></a>
+  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3AESLint"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/ESLint?style=for-the-badge" alt="ESLint"></a>
+  <a href="https://github.com/drph4nt0m/avbot-v3/actions?query=workflow%3APrettier"><img src="https://img.shields.io/github/workflow/status/drph4nt0m/avbot-v3/Prettier?style=for-the-badge" alt="Prettier"></a>
 </p>
 
 <p align="center">
