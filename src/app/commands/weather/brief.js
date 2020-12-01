@@ -8,9 +8,7 @@ const AvBrief3 = require('../../utils/AvBrief3');
 
 Dayjs.extend(utc);
 
-module.exports = class BriefCommand extends (
-  Command
-) {
+module.exports = class BriefCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'brief',

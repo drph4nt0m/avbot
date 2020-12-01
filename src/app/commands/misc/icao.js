@@ -3,9 +3,7 @@ const accents = require('remove-accents');
 const { Command } = require('discord.js-commando');
 const Avwx = require('../../utils/Avwx');
 
-module.exports = class IcaoCommand extends (
-  Command
-) {
+module.exports = class IcaoCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'icao',

@@ -2,9 +2,7 @@ const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 const Ivao = require('../../utils/Ivao');
 
-module.exports = class IvaoOnlineCommand extends (
-  Command
-) {
+module.exports = class IvaoOnlineCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'ivao-online',

@@ -5,9 +5,7 @@ const fs = require('fs');
 const AvBrief3 = require('../../utils/AvBrief3');
 const Avwx = require('../../utils/Avwx');
 
-module.exports = class AtisVoiceCommand extends (
-  Command
-) {
+module.exports = class AtisVoiceCommand extends Command {
   voiceChannels = {};
 
   tmpDir = `${__dirname}/tmp`;

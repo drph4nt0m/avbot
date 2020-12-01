@@ -2,9 +2,7 @@
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord.js-commando');
 
-module.exports = class PrefixCommand extends (
-  Command
-) {
+module.exports = class PrefixCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'prefix',

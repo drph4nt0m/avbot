@@ -7,9 +7,7 @@ const Charts = require('../../utils/Charts');
 
 Dayjs.extend(utc);
 
-module.exports = class ChartCommand extends (
-  Command
-) {
+module.exports = class ChartCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'chart',

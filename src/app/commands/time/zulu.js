@@ -9,9 +9,7 @@ const Geonames = require('../../utils/Geonames');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-module.exports = class ZuluCommand extends (
-  Command
-) {
+module.exports = class ZuluCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'zulu',

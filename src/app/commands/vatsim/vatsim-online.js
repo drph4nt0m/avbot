@@ -2,9 +2,7 @@ const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 const Vatsim = require('../../utils/Vatsim');
 
-module.exports = class VatsimOnlineCommand extends (
-  Command
-) {
+module.exports = class VatsimOnlineCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'vatsim-online',

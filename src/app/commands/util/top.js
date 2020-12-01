@@ -1,9 +1,7 @@
 const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 
-module.exports = class TopCommand extends (
-  Command
-) {
+module.exports = class TopCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'top',
@@ -25,7 +23,6 @@ module.exports = class TopCommand extends (
   }
 
   async run(msg, { count }) {
-    const x;
     const topServers = await this.client.shard
       .broadcastEval(
         `this.guilds.cache

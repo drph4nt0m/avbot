@@ -3,9 +3,7 @@ const { Command } = require('discord.js-commando');
 const Avwx = require('../../utils/Avwx');
 const AvBrief3 = require('../../utils/AvBrief3');
 
-module.exports = class MetarCommand extends (
-  Command
-) {
+module.exports = class MetarCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'metar',

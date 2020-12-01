@@ -3,9 +3,7 @@ const { Command } = require('discord.js-commando');
 const Avwx = require('../../utils/Avwx');
 const AvBrief3 = require('../../utils/AvBrief3');
 
-module.exports = class TafCommand extends (
-  Command
-) {
+module.exports = class TafCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'taf',

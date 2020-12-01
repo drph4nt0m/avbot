@@ -3,9 +3,7 @@ const { Command } = require('discord.js-commando');
 const AvBrief3 = require('../../utils/AvBrief3');
 const Avwx = require('../../utils/Avwx');
 
-module.exports = class AtisCommand extends (
-  Command
-) {
+module.exports = class AtisCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'atis',
