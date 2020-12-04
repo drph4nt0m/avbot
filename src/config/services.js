@@ -15,6 +15,12 @@ module.exports = {
   avbrief3: {
     token: process.env.AVBRIEF3_TOKEN
   },
+  aviation_stack: {
+    token: process.env.AVIATION_STACK_TOKEN
+  },
+  aero_data_box: {
+    token: process.env.AERO_DATA_BOX_TOKEN
+  },
   mongodb: {
     uri: process.env.MONGODB_URI
   },
