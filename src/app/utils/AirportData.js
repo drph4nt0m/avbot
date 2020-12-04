@@ -1,7 +1,6 @@
 const axios = require('axios').default;
 const logger = require('./Logger');
 
-
 module.exports = class AirportData {
   static api = axios.create({
     baseURL: 'https://www.airport-data.com/api/ac_thumb.json',
@@ -16,12 +15,12 @@ module.exports = class AirportData {
       try {
         const { data } = await this.api.get(null, {
           params: {
-            m: icao24,
+            m: icao24
           }
         });
 
         if (data.data.length > 0) {
-          resolve(data.data[Math.floor(Math.random() * data.data.length)])
+          resolve(data.data[Math.floor(Math.random() * data.data.length)]);
         }
         reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
       } catch (error) {

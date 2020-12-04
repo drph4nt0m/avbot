@@ -7,13 +7,12 @@ module.exports = class OpenSky {
     timeout: 10000
   });
 
-
   static getFlightInfo(callsign) {
     return new Promise(async (resolve, reject) => {
       try {
         const { data } = await this.api.get(null);
         const allAircraft = [].concat(data.states);
-        allAircraft.forEach(aircraft => {
+        allAircraft.forEach((aircraft) => {
           if (aircraft[1] && aircraft[1].trim() === callsign) {
             resolve({
               icao24: aircraft[0] ? aircraft[0].trim() : 'Unknown',
@@ -27,12 +26,12 @@ module.exports = class OpenSky {
               on_ground: aircraft[8] ? aircraft[8] : 'Unknown',
               velocity: aircraft[9] ? `${(aircraft[9] * 1.943844).toFixed(0)} knots` : 'Parked',
               true_track: aircraft[10] ? `${aircraft[10].toFixed(0)}°` : 'Unknown',
-              vertical_rate: aircraft[11] !== null ? `${(aircraft[11] * 196.8504).toFixed(0)} fpm`: 'On Ground',
+              vertical_rate: aircraft[11] !== null ? `${(aircraft[11] * 196.8504).toFixed(0)} fpm` : 'On Ground',
               sensors: aircraft[12] ? aircraft[12] : 'Unknown',
               geo_altitude: aircraft[13] ? `${(aircraft[13] * 3.28084).toFixed(0)} ft` : 'On Ground',
               squawk: aircraft[14] ? aircraft[14].trim() : 'Unknown',
               spi: aircraft[15],
-              position_source: aircraft[16],
+              position_source: aircraft[16]
             });
           }
         });

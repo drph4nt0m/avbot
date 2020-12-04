@@ -3,7 +3,6 @@ const services = require('../../config/services');
 const logger = require('./Logger');
 
 module.exports = class Database {
-
   static async isPremiumGuild(guildId) {
     try {
       const client = await MongoClient.connect(services.mongodb.uri, { useUnifiedTopology: true });

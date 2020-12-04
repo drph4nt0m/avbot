@@ -2,7 +2,6 @@ const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
 
-
 module.exports = class AviationStack {
   static api = axios.create({
     baseURL: 'http://api.aviationstack.com/v1/flights',
@@ -11,7 +10,6 @@ module.exports = class AviationStack {
       access_key: services.aviation_stack.token
     }
   });
-
 
   static getFlightInfo(callsign) {
     return new Promise(async (resolve, reject) => {
@@ -24,7 +22,7 @@ module.exports = class AviationStack {
         });
 
         if (data.data.length > 0) {
-          resolve(data.data[0])
+          resolve(data.data[0]);
         }
         reject(new Error(`no aircraft available at the moment with call sign ${callsign}`));
       } catch (error) {

@@ -14,7 +14,7 @@ module.exports = class Chart {
   static getChart(icao) {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.api.get(`${icao}.pdf`)
+        await this.api.get(`${icao}.pdf`);
         resolve(this.getChartURL(icao));
       } catch (error) {
         logger.error(`[x] ${error}`);

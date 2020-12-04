@@ -35,10 +35,13 @@ module.exports = class LiveCommand extends Command {
       .setColor('#0099ff')
       .setFooter(`${this.client.user.username} • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`)
       .setTimestamp();
-    if (!await Database.isPremiumGuild(msg.guild.id)) {
+    if (!(await Database.isPremiumGuild(msg.guild.id))) {
       logger.error(`[${this.client.shard.ids}] ${msg.guild.id} tried using live command`);
-      liveEmbed.setColor('#00ff00')
-        .setDescription(`${msg.author}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${services.discord.supportServerInvite}) and contact the developer.`)
+      liveEmbed
+        .setColor('#00ff00')
+        .setDescription(
+          `${msg.author}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${services.discord.supportServerInvite}) and contact the developer.`
+        )
         .setFooter(`${this.client.user.username} • @dr_ph4nt0m#6615`);
       msg.channel.stopTyping();
       return msg.embed(liveEmbed);
@@ -90,7 +93,7 @@ module.exports = class LiveCommand extends Command {
           value: flightInfo.icao24,
           inline: true
         }
-      ])
+      ]);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       liveEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
@@ -104,15 +107,19 @@ module.exports = class LiveCommand extends Command {
       liveEmbed.addFields([
         {
           name: 'Departure',
-          value: flightInfo.departure ? flightInfo.departure.icao + (flightInfo.departure.airport ? ` | ${flightInfo.departure.airport}` : '') : 'Unknown',
+          value: flightInfo.departure
+            ? flightInfo.departure.icao + (flightInfo.departure.airport ? ` | ${flightInfo.departure.airport}` : '')
+            : 'Unknown',
           inline: true
         },
         {
           name: 'Arrival',
-          value: flightInfo.arrival.icao ? flightInfo.arrival.icao + (flightInfo.arrival.airport ? ` | ${flightInfo.arrival.airport}` : '') : 'Unknown',
+          value: flightInfo.arrival.icao
+            ? flightInfo.arrival.icao + (flightInfo.arrival.airport ? ` | ${flightInfo.arrival.airport}` : '')
+            : 'Unknown',
           inline: true
         }
-      ])
+      ]);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
     }
@@ -136,7 +143,7 @@ module.exports = class LiveCommand extends Command {
           value: aircraftInfo.reg ? aircraftInfo.reg : 'Unknown',
           inline: true
         }
-      ])
+      ]);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
     }

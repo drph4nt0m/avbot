@@ -2,7 +2,6 @@ const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
 
-
 module.exports = class AeroDataBox {
   static api = axios.create({
     baseURL: 'https://aerodatabox.p.rapidapi.com/aircrafts/',
