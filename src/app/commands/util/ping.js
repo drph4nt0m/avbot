@@ -23,7 +23,7 @@ module.exports = class PingCommand extends Command {
     return pingMsg.edit(oneLine`
       ${msg.channel.type !== 'dm' ? `${msg.author},` : ''}
       Pong! The message round-trip took
-      ${(pingMsg.editedTimestamp || pingMsg.createdTimestamp) - (msg.editedTimestamp || msg.createdTimestamp)}ms.
+      ${pingMsg.createdTimestamp - msg.createdTimestamp}ms.
       ${this.client.ws.ping ? `The heartbeat ping is ${Math.round(this.client.ws.ping)}ms.` : ''}
     `);
   }

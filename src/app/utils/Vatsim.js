@@ -97,9 +97,7 @@ module.exports = class Vatsim {
       return;
     }
 
-    const { data } = await this.api.get(null);
-
-    const [, general, clients, servers] = data.split(/!GENERAL:|!CLIENTS:|!SERVERS:|!PREFILE:/g).map((r) => r.trim());
+    const [, general, clients, servers] = (await this.api.get(null)).data.split(/!GENERAL:|!CLIENTS:|!SERVERS:|!PREFILE:/g).map((r) => r.trim());
 
     general
       .split('\n')

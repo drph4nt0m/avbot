@@ -98,9 +98,9 @@ module.exports = class Avwx {
       return;
     }
 
-    const { data } = await this.api.get(null);
-
-    const [, general, clients, airports, servers] = data.split(/!GENERAL|!CLIENTS|!AIRPORTS|!SERVERS/g).map((r) => r.trim());
+    const [, general, clients, airports, servers] = (await this.api.get(null)).data
+      .split(/!GENERAL|!CLIENTS|!AIRPORTS|!SERVERS/g)
+      .map((r) => r.trim());
 
     general.split('\n').forEach((g) => {
       const t = g.split('=').map((r) => r.trim());

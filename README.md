@@ -13,7 +13,7 @@
 
 <p align="center">
   <a href="https://lgtm.com/projects/g/drph4nt0m/avbot-v3"><img src="https://img.shields.io/lgtm/grade/javascript/github/drph4nt0m/avbot-v3?style=for-the-badge" alt="LGTM grade"></a>
-  <a href="https://app.codacy.com/gh/drph4nt0m/avbot-v3/dashboard"><img src="https://img.shields.io/codacy/grade/90894e1b201e460b853eb1ba915b90d4?style=for-the-badge" alt="Codacy grade"></a> 
+  <a href="https://app.codacy.com/gh/drph4nt0m/avbot-v3/dashboard"><img src="https://img.shields.io/codacy/grade/90894e1b201e460b853eb1ba915b90d4?style=for-the-badge" alt="Codacy grade"></a>
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@
 | atis          | !atis VABB          | Gives you the live ATIS for the chosen airport                                                      |
 | atis-voice    | !atis VABB          | Gives you the live ATIS as voice for the chosen airport                                             |
 | icao          | !icao VABB          | Gives you the station information for the chosen airport                                            |
-| chart [wip]   | !chart VABB         | Gives you the the latest chart for the chosen airport                                               |
+| chart (wip)   | !chart VABB         | Gives you the the latest chart for the chosen airport                                               |
 | ivao          | !ivao AIC001        | Gives you the information for the chosen call sign on the IVAO network                              |
 | ivao-online   | !ivao-online VABB   | Gives you the information for all ATCs which match the given partial callsign on the IVAO network   |
 | vatsim        | !vatsim VABB        | Gives you the information for the chosen call sign on the VATSIM network                            |

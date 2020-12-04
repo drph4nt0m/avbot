@@ -35,75 +35,28 @@ module.exports = class AtisVoiceCommand extends Command {
     if (msg.member.voice.channel) {
       if (icao === '-STOP') {
         if (this.voiceChannels[msg.member.voice.channel.id]) {
-          const { connection } = this.voiceChannels[msg.member.voice.channel.id];
-          connection.disconnect();
+          this.voiceChannels[msg.member.voice.channel.id].connection.disconnect();
           msg.reply('AvBot left the voice channel');
+        } else {
+          msg.reply('AvBot already left the voice channel');
         }
-        msg.reply('AvBot already left the voice channel');
-      }
+      } else {
+        const atisEmbed = new Discord.MessageEmbed()
+          .setTitle(`ATIS for ${icao.toUpperCase()}`)
+          .setColor('#0099ff')
+          .setFooter(this.client.user.username)
+          .setTimestamp();
 
-      const atisEmbed = new Discord.MessageEmbed()
-        .setTitle(`ATIS for ${icao.toUpperCase()}`)
-        .setColor('#0099ff')
-        .setFooter(this.client.user.username)
-        .setTimestamp();
-
-      try {
-        const { speech } = await AvBrief3.getAtis(icao);
-        atisEmbed.setDescription(speech);
-
-        // eslint-disable-next-line new-cap
-        const gtts = new gTTS(speech, 'en-uk');
-
-        if (!fs.existsSync(this.tmpDir)) {
-          fs.mkdirSync(this.tmpDir);
-        }
-        gtts.save(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
-
-        const sleep = (ms) =>
-          new Promise((resolve) => {
-            setTimeout(resolve, ms);
-          });
-
-        const play = (connection) => {
-          if (!fs.existsSync(this.tmpDir)) {
-            fs.mkdirSync(this.tmpDir);
-          }
-
-          const dispatcher = connection.play(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
-          dispatcher.on('finish', async () => {
-            await sleep(1000);
-            play(connection);
-          });
-        };
-
-        if (this.client.voice.connections.filter((conn) => conn.channel.id === msg.member.voice.channel.id).array().length > 0) {
-          const { connection } = this.voiceChannels[msg.member.voice.channel.id];
-          connection.disconnect();
-          await sleep(3000);
-        }
-
-        const connection = await msg.member.voice.channel.join();
-
-        play(connection);
-
-        this.voiceChannels[msg.member.voice.channel.id] = {
-          channel: msg.member.voice.channel,
-          connection
-        };
-      } catch (error) {
-        logger.error(`[${this.client.shard.ids}] ${error}`);
         try {
-          const { speech } = await Avwx.getMetar(icao);
-
+          const { speech } = await AvBrief3.getAtis(icao);
           atisEmbed.setDescription(speech);
 
           // eslint-disable-next-line new-cap
           const gtts = new gTTS(speech, 'en-uk');
+
           if (!fs.existsSync(this.tmpDir)) {
             fs.mkdirSync(this.tmpDir);
           }
-
           gtts.save(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
 
           const sleep = (ms) =>
@@ -112,19 +65,15 @@ module.exports = class AtisVoiceCommand extends Command {
             });
 
           const play = (connection) => {
-            try {
-              if (!fs.existsSync(this.tmpDir)) {
-                fs.mkdirSync(this.tmpDir);
-              }
-
-              const dispatcher = connection.play(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
-              dispatcher.on('finish', async () => {
-                await sleep(1000);
-                play(connection);
-              });
-            } catch (err) {
-              logger.error(`[${this.client.shard.ids}] ${err}`);
+            if (!fs.existsSync(this.tmpDir)) {
+              fs.mkdirSync(this.tmpDir);
             }
+
+            const dispatcher = connection.play(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
+            dispatcher.on('finish', async () => {
+              await sleep(1000);
+              play(connection);
+            });
           };
 
           if (this.client.voice.connections.filter((conn) => conn.channel.id === msg.member.voice.channel.id).array().length > 0) {
@@ -141,14 +90,66 @@ module.exports = class AtisVoiceCommand extends Command {
             channel: msg.member.voice.channel,
             connection
           };
-        } catch (err) {
-          logger.error(`[${this.client.shard.ids}] ${err}`);
-          atisEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
-        }
-      }
+        } catch (error) {
+          logger.error(`[${this.client.shard.ids}] ${error}`);
+          try {
+            const { speech } = await Avwx.getMetar(icao);
 
-      msg.embed(atisEmbed);
+            atisEmbed.setDescription(speech);
+
+            // eslint-disable-next-line new-cap
+            const gtts = new gTTS(speech, 'en-uk');
+            if (!fs.existsSync(this.tmpDir)) {
+              fs.mkdirSync(this.tmpDir);
+            }
+
+            gtts.save(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
+
+            const sleep = (ms) =>
+              new Promise((resolve) => {
+                setTimeout(resolve, ms);
+              });
+
+            const play = (connection) => {
+              try {
+                if (!fs.existsSync(this.tmpDir)) {
+                  fs.mkdirSync(this.tmpDir);
+                }
+
+                const dispatcher = connection.play(`${this.tmpDir}/${msg.member.voice.channel.id}_${icao}.mp3`);
+                dispatcher.on('finish', async () => {
+                  await sleep(1000);
+                  play(connection);
+                });
+              } catch (err) {
+                logger.error(`[${this.client.shard.ids}] ${err}`);
+              }
+            };
+
+            if (this.client.voice.connections.filter((conn) => conn.channel.id === msg.member.voice.channel.id).array().length > 0) {
+              const { connection } = this.voiceChannels[msg.member.voice.channel.id];
+              connection.disconnect();
+              await sleep(3000);
+            }
+
+            const connection = await msg.member.voice.channel.join();
+
+            play(connection);
+
+            this.voiceChannels[msg.member.voice.channel.id] = {
+              channel: msg.member.voice.channel,
+              connection
+            };
+          } catch (err) {
+            logger.error(`[${this.client.shard.ids}] ${err}`);
+            atisEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
+          }
+        }
+
+        msg.embed(atisEmbed);
+      }
+    } else {
+      msg.reply('You need to join a voice channel first!');
     }
-    msg.reply('You need to join a voice channel first!');
   }
 };

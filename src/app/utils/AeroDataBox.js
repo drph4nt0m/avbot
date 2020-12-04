@@ -17,8 +17,7 @@ module.exports = class AeroDataBox {
         reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
       }
       try {
-        const { data } = await this.api.get(`/icao24/${icao24}`);
-        resolve(data);
+        resolve((await this.api.get(`/icao24/${icao24}`)).data);
       } catch (error) {
         logger.error(`[x] ${error}`);
         reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));

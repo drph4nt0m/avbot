@@ -92,6 +92,6 @@ Fill out our Pull Request template.
 
 Put useful information about the changes there.
 
-### Step 4: All done!
+### Step 4: All done
 
 Your changes will be reviewed soon. Keep an eye on your pull request!
