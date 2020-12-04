@@ -2,7 +2,6 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const accents = require('remove-accents');
 const axios = require('axios').default;
-
 const services = require('../../config/services');
 const logger = require('./Logger');
 
@@ -31,6 +30,7 @@ module.exports = class Avwx {
           station
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
@@ -68,6 +68,7 @@ module.exports = class Avwx {
                 }
               }
             } catch (error) {
+              logger.error(`[x] ${error}`);
               if (taf.info.city) {
                 try {
                   station += `${accents.remove(taf.info.city)}`;
@@ -95,6 +96,7 @@ module.exports = class Avwx {
           speech: taf.speech
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
@@ -131,6 +133,7 @@ module.exports = class Avwx {
                 }
               }
             } catch (error) {
+              logger.error(`[x] ${error}`);
               if (metar.info.city) {
                 try {
                   station += `${accents.remove(metar.info.city)}`;
@@ -188,6 +191,7 @@ module.exports = class Avwx {
           speech: metar.speech
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });

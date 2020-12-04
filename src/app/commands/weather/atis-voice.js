@@ -92,6 +92,7 @@ module.exports = class AtisVoiceCommand extends Command {
           connection
         };
       } catch (error) {
+        logger.error(`[${this.client.shard.ids}] ${error}`);
         try {
           const { speech } = await Avwx.getMetar(icao);
 
@@ -141,6 +142,7 @@ module.exports = class AtisVoiceCommand extends Command {
             connection
           };
         } catch (err) {
+          logger.error(`[${this.client.shard.ids}] ${err}`);
           atisEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
         }
       }

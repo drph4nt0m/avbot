@@ -4,6 +4,7 @@ const Dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const Avwx = require('../../utils/Avwx');
 const Charts = require('../../utils/Charts');
+const logger = require('../../utils/Logger');
 
 Dayjs.extend(utc);
 
@@ -55,11 +56,12 @@ module.exports = class ChartCommand extends Command {
 
       chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart})`);
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         await Avwx.getStation(icao);
-
         chartEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${icao} chart is not available in our database`);
       } catch (err) {
+        logger.error(`[${this.client.shard.ids}] ${error}`);
         chartEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }

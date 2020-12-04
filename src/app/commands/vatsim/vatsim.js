@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
+const logger = require('../../utils/Logger');
 const Vatsim = require('../../utils/Vatsim');
 
 module.exports = class VatsimCommand extends Command {
@@ -153,6 +154,7 @@ module.exports = class VatsimCommand extends Command {
         );
       }
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       vatsimEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 

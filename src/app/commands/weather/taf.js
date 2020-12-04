@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 const Avwx = require('../../utils/Avwx');
 const AvBrief3 = require('../../utils/AvBrief3');
+const logger = require('../../utils/Logger');
 
 module.exports = class TafCommand extends Command {
   constructor(client) {
@@ -44,6 +45,7 @@ module.exports = class TafCommand extends Command {
         }
       );
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         const { raw } = await AvBrief3.getTaf(icao);
 
@@ -52,6 +54,7 @@ module.exports = class TafCommand extends Command {
           value: raw
         });
       } catch (err) {
+        logger.error(`[${this.client.shard.ids}] ${err}`);
         tafEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }

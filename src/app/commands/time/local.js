@@ -5,6 +5,7 @@ const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
 const Avwx = require('../../utils/Avwx');
 const Geonames = require('../../utils/Geonames');
+const logger = require('../../utils/Logger');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -67,6 +68,7 @@ module.exports = class LocalCommand extends Command {
 
         zuluEmbed.setTitle(`Local Time at ${icao} when zulu time is ${zulutime}hrs`).setDescription(`${timestring}hrs`);
       } catch (error) {
+        logger.error(`[${this.client.shard.ids}] ${error}`);
         zuluEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
       }
     } else {

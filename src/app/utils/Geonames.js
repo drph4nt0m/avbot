@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const logger = require('./Logger');
 
 module.exports = class Geonames {
   static api = axios.create({
@@ -17,6 +18,7 @@ module.exports = class Geonames {
 
         resolve(response.data);
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.message || `internal server error`));
       }
     });

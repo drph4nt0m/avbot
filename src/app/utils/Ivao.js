@@ -2,6 +2,7 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const S = require('string');
 const axios = require('axios').default;
+const logger = require('./Logger');
 
 dayjs.extend(utc);
 
@@ -195,6 +196,7 @@ module.exports = class Avwx {
         }
         reject(new Error(`no client available at the moment with call sign ${callSign}`));
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response || `no client available at the moment with call sign ${callSign}`));
       }
     });
@@ -220,6 +222,7 @@ module.exports = class Avwx {
         }
         reject(new Error(`no client available at the moment matching call sign ${partialCallSign}`));
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response || `no client available at the moment matching call sign ${partialCallSign}`));
       }
     });

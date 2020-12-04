@@ -30,7 +30,7 @@ module.exports = class TopCommand extends Command {
           return {
             id: g.id,
             name: g.name,
-            owner: g.owner ? g.owner.user.tag : 'unkown',
+            owner: g.owner ? g.owner.user.tag : 'unknown',
             memberCount: g.memberCount,
           };
         })`

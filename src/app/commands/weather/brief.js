@@ -45,6 +45,7 @@ module.exports = class BriefCommand extends Command {
 
       briefEmbed.addField(`**METAR**`, `**Raw Report**\n${raw}\n**Readable Report**\n${readable}`);
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         const { raw } = await AvBrief3.getMetar(icao);
 

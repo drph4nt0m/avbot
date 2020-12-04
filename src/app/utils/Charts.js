@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const logger = require('./Logger');
 
 module.exports = class Chart {
   static api = axios.create({
@@ -13,12 +14,11 @@ module.exports = class Chart {
   static getChart(icao) {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.api.get(`${icao}.pdf`).catch((err) => {
-          reject(err);
-        });
+        await this.api.get(`${icao}.pdf`)
         resolve(this.getChartURL(icao));
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        logger.error(`[x] ${error}`);
+        reject(error);
       }
     });
   }

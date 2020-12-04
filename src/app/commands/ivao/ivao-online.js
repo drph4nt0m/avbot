@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 const Ivao = require('../../utils/Ivao');
+const logger = require('../../utils/Logger');
 
 module.exports = class IvaoOnlineCommand extends Command {
   constructor(client) {
@@ -38,6 +39,7 @@ module.exports = class IvaoOnlineCommand extends Command {
         ivaoEmbed.addField(`${atc.callSign}`, `VID: ${atc.vid}, Frequency: ${atc.frequency}`);
       });
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       ivaoEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 

@@ -1,6 +1,6 @@
 const axios = require('axios').default;
-
 const services = require('../../config/services');
+const logger = require('./Logger');
 
 module.exports = class AvBrief3 {
   static api = axios.create({
@@ -28,6 +28,7 @@ module.exports = class AvBrief3 {
           speech: response.data.a_text
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no atis available at the moment for ${icao}`));
       }
     });
@@ -50,6 +51,7 @@ module.exports = class AvBrief3 {
           raw: response.data.m_text
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });
@@ -72,6 +74,7 @@ module.exports = class AvBrief3 {
           raw: response.data.t_text
         });
       } catch (error) {
+        logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
       }
     });

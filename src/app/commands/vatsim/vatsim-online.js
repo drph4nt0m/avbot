@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
+const logger = require('../../utils/Logger');
 const Vatsim = require('../../utils/Vatsim');
 
 module.exports = class VatsimOnlineCommand extends Command {
@@ -38,6 +39,7 @@ module.exports = class VatsimOnlineCommand extends Command {
         vatsimEmbed.addField(`${atc.callSign}`, `VID: ${atc.vid}, Frequency: ${atc.frequency}`);
       });
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       vatsimEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
     }
 

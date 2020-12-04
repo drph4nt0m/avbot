@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
 const AvBrief3 = require('../../utils/AvBrief3');
 const Avwx = require('../../utils/Avwx');
+const logger = require('../../utils/Logger');
 
 module.exports = class AtisCommand extends Command {
   constructor(client) {
@@ -34,10 +35,12 @@ module.exports = class AtisCommand extends Command {
       const { speech } = await AvBrief3.getAtis(icao);
       atisEmbed.setDescription(speech);
     } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         const { speech } = await Avwx.getMetar(icao);
         atisEmbed.setDescription(speech);
       } catch (err) {
+        logger.error(`[${this.client.shard.ids}] ${err}`);
         atisEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }
