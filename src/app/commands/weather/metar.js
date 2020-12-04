@@ -10,7 +10,7 @@ module.exports = class MetarCommand extends Command {
       name: 'metar',
       group: 'weather',
       memberName: 'metar',
-      aliases: [],
+      aliases: ['m'],
       description: 'Gives you the live METAR for the chosen airport',
       examples: ['metar <icao>'],
       args: [

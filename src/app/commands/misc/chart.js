@@ -14,7 +14,7 @@ module.exports = class ChartCommand extends Command {
       name: 'chart',
       group: 'misc',
       memberName: 'chart',
-      aliases: ['charts'],
+      aliases: ['c', 'charts'],
       description: 'Gives you the the latest chart for the chosen airport',
       examples: ['chart <icao>'],
       hidden: true,

@@ -7,7 +7,7 @@ module.exports = class HelpCommand extends Command {
       name: 'help',
       group: 'util',
       memberName: 'help',
-      aliases: ['commands', 'commands'],
+      aliases: ['h', 'commands', 'commands'],
       description: 'Displays a list of available commands, or detailed information for a specified command',
       examples: ['help', 'help <command>'],
       hidden: true,

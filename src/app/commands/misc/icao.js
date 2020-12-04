@@ -10,7 +10,7 @@ module.exports = class IcaoCommand extends Command {
       name: 'icao',
       group: 'misc',
       memberName: 'icao',
-      aliases: [],
+      aliases: ['ic'],
       description: 'Gives you the station information for the chosen airport',
       examples: ['icao <icao>'],
       args: [

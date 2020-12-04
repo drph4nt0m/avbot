@@ -16,6 +16,7 @@ module.exports = class LocalCommand extends Command {
       name: 'local',
       group: 'time',
       memberName: 'local',
+      aliases: ['lt'],
       description: 'Gives you the specific local time for the given zulu Time and ICAO',
       args: [
         {

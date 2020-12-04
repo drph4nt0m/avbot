@@ -10,7 +10,7 @@ module.exports = class TafCommand extends Command {
       name: 'taf',
       group: 'weather',
       memberName: 'taf',
-      aliases: [],
+      aliases: ['t'],
       description: 'Gives you the live TAF for the chosen airport',
       examples: ['taf <icao>'],
       args: [

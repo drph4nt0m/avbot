@@ -14,7 +14,7 @@ module.exports = class LiveCommand extends Command {
       name: 'live',
       group: 'misc',
       memberName: 'live',
-      aliases: [],
+      aliases: ['l', 'irl'],
       description: '[premium] Gives you the information for the chosen call sign in real life',
       examples: ['live <callsign>'],
       args: [

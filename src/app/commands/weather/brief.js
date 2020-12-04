@@ -15,7 +15,7 @@ module.exports = class BriefCommand extends Command {
       name: 'brief',
       group: 'weather',
       memberName: 'brief',
-      aliases: [],
+      aliases: ['b'],
       description: 'Gives you the live METAR, zulu time and the latest chart for the chosen airport',
       examples: ['brief <icao>'],
       args: [

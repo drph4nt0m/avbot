@@ -9,7 +9,7 @@ module.exports = class VatsimCommand extends Command {
       name: 'vatsim',
       group: 'vatsim',
       memberName: 'vatsim',
-      aliases: [],
+      aliases: ['v'],
       description: 'Gives you the information for the chosen call sign on the VATSIM network',
       examples: ['vatsim <call_sign>'],
       args: [

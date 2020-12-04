@@ -9,7 +9,7 @@ module.exports = class IvaoOnlineCommand extends Command {
       name: 'ivao-online',
       group: 'ivao',
       memberName: 'ivao-online',
-      aliases: ['ivaoonline'],
+      aliases: ['io', 'ivaoonline'],
       description: 'Gives you the information for all ATCs which match the given partial callsign on the IVAO network',
       examples: ['ivao-online <partial_icao_code>'],
       args: [

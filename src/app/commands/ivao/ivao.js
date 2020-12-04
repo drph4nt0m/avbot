@@ -9,7 +9,7 @@ module.exports = class IvaoCommand extends Command {
       name: 'ivao',
       group: 'ivao',
       memberName: 'ivao',
-      aliases: [],
+      aliases: ['i'],
       description: 'Gives you the information for the chosen call sign on the IVAO network',
       examples: ['ivao <call_sign>'],
       args: [

@@ -9,7 +9,7 @@ module.exports = class VatsimOnlineCommand extends Command {
       name: 'vatsim-online',
       group: 'vatsim',
       memberName: 'vatsim-online',
-      aliases: ['vatsimonline'],
+      aliases: ['vo', 'vatsimonline'],
       description: 'Gives you the information for all ATCs which match the given partial callsign on the VATSIM network',
       examples: ['vatsim-online <partial_icao_code>'],
       args: [

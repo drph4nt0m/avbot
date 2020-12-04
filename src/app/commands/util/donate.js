@@ -7,7 +7,7 @@ module.exports = class DonateCommand extends Command {
       name: 'donate',
       group: 'util',
       memberName: 'donate',
-      aliases: ['support'],
+      aliases: ['d', 'support'],
       description: 'Support AvBot by donating.',
       examples: ['donate', 'support']
     });

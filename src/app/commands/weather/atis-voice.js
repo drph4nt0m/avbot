@@ -16,7 +16,7 @@ module.exports = class AtisVoiceCommand extends Command {
       name: 'atis-voice',
       group: 'weather',
       memberName: 'atis-voice',
-      aliases: ['atisvoice'],
+      aliases: ['av', 'atisvoice'],
       description: 'Gives you the live ATIS as voice for the chosen airport',
       examples: ['atis-voice <icao>', 'atis-voice -stop'],
       guildOnly: true,

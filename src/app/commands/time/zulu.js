@@ -16,6 +16,7 @@ module.exports = class ZuluCommand extends Command {
       name: 'zulu',
       group: 'time',
       memberName: 'zulu',
+      aliases: ['zt'],
       description: 'Gives you the current zulu time or specific zulu time for the given local Time and ICAO',
       args: [
         {

@@ -10,7 +10,7 @@ module.exports = class AtisCommand extends Command {
       name: 'atis',
       group: 'weather',
       memberName: 'atis',
-      aliases: [],
+      aliases: ['a'],
       description: 'Gives you the live ATIS for the chosen airport',
       examples: ['atis <icao>'],
       args: [
