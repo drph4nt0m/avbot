@@ -17,6 +17,10 @@ module.exports = class LiveCommand extends Command {
       aliases: ['l', 'irl'],
       description: '[premium] Gives you the information for the chosen call sign in real life',
       examples: ['live <callsign>'],
+      throttling: {
+        usages: 1,
+        duration: 90
+      },
       args: [
         {
           key: 'callSign',
@@ -52,48 +56,51 @@ module.exports = class LiveCommand extends Command {
       const flightInfo = await OpenSky.getFlightInfo(callSign);
       icao24 = flightInfo.icao24;
 
-      liveEmbed.addFields([
-        {
-          name: 'Callsign',
-          value: flightInfo.callsign,
-          inline: true
-        },
-        {
-          name: 'Ground Speed',
-          value: flightInfo.velocity,
-          inline: true
-        },
-        {
-          name: 'Heading',
-          value: flightInfo.true_track,
-          inline: true
-        },
-        {
-          name: 'Altitude',
-          value: flightInfo.geo_altitude,
-          inline: true
-        },
-        {
-          name: 'Climb Rate',
-          value: flightInfo.vertical_rate,
-          inline: true
-        },
-        {
-          name: 'Squawk',
-          value: flightInfo.squawk,
-          inline: true
-        },
-        {
-          name: 'Country of Origin',
-          value: flightInfo.origin_country,
-          inline: true
-        },
-        {
-          name: 'ICAO Address',
-          value: flightInfo.icao24,
-          inline: true
-        }
-      ]);
+      liveEmbed
+        .setTitle(`${callSign.toUpperCase()} (Track on OpenSky Network)`)
+        .setURL(`https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`)
+        .addFields([
+          {
+            name: 'Callsign',
+            value: flightInfo.callsign,
+            inline: true
+          },
+          {
+            name: 'Ground Speed',
+            value: flightInfo.velocity,
+            inline: true
+          },
+          {
+            name: 'Heading',
+            value: flightInfo.true_track,
+            inline: true
+          },
+          {
+            name: 'Altitude',
+            value: flightInfo.geo_altitude,
+            inline: true
+          },
+          {
+            name: 'Climb Rate',
+            value: flightInfo.vertical_rate,
+            inline: true
+          },
+          {
+            name: 'Squawk',
+            value: flightInfo.squawk,
+            inline: true
+          },
+          {
+            name: 'Country of Origin',
+            value: flightInfo.origin_country,
+            inline: true
+          },
+          {
+            name: 'ICAO Address',
+            value: flightInfo.icao24,
+            inline: true
+          }
+        ]);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       liveEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);

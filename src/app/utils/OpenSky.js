@@ -4,7 +4,7 @@ const logger = require('./Logger');
 module.exports = class OpenSky {
   static api = axios.create({
     baseURL: 'https://opensky-network.org/api/states/all',
-    timeout: 10000
+    timeout: 30000
   });
 
   static getFlightInfo(callsign) {
