@@ -20,10 +20,11 @@ module.exports = class PingCommand extends Command {
 
   async run(msg) {
     const pingMsg = await msg.reply('Pinging...');
+    const rtt = (pingMsg.editedTimestamp || pingMsg.createdTimestamp) - (msg.editedTimestamp || msg.createdTimestamp);
     return pingMsg.edit(oneLine`
       ${msg.channel.type !== 'dm' ? `${msg.author},` : ''}
       Pong! The message round-trip took
-      ${pingMsg.createdTimestamp - msg.createdTimestamp}ms.
+      ${rtt}ms.
       ${this.client.ws.ping ? `The heartbeat ping is ${Math.round(this.client.ws.ping)}ms.` : ''}
     `);
   }
