@@ -24,7 +24,7 @@
     "@discordjs/opus": "^0.3.3",
     "@sentry/tracing": "^5.29.2",
     "@sentry/node": "^5.29.2",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "commando-provider-mongo": "^1.3.0",
     "common-tags": "^1.8.0",
     "dayjs": "^1.9.7",
