@@ -29,7 +29,7 @@
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/fjNqtz6"><img src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner4" alt="Discord"></a>
+  <a href="https://discord.gg/fjNqtz6"><img src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3" alt="Discord"></a>
  </p>
 
 ## Commands
