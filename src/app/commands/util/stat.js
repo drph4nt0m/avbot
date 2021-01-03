@@ -44,9 +44,7 @@ module.exports = class StatCommand extends Command {
     let h = Math.floor((t - d * cd) / ch);
     let m = Math.floor((t - d * cd - h * ch) / cm);
     let s = Math.floor(t - d * cd - h * ch - m * cm);
-    const pad = (n) => {
-      return n < 10 ? `0${n}` : n;
-    };
+    const pad = (n) => n < 10 ? `0${n}` : n;
     if (s === 60) {
       m += 1;
       s = 0;
