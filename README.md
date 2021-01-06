@@ -24,6 +24,8 @@
 </p>
 
 <p align="center">
+  
+  <a href="./CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4?style=for-the-badge" alt="Contributor Covenant"></a>
   <a href="#"><img src="https://img.shields.io/tokei/lines/github/drph4nt0m/avbot-v3?style=for-the-badge" alt="Lines of code"></a>
   <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=for-the-badge&logo=prettier" alt="Prettier"></a>
 </p>
