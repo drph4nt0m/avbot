@@ -23,7 +23,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "@sentry/tracing": "^5.30.0",
-    "@sentry/node": "^5.29.2",
+    "@sentry/node": "^5.30.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.0.2",
     "common-tags": "^1.8.0",
