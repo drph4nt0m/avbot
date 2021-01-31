@@ -22,7 +22,7 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
-    "@sentry/tracing": "^5.30.0",
+    "@sentry/tracing": "^6.0.3",
     "@sentry/node": "^5.30.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.0.2",
