@@ -1,7 +1,7 @@
 const path = require('path');
 const { CommandoClient } = require('discord.js-commando');
 const { MongoClient } = require('mongodb');
-const MongoDBProvider = require('commando-provider-mongo');
+const MongoDBProvider = require('commando-provider-mongo').MongoDBProvider;
 const DBL = require('dblapi.js');
 const { MessageEmbed } = require('discord.js');
 const services = require('../config/services');
