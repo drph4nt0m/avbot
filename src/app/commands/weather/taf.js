@@ -50,7 +50,7 @@ module.exports = class TafCommand extends Command {
         tafEmbeds.push(tempEmbed);
 
         const readableList = readable.split('. ');
-        let buffer = "";
+        let buffer = '';
 
         for (let i = 0; i < readableList.length; i += 1) {
           const currentLine = `${readableList[i]}. `;
@@ -64,7 +64,7 @@ module.exports = class TafCommand extends Command {
               .setTimestamp();
 
             tafEmbeds.push(tempEmbed);
-            buffer = "";
+            buffer = '';
           }
         }
 
@@ -72,9 +72,7 @@ module.exports = class TafCommand extends Command {
         tafEmbeds.push(tempEmbed.addField(`Readable Report [${tafEmbeds.length}]`, buffer));
         // console.log(tafEmbeds);
 
-
-
-        for (let i = 0; i < tafEmbeds.length; i +=1 ) {
+        for (let i = 0; i < tafEmbeds.length; i += 1) {
           // eslint-disable-next-line no-await-in-loop
           await msg.embed(tafEmbeds[i].setFooter(`${this.client.user.username} • Message ${i + 1} of ${tafEmbeds.length}`));
         }
