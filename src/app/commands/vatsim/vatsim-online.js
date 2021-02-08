@@ -17,7 +17,7 @@ module.exports = class VatsimOnlineCommand extends Command {
           key: 'partialCallSign',
           prompt: 'What partial call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/[^A-Z0-9_]/g, '')
         }
       ]
     });
@@ -36,7 +36,7 @@ module.exports = class VatsimOnlineCommand extends Command {
       vatsimEmbed.setTitle(`VATSIM : ${partialCallSign}`);
 
       atcList.forEach((atc) => {
-        vatsimEmbed.addField(`${atc.callSign}`, `VID: ${atc.vid}, Frequency: ${atc.frequency}`);
+        vatsimEmbed.addField(`${atc.callSign}`, `CID: ${atc.cid}, Frequency: ${atc.frequency}`);
       });
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
