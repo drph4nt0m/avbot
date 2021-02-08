@@ -36,6 +36,26 @@ module.exports = class Avwx {
     });
   }
 
+  static async getStationByCoords(latitude, longitude, location) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await this.api.get(`/station/${latitude},${longitude}`);
+
+        if (response.status !== 200) {
+          reject(new Error(`no station available at the moment near ${location}`));
+        }
+        const station = response.data;
+
+        resolve({
+          station
+        });
+      } catch (error) {
+        logger.error(`[x] ${error}`);
+        reject(new Error(error.response.data.error || `no station available at the moment near ${location}`));
+      }
+    });
+  }
+
   static async getTaf(icao) {
     return new Promise(async (resolve, reject) => {
       try {

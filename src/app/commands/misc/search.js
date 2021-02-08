@@ -1,38 +1,40 @@
 const Discord = require('discord.js');
 const accents = require('remove-accents');
 const { Command } = require('discord.js-commando');
+const Geonames = require('../../utils/Geonames');
 const Avwx = require('../../utils/Avwx');
 const logger = require('../../utils/Logger');
 
 module.exports = class IcaoCommand extends Command {
   constructor(client) {
     super(client, {
-      name: 'icao',
+      name: 'search',
       group: 'misc',
-      memberName: 'icao',
-      aliases: ['ic'],
-      description: 'Gives you the station information for the chosen airport',
-      examples: ['icao <icao>'],
+      memberName: 'search',
+      aliases: ['s'],
+      description: 'Gives you the nearest airport for a chosen location',
+      examples: ['search <location>'],
       args: [
         {
-          key: 'icao',
-          prompt: 'What ICAO would you like the bot to give Station for?',
-          type: 'string',
-          parse: (val) => val.toUpperCase()
+          key: 'location',
+          prompt: 'What location would you like the bot to search for?',
+          type: 'string'
         }
       ]
     });
   }
 
-  async run(msg, { icao }) {
+  async run(msg, { location }) {
     const stationEmbed = new Discord.MessageEmbed()
-      .setTitle(`Station for ${icao.toUpperCase()}`)
+      .setTitle(`Search : ${location.toUpperCase()}`)
       .setColor('#0099ff')
       .setFooter(this.client.user.username)
       .setTimestamp();
 
     try {
-      const { station } = await Avwx.getStation(icao);
+      const { latitude, longitude } = await Geonames.getCoordinates(location);
+
+      const { station } = await Avwx.getStationByCoords(latitude, longitude, location);
 
       stationEmbed.addFields(
         {

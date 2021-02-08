@@ -15,6 +15,9 @@ module.exports = {
   avbrief3: {
     token: process.env.AVBRIEF3_TOKEN
   },
+  geonames: {
+    username: process.env.GEONAMES_USERNAME
+  },
   aviation_stack: {
     token: process.env.AVIATION_STACK_TOKEN
   },
