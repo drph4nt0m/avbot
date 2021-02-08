@@ -17,7 +17,7 @@ module.exports = class IvaoOnlineCommand extends Command {
           key: 'partialCallSign',
           prompt: 'What partial callsign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/[^A-Z0-9_]/g, '')
         }
       ]
     });
