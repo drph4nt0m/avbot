@@ -25,7 +25,7 @@
     "@sentry/tracing": "^6.1.0",
     "@sentry/node": "^6.1.0",
     "axios": "^0.21.1",
-    "commando-provider-mongo": "^2.0.2",
+    "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
     "dayjs": "^1.10.4",
     "dblapi.js": "^2.4.1",
