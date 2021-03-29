@@ -36,19 +36,16 @@ module.exports = class Avwx {
     });
   }
 
-  static async getStationByCoords(latitude, longitude, location) {
+  static async getStationsByCoords(latitude, longitude, location) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await this.api.get(`/station/${latitude},${longitude}`);
+        const response = await this.api.get(`/station/near/${latitude},${longitude}?n=10`);
 
         if (response.status !== 200) {
           reject(new Error(`no station available at the moment near ${location}`));
         }
-        const station = response.data;
 
-        resolve({
-          station
-        });
+        resolve(response.data);
       } catch (error) {
         logger.error(`[x] ${error}`);
         reject(new Error(error.response.data.error || `no station available at the moment near ${location}`));
