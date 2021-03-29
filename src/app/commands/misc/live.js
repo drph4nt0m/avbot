@@ -5,7 +5,7 @@ const AviationStack = require('../../utils/AviationStack');
 const AeroDataBox = require('../../utils/AeroDataBox');
 const AirportData = require('../../utils/AirportData');
 const logger = require('../../utils/Logger');
-const Database = require('../../utils/Database');
+const Mongo = require('../../utils/Mongo');
 const services = require('../../../config/services');
 
 module.exports = class LiveCommand extends Command {
@@ -39,7 +39,7 @@ module.exports = class LiveCommand extends Command {
       .setColor('#0099ff')
       .setFooter(`${this.client.user.username} • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`)
       .setTimestamp();
-    if (!(await Database.isPremiumGuild(msg.guild.id))) {
+    if (!(await Mongo.isPremiumGuild(msg.guild.id))) {
       logger.error(`[${this.client.shard.ids}] ${msg.guild.id} tried using live command`);
       liveEmbed
         .setColor('#00ff00')
