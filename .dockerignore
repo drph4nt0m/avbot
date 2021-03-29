@@ -3,5 +3,5 @@
 npm-debug.log
 Dockerfile
 node_modules
-tmp
-dist
+**/tmp/*
+.openode
