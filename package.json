@@ -9,7 +9,7 @@
     "start": "node ./src/app/index.js",
     "lint": "eslint ./src/**/*.js --max-warnings 0",
     "lint-fix": "eslint ./src/**/*.js --fix",
-    "prettier": "prettier . --write",
+    "prettier": "prettier . --write"
   },
   "repository": {
     "type": "git",
