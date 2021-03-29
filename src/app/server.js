@@ -4,7 +4,7 @@ const logger = require('./utils/Logger');
 const app = express();
 const PORT = 80;
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).send('AvBot is online!');
 });
 

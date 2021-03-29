@@ -34,23 +34,22 @@ module.exports = class IcaoCommand extends Command {
     try {
       const { latitude, longitude } = await Geonames.getCoordinates(location);
 
-      searchEmbed.setTitle(`Search : ${location.toUpperCase()} [${latitude}, ${longitude}]`)
+      searchEmbed.setTitle(`Search : ${location.toUpperCase()} [${latitude}, ${longitude}]`);
 
       const stations = await Avwx.getStationsByCoords(latitude, longitude, location);
 
-      stations.forEach(station => {
+      stations.forEach((station) => {
         let title = `${station.station.icao}`;
         if (station.station.iata) {
-          title += ` / ${ station.station.iata}`
+          title += ` / ${station.station.iata}`;
         }
 
         const desc = `${station.station.name}\n`;
         // if (station.station.note) {
         //   desc += station.station.note;
         // }
-        searchEmbed.addField(title, accents.remove(desc))
-      })
-
+        searchEmbed.addField(title, accents.remove(desc));
+      });
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       searchEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
