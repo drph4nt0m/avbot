@@ -12,6 +12,10 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,11 +23,21 @@ jobs:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
 
-      - name: Prettify code
-        uses: creyD/prettier_action@v3.1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          # This part is also where you can pass other options, for example:
-          prettier_options: '--write *'
-          dry: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run prettier
+        run: npm run prettier:ci -- --check
+
+      - name: Run actual reformat if bad
+        run: npm run prettier:ci -- -w
+        if: ${{ failure() }}
+
+      - name: Show diff
+        run: git diff
+        if: ${{ failure() }}

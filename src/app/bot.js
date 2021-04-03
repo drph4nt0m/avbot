@@ -47,7 +47,7 @@ client.once('ready', () => {
   });
 
   setInterval(() => {
-    dbl.postStats(client.guilds.size, client.shard.Id, client.shards.total);
+    dbl.postStats(client.guilds.size, client.shard.Id);
   }, 1800000);
 });
 

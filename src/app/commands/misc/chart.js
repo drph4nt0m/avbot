@@ -36,25 +36,10 @@ module.exports = class ChartCommand extends Command {
       .setFooter(`${this.client.user.username} • This is not a source for official briefing. Please use the appropriate forums.`)
       .setTimestamp();
 
-    // disable the command
-    chartEmbed
-      .setColor('#00ff00')
-      .setDescription(
-        `${msg.author}, we are migrating from Jepessen charts to freely
-        and openly available charts and hence chart is temporarily disabled.
-        We need the community's help in doing so.
-        Help us in collecting such charts by joining our support server.
-        https://link.avbot.in/support`
-      )
-      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#6615 • Thank you for showing your support by using AvBot`);
-
-    return msg.embed(chartEmbed);
-
-    // eslint-disable-next-line no-unreachable
     try {
       const chart = await Charts.getChart(icao);
 
-      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart})`);
+      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart.link})`);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
