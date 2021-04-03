@@ -34,7 +34,7 @@
     "dotenv": "^8.2.0",
     "emoji-regex": "^9.2.1",
     "express": "^4.17.1",
-    "ffmpeg-static": "^4.2.7",
+    "ffmpeg-static": "^4.3.0",
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
     "mongodb": "^3.6.5",
