@@ -1,6 +1,8 @@
 module.exports = {
   discord: {
     token: process.env.DISCORD_TOKEN,
+    applicationID: process.env.DISCORD_APPLICATION_ID,
+    publicKey: process.env.DISCORD_PUBLIC_KEY,
     supportServerInvite: process.env.SUPPORT_SERVER_INVITE,
     owners: process.env.BOT_OWNERS,
     newGuildChannel: process.env.GUILDS_CHANNEL,
@@ -29,5 +31,7 @@ module.exports = {
   },
   sentry: {
     dsn: process.env.SENTRY_DSN
-  }
+  },
+  port: process.env.PORT,
+  environment: process.env.NODE_ENV
 };

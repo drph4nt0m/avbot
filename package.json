@@ -22,8 +22,8 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.4.0",
-    "@sentry/tracing": "^6.1.0",
     "@sentry/node": "^6.1.0",
+    "@sentry/tracing": "^6.1.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.0.2",
     "common-tags": "^1.8.0",
@@ -33,7 +33,7 @@
     "discord.js-commando": "github:discordjs/Commando",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
-    "gtts": "^0.2.1",
+    "gtts": "^0.1.1",
     "mongodb": "^3.6.4",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",

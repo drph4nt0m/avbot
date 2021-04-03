@@ -1,6 +1,8 @@
 const Sentry = require('@sentry/node');
 const services = require('./services');
 
-Sentry.init({
-  dsn: services.sentry.dsn
-});
+if (services.environment === 'production') {
+  Sentry.init({
+    dsn: services.sentry.dsn
+  });
+}
