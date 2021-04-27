@@ -6,7 +6,7 @@ const logger = require('./Logger');
 
 dayjs.extend(utc);
 
-module.exports = class Avwx {
+module.exports = class Ivao {
   static api = axios.create({
     baseURL: 'https://api.ivao.aero/getdata/whazzup/whazzup.txt',
     timeout: 10000

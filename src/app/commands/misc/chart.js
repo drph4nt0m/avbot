@@ -39,7 +39,7 @@ module.exports = class ChartCommand extends Command {
     try {
       const chart = await Charts.getChart(icao);
 
-      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart.link})`);
+      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart ? chart.link : ''})`);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
