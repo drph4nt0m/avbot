@@ -15,4 +15,9 @@ manager.on('shardCreate', (shard) => {
   logger.info(`Launched shard ${shard.id}`);
 });
 
-manager.spawn(3, 1000, -1);
+let shards = 1;
+if (services.environment === 'production') {
+  shards = 4;
+}
+
+manager.spawn(shards, 1000, -1);

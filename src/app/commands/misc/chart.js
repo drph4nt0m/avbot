@@ -39,7 +39,10 @@ module.exports = class ChartCommand extends Command {
     try {
       const chart = await Charts.getChart(icao);
 
-      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart ? chart.link : ''})`);
+      if (!chart) {
+        throw new Error(`${icao} chart is not available in our database`)
+      }
+      chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart.link})`);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
@@ -47,7 +50,7 @@ module.exports = class ChartCommand extends Command {
         chartEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${icao} chart is not available in our database`);
       } catch (err) {
         logger.error(`[${this.client.shard.ids}] ${error}`);
-        chartEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
+        chartEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${icao} chart is not available in our database`);
       }
     }
     return msg.embed(chartEmbed);
