@@ -39,7 +39,7 @@
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
     "mongodb": "^3.6.5",
-    "prettier": "^2.2.1",
+    "prettier": "^2.3.0",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
     "winston": "^3.3.3"
