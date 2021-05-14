@@ -8,7 +8,7 @@ const logger = require('./utils/Logger');
 
 const manager = new ShardingManager('src/app/bot.js', {
   totalShards: 'auto',
-  token: services.discord.token,
+  token: services.discord.token
 });
 
 manager.on('shardCreate', (shard) => {

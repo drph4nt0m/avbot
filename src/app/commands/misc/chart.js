@@ -40,7 +40,7 @@ module.exports = class ChartCommand extends Command {
       const chart = await Charts.getChart(icao);
 
       if (!chart) {
-        throw new Error(`${icao} chart is not available in our database`)
+        throw new Error(`${icao} chart is not available in our database`);
       }
       chartEmbed.setDescription(`[Click here for ${icao} Charts](${chart.link})`);
     } catch (error) {
