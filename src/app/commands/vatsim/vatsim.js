@@ -105,7 +105,7 @@ module.exports = class VatsimCommand extends Command {
           },
           {
             name: `EET`,
-            value: `${vatsimClient.eetHours}:${vatsimClient.eetMinutes}`,
+            value: vatsimClient.eet,
             inline: true
           },
           {

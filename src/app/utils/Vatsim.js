@@ -8,84 +8,21 @@ dayjs.extend(utc);
 
 module.exports = class Vatsim {
   static api = axios.create({
-    baseURL: 'http://us.data.vatsim.net/vatsim-data.txt',
+    baseURL: 'https://data.vatsim.net/v3/vatsim-data.json',
     timeout: 10000
   });
 
-  static facilityType = {
-    0: 'Observer',
-    1: 'Flight Information',
-    2: 'Delivery',
-    3: 'Ground',
-    4: 'Tower',
-    5: 'Approach',
-    6: 'ACC',
-    7: 'Departure'
-  };
-
-  static administrativeRating = {
-    0: 'Suspended',
-    1: 'Observer',
-    2: 'User',
-    11: 'Supervisor',
-    12: 'Administrator'
-  };
-
-  static atcRating = {
-    1: 'Observer',
-    2: 'ATC Applicant (AS1)',
-    3: 'ATC Trainee (AS2)',
-    4: 'Advanced ATC Trainee (AS3)',
-    5: 'Aerodrome Controller (ADC)',
-    6: 'Approach Controller (APC)',
-    7: 'Center Controller (ACC)',
-    8: 'Senior Controller (SEC)',
-    9: 'Senior ATC Instructor (SAI)',
-    10: 'Chief ATC Instructor (CAI)'
-  };
-
-  static pilotRating = {
-    1: 'Observer',
-    2: 'Basic Flight Student (FS1)',
-    3: 'Flight Student (FS2)',
-    4: 'Advanced Flight Student (FS3)',
-    5: 'Private Pilot (PP)',
-    6: 'Senior Private Pilot (SPP)',
-    7: 'Commercial Pilot (CP)',
-    8: 'Airline Transport Pilot (ATP)',
-    9: 'Senior Flight Instructor (SFI)',
-    10: 'Chief Flight Instructor (CFI)'
-  };
-
-  static flightSimulators = {
-    0: 'Unknown',
-    1: 'Microsoft Flight Simulator 95',
-    2: 'Microsoft Flight Simulator 98',
-    3: 'Microsoft Combat Flight Simulator',
-    4: 'Microsoft Flight Simulator 2000',
-    5: 'Microsoft Combat Flight Simulator 2',
-    6: 'Microsoft Flight Simulator 2002',
-    7: 'Microsoft Combat Flight Simulator 3',
-    8: 'Microsoft Flight Simulator 2004',
-    9: 'Microsoft Flight Simulator X',
-    11: 'X-Plane (unknown version)',
-    12: 'X-Plane 8.x',
-    13: 'X-Plane 9.x',
-    14: 'X-Plane 10.x',
-    15: 'PS1',
-    16: 'X-Plane 11.x',
-    17: 'X-Plane 12.x',
-    20: 'Fly!',
-    21: 'Fly! 2',
-    25: 'FlightGear',
-    30: 'Prepar3D 1.x',
-    40: 'Microsoft Flight Simulator 2020'
-  };
-
   static vatsim = {
     general: {},
-    clients: {},
-    servers: {}
+    pilots: {},
+    controllers: {},
+    atis: {},
+    servers: {},
+    prefiles: {},
+    facilities: {},
+    ratings: {},
+    pilot_ratings: {},
+    clients: {}
   };
 
   static formatDate(date) {
@@ -93,93 +30,101 @@ module.exports = class Vatsim {
   }
 
   static async download() {
-    if (this.vatsim.general.UPDATE && this.formatDate(this.vatsim.general.UPDATE).add(4, 'minute').isAfter(dayjs())) {
+    if (this.vatsim.general.update && this.formatDate(this.vatsim.general.update).add(4, 'minute').isAfter(dayjs())) {
       return;
     }
 
-    const [, general, clients, servers] = (await this.api.get(null)).data.split(/!GENERAL:|!CLIENTS:|!SERVERS:|!PREFILE:/g).map((r) => r.trim());
+    this.vatsim = { ...(await this.api.get(null)).data, clients: {} };
 
-    general
-      .split('\n')
-      .filter((g) => g !== ';')
-      .forEach((g) => {
-        const t = g.split('=').map((r) => r.trim());
-        this.vatsim.general[S(t[0]).replaceAll(' ', '_').s] = t[1];
-      });
+    this.vatsim.pilots.forEach((c) => {
+      this.vatsim.clients[c.callsign] = {
+        callSign: c.callsign || undefined,
+        cid: c.cid || undefined,
+        name: c.name || undefined,
+        clientType: 'PILOT',
+        frequency: c.frequency || undefined,
+        latitude: c.latitude || undefined,
+        longitude: c.longitude || undefined,
+        altitude: `${c.altitude} ft`,
+        groundSpeed: `${c.groundspeed} knots`,
+        aircraft: c.flight_plan ? c.flight_plan.aircraft : undefined,
+        cruisingSpeed: c.flight_plan ? c.flight_plan.cruise_tas : undefined,
+        departureAerodrome: c.flight_plan ? c.flight_plan.departure : undefined,
+        cruisingLevel: c.flight_plan ? c.flight_plan.altitude : undefined,
+        destinationAerodrome: c.flight_plan ? c.flight_plan.arrival : undefined,
+        server: c.server || undefined,
+        transponderCode: c.transponder || undefined,
+        facilityType: c.facility ? this.vatsim.facilities[c.facility] : undefined,
+        visualRange: undefined,
+        revision: c.flight_plan ? c.flight_plan.revision_id : undefined,
+        flightRules: c.flight_plan ? c.flight_plan.flight_rules : undefined,
+        departureTime: c.flight_plan
+          ? c.flight_plan.deptime.length === 2
+            ? `00:${c.flight_plan.deptime.substring(0, 2)}z`
+            : c.flight_plan.deptime.length === 3
+            ? `0${c.flight_plan.deptime.substring(0, 1)}:${c.flight_plan.deptime.substring(1, 3)}z`
+            : `${c.flight_plan.deptime.substring(0, 2)}:${c.flight_plan.deptime.substring(2, 4)}z`
+          : undefined,
+        eet: c.flight_plan
+          ? c.flight_plan.enroute_time.length === 2
+            ? `00:${c.flight_plan.enroute_time.substring(0, 2)}`
+            : c.flight_plan.enroute_time.length === 3
+            ? `0${c.flight_plan.enroute_time.substring(0, 1)}:${c.flight_plan.enroute_time.substring(1, 3)}`
+            : `${c.flight_plan.enroute_time.substring(0, 2)}:${c.flight_plan.enroute_time.substring(2, 4)}`
+          : undefined,
+        alternateAerodrome: c.flight_plan ? c.flight_plan.alternate : undefined,
+        route: c.flight_plan ? c.flight_plan.route : undefined,
+        atis: c.text_atis ? c.text_atis.join('\n') : undefined,
+        connectionTime: c.logon_time || undefined,
+        atcPilotRating: this.vatsim.pilot_ratings[c.pilot_rating] ? this.vatsim.pilot_ratings[c.pilot_rating].short_name : undefined,
+        heading: `${c.heading}°`
+      };
+    });
 
-    servers
-      .split('\n')
-      .filter((s) => s !== ';')
-      .forEach((s) => {
-        const t = s.split(':').map((r) => r.trim());
-        this.vatsim.servers[t[0]] = {
-          ip: t[1],
-          location: t[2],
-          name: t[3],
-          clientConnectionsAllowed: t[4],
-          maximumConnection: t[5]
-        };
-      });
-
-    clients
-      .split('\n')
-      .filter((c) => c !== ';')
-      .forEach((c) => {
-        const t = c.split(':').map((r) => r.trim());
-        this.vatsim.clients[t[0]] = {
-          callSign: t[0] || undefined,
-          cid: t[1] || undefined,
-          name: t[2] || undefined,
-          clientType: t[3] || undefined,
-          frequency: t[4] || undefined,
-          latitude: t[5] || undefined,
-          longitude: t[6] || undefined,
-          altitude: t[7] ? `${t[7]} ft` : undefined || undefined,
-          groundSpeed: t[8] ? `${t[8]} knots` : undefined || undefined,
-          aircraft: t[9] || undefined,
-          cruisingSpeed: t[10] || undefined,
-          departureAerodrome: t[11] || undefined,
-          cruisingLevel: t[12] || undefined,
-          destinationAerodrome: t[13] || undefined,
-          server: t[14] || undefined,
-          protocol: t[15] || undefined,
-          combinedRating: t[16] || undefined,
-          transponderCode: t[17] || undefined,
-          facilityType: t[18] ? this.facilityType[t[18]] : undefined || undefined,
-          visualRange: t[19] ? `${t[19]} NM` : undefined || undefined,
-          revision: t[20] || undefined,
-          flightRules: t[21] || undefined,
-          departureTime: t[22]
-            ? t[22].length === 2
-              ? `00:${t[22].substring(0, 2)}z`
-              : t[22].length === 3
-              ? `0${t[22].substring(0, 1)}:${t[22].substring(1, 3)}z`
-              : `${t[22].substring(0, 2)}:${t[22].substring(2, 4)}z`
-            : undefined || undefined,
-          actualDepartureTime: t[23] || undefined,
-          eetHours: t[24] ? (t[24].length === 1 ? `0${t[24]}` : t[24]) : undefined || undefined,
-          eetMinutes: t[25] ? (t[25].length === 1 ? `0${t[25]}` : t[25]) : undefined || undefined,
-          enduranceHours: t[26] ? (t[26].length === 1 ? `0${t[26]}` : t[26]) : undefined || undefined,
-          enduranceMinutes: t[27] ? (t[27].length === 1 ? `0${t[27]}` : t[27]) : undefined || undefined,
-          alternateAerodrome: t[28] || undefined,
-          otherInfo: t[29] || undefined,
-          route: t[30] || undefined,
-          atis: S(t[35]).replaceAll('^�', ' ').replaceAll('^§', ' ').s.replace(/\s+/g, ' ') || undefined,
-          atisTime: t[36] ? this.formatDate(t[36]).toDate() : undefined || undefined,
-          connectionTime: t[37] ? this.formatDate(t[37]).toDate() : undefined || undefined,
-          softwareName: t[38] || undefined,
-          softwareVersion: t[39] || undefined,
-          administrativeVersion: t[40] || undefined,
-          atcPilotRating: t[3] === 'ATC' ? this.atcRating[t[41]] : t[3] === 'PILOT' ? this.pilotRating[t[41]] : undefined || undefined,
-          alternateAerodrome2: t[42] || undefined,
-          typeOfFlight: t[43] || undefined,
-          personsOnBoard: t[44] || undefined,
-          heading: t[45] ? `${t[45]}°` : undefined || undefined,
-          onGround: t[46] === '1' ? true : false || undefined,
-          simulator: t[47] ? this.flightSimulators[t[47]] : undefined || undefined,
-          plane: t[48] || undefined
-        };
-      });
+    this.vatsim.controllers.forEach((c) => {
+      this.vatsim.clients[c.callsign] = {
+        callSign: c.callsign || undefined,
+        cid: c.cid || undefined,
+        name: c.name || undefined,
+        clientType: 'ATC',
+        frequency: c.frequency || undefined,
+        latitude: c.latitude || undefined,
+        longitude: c.longitude || undefined,
+        altitude: undefined,
+        groundSpeed: undefined,
+        aircraft: c.flight_plan ? c.flight_plan.aircraft : undefined,
+        cruisingSpeed: c.flight_plan ? c.flight_plan.cruise_tas : undefined,
+        departureAerodrome: c.flight_plan ? c.flight_plan.departure : undefined,
+        cruisingLevel: c.flight_plan ? c.flight_plan.altitude : undefined,
+        destinationAerodrome: c.flight_plan ? c.flight_plan.arrival : undefined,
+        server: c.server || undefined,
+        transponderCode: c.transponder || undefined,
+        facilityType: this.vatsim.facilities[c.facility].long,
+        visualRange: c.visual_range ? `${c.visual_range} NM` : undefined,
+        revision: c.flight_plan ? c.flight_plan.revision_id : undefined,
+        flightRules: c.flight_plan ? c.flight_plan.flight_rules : undefined,
+        departureTime: c.flight_plan
+          ? c.flight_plan.deptime.length === 2
+            ? `00:${c.flight_plan.deptime.substring(0, 2)}z`
+            : c.flight_plan.deptime.length === 3
+            ? `0${c.flight_plan.deptime.substring(0, 1)}:${c.flight_plan.deptime.substring(1, 3)}z`
+            : `${c.flight_plan.deptime.substring(0, 2)}:${c.flight_plan.deptime.substring(2, 4)}z`
+          : undefined,
+        eet: c.flight_plan
+          ? c.flight_plan.enroute_time.length === 2
+            ? `00:${c.flight_plan.enroute_time.substring(0, 2)}`
+            : c.flight_plan.enroute_time.length === 3
+            ? `0${c.flight_plan.enroute_time.substring(0, 1)}:${c.flight_plan.enroute_time.substring(1, 3)}`
+            : `${c.flight_plan.enroute_time.substring(0, 2)}:${c.flight_plan.enroute_time.substring(2, 4)}`
+          : undefined,
+        alternateAerodrome: c.flight_plan ? c.flight_plan.alternate : undefined,
+        route: c.flight_plan ? c.flight_plan.route : undefined,
+        atis: c.text_atis ? c.text_atis.join('\n') : undefined,
+        connectionTime: c.logon_time || undefined,
+        atcPilotRating: this.vatsim.ratings[c.rating].short || undefined,
+        heading: undefined
+      };
+    });
   }
 
   static async getClientInfo(callSign) {
