@@ -4,19 +4,19 @@ const Avwx = require('../../utils/Avwx');
 const AvBrief3 = require('../../utils/AvBrief3');
 const logger = require('../../utils/Logger');
 
-module.exports = class RawMetarCommand extends Command {
+module.exports = class RawTafCommand extends Command {
   constructor(client) {
     super(client, {
-      name: 'raw-metar',
+      name: 'raw-taf',
       group: 'weather',
-      memberName: 'raw-metar',
-      aliases: ['rm'],
-      description: 'Gives you the live raw METAR for the chosen airport',
-      examples: ['raw-metar <icao>'],
+      memberName: 'raw-taf',
+      aliases: ['rt'],
+      description: 'Gives you the live raw TAF for the chosen airport',
+      examples: ['raw-taf <icao>'],
       args: [
         {
           key: 'icao',
-          prompt: 'What ICAO would you like the bot to give raw METAR for?',
+          prompt: 'What ICAO would you like the bot to give raw TAF for?',
           type: 'string',
           parse: (val) => val.toUpperCase()
         }
@@ -25,28 +25,28 @@ module.exports = class RawMetarCommand extends Command {
   }
 
   async run(msg, { icao }) {
-    const rawMetarEmbed = new Discord.MessageEmbed()
-      .setTitle(`Raw METAR for ${icao.toUpperCase()}`)
+    const rawTafEmbed = new Discord.MessageEmbed()
+      .setTitle(`Raw TAF for ${icao.toUpperCase()}`)
       .setColor('#0099ff')
       .setFooter(this.client.user.username)
       .setTimestamp();
 
     try {
-      const { raw } = await Avwx.getMetar(icao);
+      const { raw } = await Avwx.getTaf(icao);
 
-      rawMetarEmbed.setDescription(raw);
+      rawTafEmbed.setDescription(raw);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
-        const { raw } = await AvBrief3.getMetar(icao);
+        const { raw } = await AvBrief3.getTaf(icao);
 
-        rawMetarEmbed.setDescription(raw);
+        rawTafEmbed.setDescription(raw);
       } catch (err) {
         logger.error(`[${this.client.shard.ids}] ${err}`);
-        rawMetarEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
+        rawTafEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
       }
     }
 
-    return msg.embed(rawMetarEmbed);
+    return msg.embed(rawTafEmbed);
   }
 };
