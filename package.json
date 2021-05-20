@@ -23,8 +23,8 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "@sentry/node": "^6.3.6",
-    "@sentry/tracing": "^6.3.6",
+    "@sentry/node": "^6.4.0",
+    "@sentry/tracing": "^6.4.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
