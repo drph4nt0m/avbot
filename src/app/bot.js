@@ -28,9 +28,7 @@ client
 client.registry
   .registerDefaultTypes()
   .registerGroups([
-    ['util', 'Utility commands'],
-    ['weather', 'Weather commands'],
-    ['ivao', 'IVAO commands'],
+    ['util', 'Utility commands'],['weather', 'Weather commands'],['ivao', 'IVAO commands'],
     ['vatsim', 'VATSIM commands'],
     ['time', 'Time commands'],
     ['misc', 'Miscellaneous commands']
