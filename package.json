@@ -62,7 +62,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettier && npm run lint-fix"
+      "pre-commit": "echo hello && npm run prettier && npm run lint-fix"
     }
   }
 }
