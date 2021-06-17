@@ -40,20 +40,26 @@ client.registry
 
 const dbl = new DBL(services.dbl.token, client);
 
-client.once('ready',async () => {
+client.once('ready', async () => {
   logger.info(`[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`);
 
+  let guildsCount = (await client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
+  let commandsCount = (await Mongo.getCommandCounts()).total;
+
   client.user.setActivity({
-    type: 'CUSTOM_STATUS',
-    name: `${(await Mongo.getCommandCounts()).total}`
+    type: 'WATCHING',
+    name: `${guildsCount} servers | ${commandsCount}+ commands used`
   });
 
   setInterval(async () => {
     dbl.postStats(client.guilds.size, client.shard.Id);
+
+    guildsCount = (await client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
+    commandsCount = (await Mongo.getCommandCounts()).total;
+
     client.user.setActivity({
-      type: 'CUSTOM_STATUS',
-      
-      name: `${(await Mongo.getCommandCounts()).total}`
+      type: 'WATCHING',
+      name: `${guildsCount} servers | ${commandsCount}+ commands used`
     });
   }, 1800000);
 });
@@ -82,7 +88,7 @@ client.on('guildCreate', (guild) => {
 
 client.on('commandRun', (command) => {
   Mongo.increaseCommandCount(command.name);
-})
+});
 
 client.on('error', (error) => logger.error(`[${client.shard.ids}] ${error}`));
 

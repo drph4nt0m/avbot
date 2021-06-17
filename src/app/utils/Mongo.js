@@ -58,7 +58,7 @@ module.exports = {
         await sleep(10000);
       }
       const stats = await db.collection('stats');
-      await stats.update({ "command": command }, { $inc: { "count": 1 } }, { upsert: true });
+      await stats.update({ command }, { $inc: { count: 1 } }, { upsert: true });
       return true;
     } catch (error) {
       logger.error(`[x] ${error}`);
@@ -75,8 +75,10 @@ module.exports = {
       const stats = await db.collection('stats');
       const counts = await stats.find().toArray();
       let total = 0;
-      counts.forEach(c => { total += c.count });
-      return {total, counts};
+      counts.forEach((c) => {
+        total += c.count;
+      });
+      return { total, counts };
     } catch (error) {
       logger.error(`[x] ${error}`);
       return false;

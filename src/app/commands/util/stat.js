@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { Command } = require('discord.js-commando');
+const Mongo = require('../../utils/Mongo');
 
 module.exports = class StatCommand extends Command {
   constructor(client) {
@@ -15,7 +16,13 @@ module.exports = class StatCommand extends Command {
   }
 
   async run(msg) {
-    const guilds = await this.client.shard.fetchClientValues('guilds.cache.size');
+    const guildsCount = (await this.client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
+    const commandsCount = (await Mongo.getCommandCounts());
+
+    let commandsMsg = '';
+    commandsCount.counts.sort((a, b) => b.count - a.count).forEach(c => { commandsMsg += `${c.command} - ${c.count}\n` })
+    commandsMsg = commandsMsg.trim();
+
     const statsEmbed = new Discord.MessageEmbed()
       .setColor('#0099ff')
       .setTitle('AvBot Stats!')
@@ -26,11 +33,15 @@ module.exports = class StatCommand extends Command {
       .addFields(
         {
           name: 'Server Count',
-          value: guilds.reduce((acc, guildCount) => acc + guildCount, 0)
+          value: guildsCount
         },
         {
           name: 'Uptime',
           value: this.dhms(process.uptime())
+        },
+        {
+          name: 'Commands Count',
+          value: commandsMsg
         }
       );
     return msg.embed(statsEmbed);
