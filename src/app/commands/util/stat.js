@@ -17,10 +17,14 @@ module.exports = class StatCommand extends Command {
 
   async run(msg) {
     const guildsCount = (await this.client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
-    const commandsCount = (await Mongo.getCommandCounts());
+    const commandsCount = await Mongo.getCommandCounts();
 
     let commandsMsg = '';
-    commandsCount.counts.sort((a, b) => b.count - a.count).forEach(c => { commandsMsg += `${c.command} - ${c.count}\n` })
+    commandsCount.counts
+      .sort((a, b) => b.count - a.count)
+      .forEach((c) => {
+        commandsMsg += `${c.command} - ${c.count}\n`;
+      });
     commandsMsg = commandsMsg.trim();
 
     const statsEmbed = new Discord.MessageEmbed()
