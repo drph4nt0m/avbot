@@ -6,6 +6,7 @@ const DBL = require('dblapi.js');
 const { MessageEmbed } = require('discord.js');
 const services = require('../config/services');
 const logger = require('./utils/Logger');
+const Mongo = require('./utils/Mongo');
 
 const client = new CommandoClient({
   commandPrefix: '!',
@@ -28,7 +29,9 @@ client
 client.registry
   .registerDefaultTypes()
   .registerGroups([
-    ['util', 'Utility commands'],['weather', 'Weather commands'],['ivao', 'IVAO commands'],
+    ['util', 'Utility commands'],
+    ['weather', 'Weather commands'],
+    ['ivao', 'IVAO commands'],
     ['vatsim', 'VATSIM commands'],
     ['time', 'Time commands'],
     ['misc', 'Miscellaneous commands']
@@ -37,15 +40,21 @@ client.registry
 
 const dbl = new DBL(services.dbl.token, client);
 
-client.once('ready', () => {
+client.once('ready',async () => {
   logger.info(`[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`);
+
   client.user.setActivity({
-    type: 'WATCHING',
-    name: '!help'
+    type: 'CUSTOM_STATUS',
+    name: `${(await Mongo.getCommandCounts()).total}`
   });
 
-  setInterval(() => {
+  setInterval(async () => {
     dbl.postStats(client.guilds.size, client.shard.Id);
+    client.user.setActivity({
+      type: 'CUSTOM_STATUS',
+      
+      name: `${(await Mongo.getCommandCounts()).total}`
+    });
   }, 1800000);
 });
 
@@ -70,6 +79,10 @@ client.on('guildCreate', (guild) => {
     logger.error(`[${client.shard.ids}] ${error}`);
   }
 });
+
+client.on('commandRun', (command) => {
+  Mongo.increaseCommandCount(command.name);
+})
 
 client.on('error', (error) => logger.error(`[${client.shard.ids}] ${error}`));
 

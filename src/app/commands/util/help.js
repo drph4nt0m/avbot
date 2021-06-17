@@ -18,7 +18,8 @@ module.exports = class HelpCommand extends Command {
           type: 'string',
           default: ''
         }
-      ]
+      ],
+
     });
   }
 
