@@ -31,7 +31,7 @@ module.exports = class Avwx {
         });
       } catch (error) {
         logger.error(`[x] ${error}`);
-        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
+        reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
       }
     });
   }
@@ -48,7 +48,7 @@ module.exports = class Avwx {
         resolve(response.data);
       } catch (error) {
         logger.error(`[x] ${error}`);
-        reject(new Error(error.response.data.error || `no station available at the moment near ${location}`));
+        reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${location}`));
       }
     });
   }
@@ -114,7 +114,7 @@ module.exports = class Avwx {
         });
       } catch (error) {
         logger.error(`[x] ${error}`);
-        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
+        reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
       }
     });
   }
@@ -209,7 +209,7 @@ module.exports = class Avwx {
         });
       } catch (error) {
         logger.error(`[x] ${error}`);
-        reject(new Error(error.response.data.error || `no station available at the moment near ${icao}`));
+        reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
       }
     });
   }

@@ -47,17 +47,17 @@ module.exports = class IcaoCommand extends Command {
         },
         {
           name: 'Name',
-          value: accents.remove(station.name) || 'Unknown',
+          value: station.name ? accents.remove(station.name) : 'Unknown',
           inline: true
         },
         {
           name: 'City',
-          value: accents.remove(station.city) || 'Unknown',
+          value: station.city ? accents.remove(station.city) : 'Unknown',
           inline: true
         },
         {
           name: 'Country',
-          value: accents.remove(station.country) || 'Unknown',
+          value: station.country ? accents.remove(station.country) : 'Unknown',
           inline: true
         },
         {
@@ -77,7 +77,7 @@ module.exports = class IcaoCommand extends Command {
         },
         {
           name: 'Elevation',
-          value: `${station.elevation_ft} ft` || 'Unknown',
+          value: station.elevation_ft ? `${station.elevation_ft} ft` : 'Unknown',
           inline: true
         },
         {
@@ -113,7 +113,7 @@ module.exports = class IcaoCommand extends Command {
                 links += `\nWikipedia: ${station.wiki}`;
               }
               return links;
-            })() || 'Unknown'
+            })() || 'None'
         }
       );
     } catch (error) {
