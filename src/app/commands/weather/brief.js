@@ -41,29 +41,42 @@ module.exports = class BriefCommand extends Command {
     briefEmbed.addField(`**Zulu**`, `${zuluTime}`);
 
     try {
-      const { raw, readable } = await Avwx.getMetar(icao);
+      const { raw } = await Avwx.getMetar(icao);
 
-      briefEmbed.addField(`**METAR**`, `**Raw Report**\n${raw}\n**Readable Report**\n${readable}`);
+      briefEmbed.addField(`**METAR**`, raw);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         const { raw } = await AvBrief3.getMetar(icao);
 
-        briefEmbed.addField('**METAR**', `**Raw Report**\n${raw}`);
+        briefEmbed.addField('**METAR**', raw);
       } catch (err) {
         logger.error(`[${this.client.shard.ids}] ${err}`);
       }
     }
 
-    return msg.embed(briefEmbed);
+    try {
+      const { raw } = await Avwx.getTaf(icao);
 
-    // eslint-disable-next-line no-unreachable
+      briefEmbed.addField(`**TAF**`, raw);
+    } catch (error) {
+      logger.error(`[${this.client.shard.ids}] ${error}`);
+      try {
+        const { raw } = await AvBrief3.getTaf(icao);
+
+        briefEmbed.addField('**TAF**', raw);
+      } catch (err) {
+        logger.error(`[${this.client.shard.ids}] ${err}`);
+      }
+    }
+
     try {
       const chart = await Charts.getChart(icao);
 
-      briefEmbed.addField(`**CHART**`, `[Click here for ${icao} Charts](${chart})`);
+      briefEmbed.addField(`**CHART**`, `[Click here for ${icao} Charts](${chart.link})`);
     } catch (err) {
       logger.error(`[${this.client.shard.ids}] ${err}`);
     }
+    return msg.embed(briefEmbed);
   }
 };
