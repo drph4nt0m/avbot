@@ -38,7 +38,7 @@
     "ffmpeg-static": "^4.4.0",
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
-    "mongodb": "^3.6.10",
+    "mongodb": "^4.1.0",
     "prettier": "^2.3.2",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
