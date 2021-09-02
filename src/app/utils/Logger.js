@@ -16,7 +16,7 @@ const logger = createLogger({
   transports: [
     new transports.Console(),
     new transports.File({
-      filename: `${__dirname}/combined.log`
+      filename: `${process.cwd()}/combined.log`
     })
   ]
 });
