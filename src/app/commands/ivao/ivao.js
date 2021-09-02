@@ -17,17 +17,22 @@ module.exports = class IvaoCommand extends Command {
           key: 'callSign',
           prompt: 'What call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         }
       ]
     });
   }
 
   async run(msg, { callSign }) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const ivaoEmbed = new Discord.MessageEmbed()
       .setTitle(`${callSign.toUpperCase()}`)
       .setColor('#0099ff')
-      .setFooter(`${this.client.user.username} • Source: IVAO API`)
+      .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: IVAO API`)
       .setTimestamp();
 
     try {

@@ -23,6 +23,11 @@ module.exports = class HelpCommand extends Command {
   }
 
   async run(msg, args) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const commands = this.client.registry.findCommands(args.command, false, msg);
     const showAll = args.command && args.command.toLowerCase() === 'all';
 
@@ -59,9 +64,11 @@ module.exports = class HelpCommand extends Command {
           .setTitle('AvBot to the rescue!')
           .setURL('https://avbot.in')
           .setThumbnail('https://avbot.in/assets/logo.png')
-          .setFooter(this.client.user.username)
-          .setTimestamp()
-          .addFields(fields);
+          .addFields(fields)
+          .addField('\u200b', '[Click here to support avbot](https://link.avbot.in/donate)')
+          .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+          .setTimestamp();
+
         return msg.embed(helpEmbed);
       }
       if (commands.length > 1) {
@@ -93,9 +100,10 @@ module.exports = class HelpCommand extends Command {
       .setTitle('AvBot to the rescue!')
       .setURL('https://avbot.in')
       .setThumbnail('https://avbot.in/assets/logo.png')
-      .setFooter(this.client.user.username)
-      .setTimestamp()
-      .addFields(fields);
+      .addFields(fields)
+      .addField('\u200b', '[Click here to support avbot](https://link.avbot.in/donate)')
+      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+      .setTimestamp();
 
     return msg.embed(helpEmbed);
   }

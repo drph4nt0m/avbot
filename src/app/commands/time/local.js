@@ -24,7 +24,7 @@ module.exports = class LocalCommand extends Command {
           type: 'string',
           prompt: 'Enter ICAO code',
           default: '',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         },
         {
           key: 'zulutime',
@@ -53,10 +53,19 @@ module.exports = class LocalCommand extends Command {
   }
 
   async run(msg, { icao, zulutime }) {
-    const zuluEmbed = new MessageEmbed().setTitle('Local Time').setColor('#1a8fe3').setFooter(this.client.user.username).setTimestamp();
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
+    const localEmbed = new MessageEmbed()
+      .setTitle('Local Time')
+      .setColor('#1a8fe3')
+      .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums`)
+      .setTimestamp();
 
     if (!(icao || zulutime)) {
-      zuluEmbed.setColor('#ff0000').setDescription('Command syntax: local [ICAO] [Zulu time]');
+      localEmbed.setColor('#ff0000').setDescription('Command syntax: local [ICAO] [Zulu time]');
     } else if (icao && zulutime) {
       try {
         const {
@@ -67,14 +76,15 @@ module.exports = class LocalCommand extends Command {
 
         const timestring = dayjs().utc().hour(HH).minute(MM).tz(timezoneId).format('DD/MM HHmm');
 
-        zuluEmbed.setTitle(`Local Time at ${icao} when zulu time is ${zulutime}hrs`).setDescription(`${timestring}hrs`);
+        localEmbed.setTitle(`Local Time at ${icao} when zulu time is ${zulutime}hrs`).setDescription(`${timestring}hrs`);
       } catch (error) {
         logger.error(`[${this.client.shard.ids}] ${error}`);
-        zuluEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
+        localEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${error.message}`);
       }
     } else {
-      zuluEmbed.setColor('#ff0000').setDescription('Command syntax: local [ICAO] [Zulu time]');
+      localEmbed.setColor('#ff0000').setDescription('Command syntax: local [ICAO] [Zulu time]');
     }
-    return msg.embed(zuluEmbed);
+
+    return msg.embed(localEmbed);
   }
 };

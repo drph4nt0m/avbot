@@ -9,13 +9,18 @@ module.exports = class StatCommand extends Command {
       group: 'util',
       memberName: 'stat',
       aliases: ['stats'],
-      description: 'Gives you the AvBot stats.',
+      description: 'Gives you the AvBot stats',
       examples: ['stat'],
       ownerOnly: true
     });
   }
 
   async run(msg) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const guildsCount = (await this.client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
     const commandsCount = await Mongo.getCommandCounts();
 
@@ -32,8 +37,6 @@ module.exports = class StatCommand extends Command {
       .setTitle('AvBot Stats!')
       .setURL('https://avbot.in')
       .setThumbnail('https://avbot.in/assets/logo.png')
-      .setFooter(this.client.user.username)
-      .setTimestamp()
       .addFields(
         {
           name: 'Server Count',
@@ -47,7 +50,10 @@ module.exports = class StatCommand extends Command {
           name: 'Commands Count',
           value: commandsMsg
         }
-      );
+      )
+      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+      .setTimestamp();
+
     return msg.embed(statsEmbed);
   }
 

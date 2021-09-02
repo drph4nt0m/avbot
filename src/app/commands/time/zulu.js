@@ -24,7 +24,7 @@ module.exports = class ZuluCommand extends Command {
           type: 'string',
           prompt: 'Enter ICAO code',
           default: '',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         },
         {
           key: 'localtime',
@@ -53,7 +53,16 @@ module.exports = class ZuluCommand extends Command {
   }
 
   async run(msg, { icao, localtime }) {
-    const zuluEmbed = new MessageEmbed().setTitle('ZULU Time').setColor('#1a8fe3').setFooter(this.client.user.username).setTimestamp();
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
+    const zuluEmbed = new MessageEmbed()
+      .setTitle('ZULU Time')
+      .setColor('#1a8fe3')
+      .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums`)
+      .setTimestamp();
 
     if (!(icao || localtime)) {
       const timestring = dayjs.utc().format('DD/MM HH:mm');

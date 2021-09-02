@@ -26,18 +26,26 @@ module.exports = class LiveCommand extends Command {
           key: 'callSign',
           prompt: 'What call sign would you like the bot to give information for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         }
       ]
     });
   }
 
   async run(msg, { callSign }) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     msg.channel.startTyping();
     const liveEmbed = new Discord.MessageEmbed()
       .setTitle(`${callSign.toUpperCase()}`)
       .setColor('#0099ff')
-      .setFooter(`${this.client.user.username} • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`)
+      .setFooter(
+        `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
+      )
+
       .setTimestamp();
     if (!(await Mongo.isPremiumGuild(msg.guild.id))) {
       logger.error(`[${this.client.shard.ids}] ${msg.guild.id} tried using live command`);
@@ -46,7 +54,7 @@ module.exports = class LiveCommand extends Command {
         .setDescription(
           `${msg.author}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${services.discord.supportServerInvite}) and contact the developer.`
         )
-        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#6615`);
+        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`);
       msg.channel.stopTyping();
       return msg.embed(liveEmbed);
     }

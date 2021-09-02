@@ -28,7 +28,9 @@ module.exports = class IcaoCommand extends Command {
     const searchEmbed = new Discord.MessageEmbed()
       .setTitle(`Search : ${location.toUpperCase()}`)
       .setColor('#0099ff')
-      .setFooter(this.client.user.username)
+      .setFooter(
+        `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: GeoNames | AVWX`
+      )
       .setTimestamp();
 
     try {

@@ -18,25 +18,41 @@ module.exports = class TafCommand extends Command {
           key: 'icao',
           prompt: 'What ICAO would you like the bot to give TAF for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         }
       ]
     });
   }
 
   async run(msg, { icao }) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const tafEmbed = new Discord.MessageEmbed()
       .setTitle(`TAF for ${icao.toUpperCase()}`)
       .setColor('#0099ff')
-      .setFooter(this.client.user.username)
+      .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums`)
       .setTimestamp();
 
     try {
       const { raw, readable } = await Avwx.getTaf(icao);
 
       if (readable.length < 600) {
-        tafEmbed.addField('Raw Report', raw);
-        tafEmbed.addField('Readable Report', readable);
+        tafEmbed
+          .addFields(
+            {
+              name: 'Raw Report',
+              value: raw
+            },
+            {
+              name: 'Readable Report',
+              value: readable
+            }
+          )
+          .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`);
+
         return msg.embed(tafEmbed);
       } else {
         const tafEmbeds = [];
@@ -44,7 +60,7 @@ module.exports = class TafCommand extends Command {
           .setTitle(`TAF for ${icao.toUpperCase()}`)
           .setColor('#0099ff')
           .addField('Raw Report', raw)
-          .setFooter(this.client.user.username)
+          .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`)
           .setTimestamp();
 
         tafEmbeds.push(tempEmbed);
@@ -60,7 +76,9 @@ module.exports = class TafCommand extends Command {
               .setTitle(`TAF for ${icao.toUpperCase()}`)
               .setColor('#0099ff')
               .addField(`Readable Report [${tafEmbeds.length}]`, buffer)
-              .setFooter(this.client.user.username)
+              .setFooter(
+                `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
+              )
               .setTimestamp();
 
             tafEmbeds.push(tempEmbed);
@@ -69,12 +87,19 @@ module.exports = class TafCommand extends Command {
         }
 
         tempEmbed = tafEmbed;
-        tafEmbeds.push(tempEmbed.addField(`Readable Report [${tafEmbeds.length}]`, buffer));
-        // console.log(tafEmbeds);
+        if (buffer.length > 0) {
+          tafEmbeds.push(tempEmbed.addField(`Readable Report [${tafEmbeds.length}]`, buffer));
+        }
 
         for (let i = 0; i < tafEmbeds.length; i += 1) {
           // eslint-disable-next-line no-await-in-loop
-          await msg.embed(tafEmbeds[i].setFooter(`${this.client.user.username} • Message ${i + 1} of ${tafEmbeds.length}`));
+          await msg.embed(
+            tafEmbeds[i].setFooter(
+              `${this.client.user.username} • Message ${i + 1} of ${
+                tafEmbeds.length
+              } • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
+            )
+          );
         }
 
         return null;
@@ -84,10 +109,14 @@ module.exports = class TafCommand extends Command {
       try {
         const { raw } = await AvBrief3.getTaf(icao);
 
-        tafEmbed.addFields({
-          name: 'Raw Report',
-          value: raw
-        });
+        tafEmbed
+          .addFields({
+            name: 'Raw Report',
+            value: raw
+          })
+          .setFooter(
+            `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AvBrief3`
+          );
       } catch (err) {
         logger.error(`[${this.client.shard.ids}] ${err}`);
         tafEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);

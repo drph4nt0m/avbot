@@ -23,6 +23,11 @@ module.exports = class TopCommand extends Command {
   }
 
   async run(msg, { count }) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const topServers = await this.client.shard
       .broadcastEval(
         `this.guilds.cache
@@ -45,8 +50,6 @@ module.exports = class TopCommand extends Command {
         .setTitle('AvBot Top Servers!')
         .setURL('https://avbot.in')
         .setThumbnail('https://avbot.in/assets/logo.png')
-        .setFooter(this.client.user.username)
-        .setTimestamp()
         .addFields([
           {
             name: 'Name',
@@ -64,7 +67,10 @@ module.exports = class TopCommand extends Command {
             name: '# of members',
             value: s.memberCount
           }
-        ]);
+        ])
+        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+        .setTimestamp();
+
       msg.embed(topsEmbed);
     });
     return null;

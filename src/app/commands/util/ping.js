@@ -10,7 +10,6 @@ module.exports = class PingCommand extends Command {
       aliases: [],
       description: "Checks the AvBot's ping to the Discord server",
       examples: ['ping'],
-      hidden: true,
       throttling: {
         usages: 5,
         duration: 10

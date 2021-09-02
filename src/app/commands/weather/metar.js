@@ -18,41 +18,52 @@ module.exports = class MetarCommand extends Command {
           key: 'icao',
           prompt: 'What ICAO would you like the bot to give METAR for?',
           type: 'string',
-          parse: (val) => val.toUpperCase()
+          parse: (val) => val.toUpperCase().replace(/\s/g, '')
         }
       ]
     });
   }
 
   async run(msg, { icao }) {
+    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+      return msg.reply(
+        `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
+      );
+    }
     const metarEmbed = new Discord.MessageEmbed()
       .setTitle(`METAR for ${icao.toUpperCase()}`)
       .setColor('#0099ff')
-      .setFooter(this.client.user.username)
+      .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums`)
       .setTimestamp();
 
     try {
       const { raw, readable } = await Avwx.getMetar(icao);
 
-      metarEmbed.addFields(
-        {
-          name: 'Raw Report',
-          value: raw
-        },
-        {
-          name: 'Readable Report',
-          value: readable
-        }
-      );
+      metarEmbed
+        .addFields(
+          {
+            name: 'Raw Report',
+            value: raw
+          },
+          {
+            name: 'Readable Report',
+            value: readable
+          }
+        )
+        .setFooter(`${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`);
     } catch (error) {
       logger.error(`[${this.client.shard.ids}] ${error}`);
       try {
         const { raw } = await AvBrief3.getMetar(icao);
 
-        metarEmbed.addFields({
-          name: 'Raw Report',
-          value: raw
-        });
+        metarEmbed
+          .addFields({
+            name: 'Raw Report',
+            value: raw
+          })
+          .setFooter(
+            `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AvBrief3`
+          );
       } catch (err) {
         logger.error(`[${this.client.shard.ids}] ${err}`);
         metarEmbed.setColor('#ff0000').setDescription(`${msg.author}, ${err.message}`);
