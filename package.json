@@ -23,12 +23,12 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "@sentry/node": "^6.4.1",
-    "@sentry/tracing": "^6.4.1",
+    "@sentry/node": "^6.10.0",
+    "@sentry/tracing": "^6.10.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
-    "dayjs": "^1.10.4",
+    "dayjs": "^1.10.6",
     "dblapi.js": "^2.4.1",
     "discord.js": "^12.5.2",
     "discord.js-commando": "^0.12.3",
@@ -38,8 +38,8 @@
     "ffmpeg-static": "^4.4.0",
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
-    "mongodb": "^3.6.7",
-    "prettier": "^2.3.0",
+    "mongodb": "^3.6.10",
+    "prettier": "^2.3.2",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
     "winston": "^3.3.3"
@@ -47,13 +47,13 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.26.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.23.2",
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^6.0.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.12"
   },
   "config": {
     "commitizen": {
