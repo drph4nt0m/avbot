@@ -28,7 +28,7 @@
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
-    "dayjs": "^1.10.4",
+    "dayjs": "^1.10.6",
     "dblapi.js": "^2.4.1",
     "discord.js": "^12.5.2",
     "discord.js-commando": "^0.12.3",
