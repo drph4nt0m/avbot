@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.5.0",
-    "axios": "^0.21.1",
+    "@discordjs/opus": "^0.5.3",
+    "axios": "^0.21.4",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
     "datadog-metrics": "^0.9.3",
@@ -37,7 +37,7 @@
     "ffmpeg-static": "^4.4.0",
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
-    "mongodb": "^3.6.10",
+    "mongodb": "^4.1.0",
     "prettier": "^2.3.2",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
@@ -51,7 +51,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.23.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "husky": "^6.0.0",
+    "husky": "^7.0.1",
     "nodemon": "^2.0.12"
   },
   "config": {
