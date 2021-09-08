@@ -6,7 +6,7 @@ const { combine, splat, timestamp, printf } = format;
 
 const httpTransportOptions = {
   host: 'http-intake.logs.datadoghq.com',
-  path: `/v1/input/${services.datadog.apiKey}?ddsource=nodejs&service=avbot`,
+  path: `/v1/input/${services.datadog.apiKey}?ddsource=nodejs&service=avbot_${services.environment}`,
   ssl: true
 };
 
