@@ -1,5 +1,4 @@
 require('../config/setup');
-require('../config/sentry');
 require('./server');
 
 const { ShardingManager } = require('discord.js');

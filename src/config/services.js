@@ -29,8 +29,8 @@ module.exports = {
   mongodb: {
     uri: process.env.MONGODB_URI
   },
-  sentry: {
-    dsn: process.env.SENTRY_DSN
+  datadog: {
+    apiKey: process.env.DATADOG_API_KEY
   },
   port: process.env.PORT,
   environment: process.env.NODE_ENV

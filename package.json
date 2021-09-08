@@ -2,7 +2,7 @@
   "name": "avbot",
   "version": "3.0.0",
   "description": "AvBot v3",
-  "author": "Rahul Singh <dr@ph4nt0m.me>",
+  "author": "Rahul Singh <hey.singh@protonmail.com>",
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "nodemon ./src/app/index.js",
@@ -23,11 +23,10 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "@sentry/node": "^6.10.0",
-    "@sentry/tracing": "^6.10.0",
     "axios": "^0.21.1",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
+    "datadog-metrics": "^0.9.3",
     "dayjs": "^1.10.6",
     "dblapi.js": "^2.4.1",
     "discord.js": "^12.5.2",

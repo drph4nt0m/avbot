@@ -91,6 +91,7 @@ client.on('commandRun', (command) => {
 });
 
 client.on('error', (error) => logger.error(`[${client.shard.ids}] ${error}`));
+client.on('commandError', (command, error) => logger.error(`[${client.shard.ids}] ${error}`, command));
 
 client.login(services.discord.token);
 

@@ -1,6 +1,14 @@
 const { createLogger, format, transports } = require('winston');
 
+const services = require('../../config/services');
+
 const { combine, splat, timestamp, printf } = format;
+
+const httpTransportOptions = {
+  host: 'http-intake.logs.datadoghq.com',
+  path: `/v1/input/${services.datadog.apiKey}?ddsource=nodejs&service=avbot`,
+  ssl: true
+};
 
 const myFormat = printf(({ level: l, message: m, timestamp: t, ...metadata }) => {
   let msg = `⚡ ${t} [${l}] : ${m} `;
@@ -17,7 +25,8 @@ const logger = createLogger({
     new transports.Console(),
     new transports.File({
       filename: `${process.cwd()}/combined.log`
-    })
+    }),
+    new transports.Http(httpTransportOptions)
   ]
 });
 
