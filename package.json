@@ -11,7 +11,8 @@
     "lint-fix": "eslint ./src/**/*.js --fix",
     "prettier:ci": "prettier .",
     "prettier": "prettier . -w",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "echo 'Run your tests here'"
   },
   "repository": {
     "type": "git",
