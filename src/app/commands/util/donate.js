@@ -14,7 +14,7 @@ module.exports = class DonateCommand extends Command {
   }
 
   async run(msg) {
-    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+    if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
       return msg.reply(
         `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
       );

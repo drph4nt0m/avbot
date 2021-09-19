@@ -24,7 +24,7 @@ module.exports = class VatsimCommand extends Command {
   }
 
   async run(msg, { callSign }) {
-    if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+    if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
       return msg.reply(
         `AvBot doesn't have permissions to send Embeds in this channel. Please enable "Embed Links" under channel permissions for AvBot.`
       );
@@ -89,7 +89,7 @@ module.exports = class VatsimCommand extends Command {
             inline: true
           },
           {
-            name: `Groundspeed`,
+            name: `Ground Speed`,
             value: vatsimClient.groundSpeed,
             inline: true
           },

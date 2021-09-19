@@ -11,6 +11,7 @@ module.exports = class PrefixCommand extends Command {
       aliases: [],
       description: "Change or view AvBot's prefix",
       examples: ['prefix', 'prefix default', 'prefix none', 'prefix <new>'],
+      guildOnly: true,
       args: [
         {
           key: 'prefix',

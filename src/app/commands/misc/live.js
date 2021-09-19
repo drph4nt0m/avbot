@@ -21,6 +21,7 @@ module.exports = class LiveCommand extends Command {
         usages: 1,
         duration: 90
       },
+      guildOnly: true,
       args: [
         {
           key: 'callSign',
@@ -45,8 +46,8 @@ module.exports = class LiveCommand extends Command {
       .setFooter(
         `${this.client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
       )
-
       .setTimestamp();
+
     if (!(await Mongo.isPremiumGuild(msg.guild.id))) {
       logger.error(`[${this.client.shard.ids}] ${msg.guild.id} tried using live command`);
       liveEmbed
