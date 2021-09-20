@@ -47,8 +47,12 @@ client.once('ready', async () => {
   let guildsCount = (await client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
   let commandsCount = (await Mongo.getCommandCounts()).total;
 
-  const restartChannel = await client.channels.fetch(services.discord.botRestartChannel);
-  restartChannel.send(`${client.user.username} (${client.shard.ids}) restarted!`);
+  try {
+    const restartChannel = await client.channels.fetch(services.discord.botRestartChannel);
+    restartChannel.send(`${client.user.username} (${client.shard.ids}) restarted!`);
+  } catch (error) {
+    logger.error(`[${client.shard.ids}] Failed to send restart message: ${error}`);
+  }
 
   client.user.setActivity({
     type: 'WATCHING',
