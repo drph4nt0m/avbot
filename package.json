@@ -11,7 +11,8 @@
     "lint-fix": "eslint ./src/**/*.js --fix",
     "prettier:ci": "prettier .",
     "prettier": "prettier . -w",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "echo 'Run your tests here'"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,7 @@
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
     "datadog-metrics": "^0.9.3",
-    "dayjs": "^1.10.6",
+    "dayjs": "^1.10.7",
     "dblapi.js": "^2.4.1",
     "discord.js": "^12.5.2",
     "discord.js-commando": "^0.12.3",
@@ -37,8 +38,8 @@
     "ffmpeg-static": "^4.4.0",
     "gtts": "^0.1.1",
     "is-promise": "^4.0.0",
-    "mongodb": "^4.1.0",
-    "prettier": "^2.4.0",
+    "mongodb": "^4.1.2",
+    "prettier": "^2.4.1",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
     "winston": "^3.3.3"
