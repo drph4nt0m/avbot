@@ -33,10 +33,12 @@ client.registry
     ['weather', 'Weather commands'],
     ['ivao', 'IVAO commands'],
     ['vatsim', 'VATSIM commands'],
+    ['poscon', 'POSCON commands'],
     ['time', 'Time commands'],
     ['misc', 'Miscellaneous commands']
   ])
   .registerCommandsIn(path.join(__dirname, 'commands'));
+
 
 const dbl = new DBL(services.dbl.token, client);
 
