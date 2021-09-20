@@ -47,7 +47,7 @@ client.once('ready', async () => {
   let guildsCount = (await client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
   let commandsCount = (await Mongo.getCommandCounts()).total;
 
-  const restartChannel = client.channels.cache.get(services.discord.botRestartChannel);
+  const restartChannel = await client.channels.fetch(services.discord.botRestartChannel);
   restartChannel.send(`${client.user.username} (${client.shard.ids}) restarted!`);
 
   client.user.setActivity({
