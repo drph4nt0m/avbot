@@ -83,5 +83,35 @@ module.exports = {
       logger.error(`[x] ${error}`);
       return false;
     }
+  },
+
+  async increaseAPIUsage(hostname) {
+    try {
+      while (!db) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(10000);
+      }
+      const apiUsage = await db.collection('api-usage');
+      await apiUsage.update({ hostname }, { $inc: { count: 1 } }, { upsert: true });
+      return true;
+    } catch (error) {
+      logger.error(`[x] ${error}`);
+      return false;
+    }
+  },
+
+  async getAPIUsage() {
+    try {
+      while (!db) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(10000);
+      }
+      const apiUsage = await db.collection('api-usage');
+      const counts = await apiUsage.find().toArray();
+      return counts;
+    } catch (error) {
+      logger.error(`[x] ${error}`);
+      return false;
+    }
   }
 };

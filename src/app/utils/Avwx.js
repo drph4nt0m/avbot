@@ -4,17 +4,20 @@ const accents = require('remove-accents');
 const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 dayjs.extend(utc);
 
 module.exports = class Avwx {
-  static api = axios.create({
-    baseURL: 'https://avwx.rest/api/',
-    timeout: 10000,
-    headers: {
-      Authorization: services.avwx.token
-    }
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://avwx.rest/api/',
+      timeout: 10000,
+      headers: {
+        Authorization: services.avwx.token
+      }
+    })
+  );
 
   static async getStation(icao) {
     return new Promise(async (resolve, reject) => {

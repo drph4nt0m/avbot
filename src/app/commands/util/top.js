@@ -68,7 +68,7 @@ module.exports = class TopCommand extends Command {
             value: s.memberCount
           }
         ])
-        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`)
         .setTimestamp();
 
       msg.embed(topsEmbed);

@@ -2,14 +2,17 @@ const axios = require('axios').default;
 const dayjs = require('dayjs');
 const isBetween = require('dayjs/plugin/isBetween');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 dayjs.extend(isBetween);
 
 module.exports = class Nats {
-  static api = axios.create({
-    baseURL: 'https://api.flightplandatabase.com/nav/NATS',
-    timeout: 10000
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://api.flightplandatabase.com/nav/NATS',
+      timeout: 10000
+    })
+  );
 
   static getAllTracks() {
     return new Promise(async (resolve, reject) => {

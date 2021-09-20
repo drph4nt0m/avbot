@@ -23,7 +23,7 @@ module.exports = class DonateCommand extends Command {
       .setTitle('Donate')
       .setColor('#1a8fe3')
       .setDescription('[Click here to support avbot](https://link.avbot.in/donate)')
-      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`)
       .setTimestamp();
 
     return msg.embed(donateEmbed);

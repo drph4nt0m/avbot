@@ -3,14 +3,17 @@ const utc = require('dayjs/plugin/utc');
 const S = require('string');
 const axios = require('axios').default;
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 dayjs.extend(utc);
 
 module.exports = class Vatsim {
-  static api = axios.create({
-    baseURL: 'https://data.vatsim.net/v3/vatsim-data.json',
-    timeout: 10000
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://data.vatsim.net/v3/vatsim-data.json',
+      timeout: 10000
+    })
+  );
 
   static vatsim = {
     general: {},

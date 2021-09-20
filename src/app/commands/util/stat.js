@@ -51,7 +51,7 @@ module.exports = class StatCommand extends Command {
           value: commandsMsg
         }
       )
-      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`)
       .setTimestamp();
 
     return msg.embed(statsEmbed);

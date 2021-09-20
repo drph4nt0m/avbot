@@ -66,7 +66,7 @@ module.exports = class HelpCommand extends Command {
           .setThumbnail('https://avbot.in/assets/logo.png')
           .addFields(fields)
           .addField('\u200b', '[Click here to support avbot](https://link.avbot.in/donate)')
-          .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+          .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`)
           .setTimestamp();
 
         return msg.embed(helpEmbed);
@@ -102,7 +102,7 @@ module.exports = class HelpCommand extends Command {
       .setThumbnail('https://avbot.in/assets/logo.png')
       .addFields(fields)
       .addField('\u200b', '[Click here to support avbot](https://link.avbot.in/donate)')
-      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`)
+      .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`)
       .setTimestamp();
 
     return msg.embed(helpEmbed);

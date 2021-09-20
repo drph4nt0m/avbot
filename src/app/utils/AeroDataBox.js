@@ -1,15 +1,18 @@
 const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class AeroDataBox {
-  static api = axios.create({
-    baseURL: 'https://aerodatabox.p.rapidapi.com/aircrafts/',
-    timeout: 10000,
-    headers: {
-      'x-rapidapi-key': services.aero_data_box.token
-    }
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://aerodatabox.p.rapidapi.com/aircrafts/',
+      timeout: 10000,
+      headers: {
+        'x-rapidapi-key': services.aero_data_box.token
+      }
+    })
+  );
 
   static getAircraftInfo(icao24) {
     return new Promise(async (resolve, reject) => {

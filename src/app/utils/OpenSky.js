@@ -1,11 +1,14 @@
 const axios = require('axios').default;
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class OpenSky {
-  static api = axios.create({
-    baseURL: 'https://opensky-network.org/api/states/all',
-    timeout: 30000
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://opensky-network.org/api/states/all',
+      timeout: 30000
+    })
+  );
 
   static getFlightInfo(callsign) {
     return new Promise(async (resolve, reject) => {

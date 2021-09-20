@@ -1,12 +1,15 @@
 const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class Geonames {
-  static api = axios.create({
-    baseURL: 'http://api.geonames.org/',
-    timeout: 10000
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'http://api.geonames.org/',
+      timeout: 10000
+    })
+  );
 
   static async getTimezone(lat, long) {
     return new Promise(async (resolve, reject) => {

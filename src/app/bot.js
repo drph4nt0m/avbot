@@ -47,6 +47,9 @@ client.once('ready', async () => {
   let guildsCount = (await client.shard.fetchClientValues('guilds.cache.size')).reduce((acc, guildCount) => acc + guildCount, 0);
   let commandsCount = (await Mongo.getCommandCounts()).total;
 
+  const restartChannel = client.channels.cache.get(services.discord.botRestartChannel);
+  restartChannel.send(`${client.user.username} (${client.shard.ids}) restarted!`);
+
   client.user.setActivity({
     type: 'WATCHING',
     name: `${guildsCount} servers | ${commandsCount}+ commands used`
@@ -75,7 +78,7 @@ client.on('guildCreate', (guild) => {
         To get started try \`!help\`.
         [Buy me a coffee](https://link.avbot.in/donate)`
       )
-      .setFooter(`${client.user.username} • @dr_ph4nt0m#6615 • Thank you for showing your support by using AvBot`)
+      .setFooter(`${client.user.username} • @dr_ph4nt0m#8402 • Thank you for showing your support by using AvBot`)
       .setTimestamp();
 
     guild.channels.cache

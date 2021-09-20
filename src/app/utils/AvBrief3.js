@@ -1,15 +1,18 @@
 const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class AvBrief3 {
-  static api = axios.create({
-    baseURL: `https://avbrief3.el.r.appspot.com/api`,
-    timeout: 10000,
-    params: {
-      key: services.avbrief3.token
-    }
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: `https://avbrief3.el.r.appspot.com/api`,
+      timeout: 10000,
+      params: {
+        key: services.avbrief3.token
+      }
+    })
+  );
 
   static async getAtis(icao) {
     return new Promise(async (resolve, reject) => {

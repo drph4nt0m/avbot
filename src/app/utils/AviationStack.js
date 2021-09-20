@@ -1,15 +1,18 @@
 const axios = require('axios').default;
 const services = require('../../config/services');
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class AviationStack {
-  static api = axios.create({
-    baseURL: 'http://api.aviationstack.com/v1/flights',
-    timeout: 10000,
-    params: {
-      access_key: services.aviation_stack.token
-    }
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'http://api.aviationstack.com/v1/flights',
+      timeout: 10000,
+      params: {
+        access_key: services.aviation_stack.token
+      }
+    })
+  );
 
   static getFlightInfo(callsign) {
     return new Promise(async (resolve, reject) => {

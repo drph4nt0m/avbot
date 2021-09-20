@@ -55,7 +55,7 @@ module.exports = class LiveCommand extends Command {
         .setDescription(
           `${msg.author}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${services.discord.supportServerInvite}) and contact the developer.`
         )
-        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#0001`);
+        .setFooter(`${this.client.user.username} • @dr_ph4nt0m#8402`);
       msg.channel.stopTyping();
       return msg.embed(liveEmbed);
     }

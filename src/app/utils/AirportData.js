@@ -1,14 +1,17 @@
 const axios = require('axios').default;
 const logger = require('./Logger');
+const AxiosInterceptor = require('../interceptors/AxiosInterceptor');
 
 module.exports = class AirportData {
-  static api = axios.create({
-    baseURL: 'https://www.airport-data.com/api/ac_thumb.json',
-    timeout: 10000,
-    params: {
-      n: 'N'
-    }
-  });
+  static api = AxiosInterceptor.init(
+    axios.create({
+      baseURL: 'https://www.airport-data.com/api/ac_thumb.json',
+      timeout: 10000,
+      params: {
+        n: 'N'
+      }
+    })
+  );
 
   static getAircraftImage(icao24) {
     return new Promise(async (resolve, reject) => {
