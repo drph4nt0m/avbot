@@ -39,7 +39,6 @@ client.registry
   ])
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
-
 const dbl = new DBL(services.dbl.token, client);
 
 client.once('ready', async () => {
