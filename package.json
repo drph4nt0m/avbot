@@ -24,7 +24,7 @@
   "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
-    "axios": "^0.22.0",
+    "axios": "^0.23.0",
     "commando-provider-mongo": "^2.1.0",
     "common-tags": "^1.8.0",
     "datadog-metrics": "^0.9.3",
