@@ -53,7 +53,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^7.0.4",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.14"
   },
   "config": {
     "commitizen": {
