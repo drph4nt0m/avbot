@@ -11,7 +11,6 @@
     "lint-fix": "eslint ./src/**/*.js --fix",
     "prettier:ci": "prettier .",
     "prettier": "prettier . -w",
-    "prepare": "husky install",
     "test": "echo 'Run your tests here'"
   },
   "repository": {
@@ -52,7 +51,6 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.23.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "husky": "^7.0.1",
     "nodemon": "^2.0.12"
   },
   "config": {
