@@ -119,3 +119,7 @@ dist
 .openode
 .env.*
 !.env.example
+/build
+**build/**
+**.idea/**
+.idea/
