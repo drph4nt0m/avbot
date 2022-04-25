@@ -1,7 +1,7 @@
 import {Category, RateLimit, TIME_UNIT} from "@discordx/utilities";
 import type {CommandInteraction} from "discord.js";
 import {MessageEmbed} from "discord.js";
-import {Client, Discord, Guard, Slash, SlashGroup, SlashOption} from "discordx";
+import {Client, Discord, Guard, Slash, SlashOption} from "discordx";
 import {injectable} from "tsyringe";
 
 import {GuildOnly} from "../guards/GuildOnly.js";
@@ -15,11 +15,6 @@ import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils} from "../utils/Utils.js";
 
 @Discord()
-@SlashGroup({
-    description: "Miscellaneous commands",
-    name: "misc"
-})
-@SlashGroup("misc")
 @Category("Miscellaneous commands")
 @injectable()
 export class Misc {
@@ -33,7 +28,9 @@ export class Misc {
     @Slash("live", {
         description: "[premium] Gives you the information for the chosen call sign in real life"
     })
-    @Guard(GuildOnly, PremiumGuild, RateLimit(TIME_UNIT.seconds, 90), RequiredBotPerms(["EMBED_LINKS"]))
+    @Guard(GuildOnly, PremiumGuild, RateLimit(TIME_UNIT.seconds, 90), RequiredBotPerms({
+        textChannel: ["EMBED_LINKS"]
+    }))
     private async live(
         @SlashOption("call-sign", {
             description: "What call sign would you like the bot to give information for?",

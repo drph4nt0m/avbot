@@ -121,3 +121,22 @@ export type AircraftInfo = {
     "link": string,
     "photographer": string
 };
+
+export type Nats = {
+    ident: string,
+    validFrom: string,
+    validTo: string,
+    route: {
+        westLevels: string[],
+        eastLevels: string[],
+        nodes: NatsNode[]
+    }
+};
+
+export type NatsNode = {
+    "id": number,
+    "ident": string,
+    "type": string,
+    "lat": number,
+    "lon": number
+};

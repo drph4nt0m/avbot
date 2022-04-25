@@ -1,6 +1,4 @@
 import axios from "axios";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
 import type {AutocompleteInteraction} from "discord.js";
 import Fuse from "fuse.js";
 import accents from "remove-accents";
@@ -17,7 +15,6 @@ import {defaultSearch, fuseOptions} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
 
 // TODO: skeptical!
-dayjs.extend(utc);
 
 @singleton()
 export class AvwxManager extends AbstractRequestEngine implements ISearchBase<IcaoCode> {
@@ -102,7 +99,7 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${dayjs.utc(taf.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(taf.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
 
             readable += `**Report : ** ${taf.speech}`;
 
@@ -142,7 +139,7 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${dayjs.utc(metar.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(metar.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
 
             if (metar.translate.wind) {
                 readable += `**Wind : ** ${metar.translate.wind} \n`;

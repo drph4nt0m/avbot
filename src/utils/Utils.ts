@@ -1,3 +1,5 @@
+import dayjs, {Dayjs} from "dayjs";
+import utc from "dayjs/plugin/utc.js";
 import type {
     AutocompleteInteraction,
     BaseCommandInteraction,
@@ -19,6 +21,14 @@ export class Utils {
 }
 
 export class ObjectUtil {
+
+    static {
+        dayjs.extend(utc);
+    }
+
+    public static get dayJs(): Dayjs {
+        return dayjs();
+    }
 
     /**
      * Ensures value is a string and has a size after trim
