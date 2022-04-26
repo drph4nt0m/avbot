@@ -1,14 +1,17 @@
 import axios from "axios";
+import csv from "csvtojson/index.js";
 import type {AutocompleteInteraction} from "discord.js";
 import Fuse from "fuse.js";
 import accents from "remove-accents";
 import {singleton} from "tsyringe";
 
+import METHOD_EXECUTOR_TIME_UNIT from "../../../enums/METHOD_EXECUTOR_TIME_UNIT.js";
 import logger from "../../../utils/LoggerFactory.js";
 import {ObjectUtil} from "../../../utils/Utils.js";
 import type {IcaoCode, MetarInfo, Station, TafInfo} from "../../Typeings.js";
 import {PostConstruct} from "../decorators/PostConstruct.js";
 import {Property} from "../decorators/Property.js";
+import {RunEvery} from "../decorators/RunEvery.js";
 import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
 import type {ISearchBase} from "../ISearchBase.js";
 import {defaultSearch, getFuseOptions} from "../ISearchBase.js";
@@ -31,18 +34,24 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
     }
 
     @PostConstruct
-    private async init(): Promise<void> {
-        const callResponse = await axios.get("https://raw.githubusercontent.com/mwgg/Airports/master/airports.json");
-        const fuseOptions = getFuseOptions<IcaoCode>(["icao", "iata", "name"]);
+    private async indexAirports(): Promise<void> {
+        const callResponse = await axios.get("https://raw.githubusercontent.com/davidmegginson/ourairports-data/main/airports.csv");
+        const fuseOptions = getFuseOptions<IcaoCode>(["ident", "iata_code", "name", "municipality"]);
         if (callResponse.status !== 200) {
             this._fuseCache = new AvFuse([], fuseOptions);
             return;
         }
         const result = callResponse.data;
-        const buildJson: IcaoCode[] = this.buildJson(result);
+        const json = await csv().fromString(result);
+        const buildJson: IcaoCode[] = this.buildJson(json);
         const index = Fuse.createIndex(fuseOptions.keys, buildJson);
         this._fuseCache = new AvFuse(buildJson, fuseOptions, index);
         logger.info(`indexed ${buildJson.length} icao locations`);
+    }
+
+    @RunEvery(7, METHOD_EXECUTOR_TIME_UNIT.days)
+    private poll(): Promise<void> {
+        return this.indexAirports();
     }
 
     public async getStation(icao: string): Promise<Station> {
@@ -218,21 +227,22 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
                 continue;
             }
             const value: IcaoCode = resultData[key];
-            const {icao, name, iata} = value;
-            if (!ObjectUtil.validString(icao)) {
+            const {ident, name, iata_code, municipality} = value;
+            if (!ObjectUtil.validString(ident)) {
                 continue;
             }
             let fullName = "";
-            if (ObjectUtil.validString(icao)) {
-                fullName += `${icao} - `;
+            if (ObjectUtil.validString(ident)) {
+                fullName += `${ident}`;
             }
-            if (ObjectUtil.validString(iata)) {
-                fullName += `${iata} - `;
+            if (ObjectUtil.validString(iata_code)) {
+                fullName += `/${iata_code}`;
             }
             if (ObjectUtil.validString(name)) {
-                fullName += name;
+                fullName += ` (${name}`;
+                fullName += ObjectUtil.validString(municipality) ? `, ${municipality})` : ")";
             }
-            value.value = value.icao;
+            value.value = value.ident;
             value.fullInfo = fullName;
             ret.push(value);
         }

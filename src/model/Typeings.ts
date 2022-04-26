@@ -31,18 +31,26 @@ export type CommandCount = {
 
 
 export type IcaoCode = {
-    "icao": string,
-    "iata": string,
-    "name": string,
-    "city": string,
-    "state": string,
-    "country": string,
-    "elevation": number,
-    "lat": number,
-    "lon": number,
-    "fullInfo": string,
-    "value": string,
-    "tz": string
+    id: string;
+    ident: string;
+    type: string;
+    name: string;
+    latitude_deg: number;
+    longitude_deg: number;
+    elevation_ft: number;
+    continent: string;
+    iso_country: string;
+    iso_region: string;
+    municipality: string;
+    scheduled_service: string;
+    gps_code: string;
+    iata_code: string;
+    local_code: string;
+    home_link: string;
+    wikipedia_link: string;
+    keywords: string,
+    value: string,
+    fullInfo: string
 };
 
 export type Station = {
