@@ -25,7 +25,7 @@ export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | str
                 const task = new AsyncTask("simple task", () => {
                     return descriptor.value.call(result, client);
                 }, err => {
-                    console.error(err);
+                    logger.error(err);
                 });
                 const job = new SimpleIntervalJob({
                     runImmediately,

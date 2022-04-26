@@ -19,7 +19,6 @@ export class Mongo {
 
     @PostConstruct
     private async init(): Promise<void> {
-        console.log(this.uri);
         // useNewUrlParser and useUnifiedTopology are no longer supported:  https://mongoosejs.com/docs/migrating_to_6.html#no-more-deprecation-warning-options and https://stackoverflow.com/questions/56306484/type-error-using-usenewurlparser-with-mongoose-in-typescript
         let mongoClient: MongoClient = null;
         try {
