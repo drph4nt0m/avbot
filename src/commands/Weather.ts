@@ -134,7 +134,7 @@ export class Weather {
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
     @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS", "ADD_REACTIONS"],
+        textChannel: ["EMBED_LINKS"],
         voice: ["CONNECT", "SPEAK"]
     }), GuildOnly)
     private async atisVoice(
