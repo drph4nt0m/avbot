@@ -33,7 +33,7 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
     @PostConstruct
     private async init(): Promise<void> {
         const callResponse = await axios.get("https://raw.githubusercontent.com/mwgg/Airports/master/airports.json");
-        const fuseOptions = getFuseOptions(["icao", "iata", "name"]);
+        const fuseOptions = getFuseOptions<IcaoCode>(["icao", "iata", "name"]);
         if (callResponse.status !== 200) {
             this._fuseCache = new AvFuse([], fuseOptions);
             return;
