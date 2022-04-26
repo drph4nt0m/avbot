@@ -9,7 +9,7 @@ export type SearchBase = {
     value: string
 };
 
-export function getFuseOptions(keys: string[] = ["name"]) {
+export function getFuseOptions<T extends SearchBase>(keys: (keyof T)[] = ["name"]) {
     return {
         keys: keys,
         minMatchCharLength: 0,
