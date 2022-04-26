@@ -17,9 +17,9 @@ export class GuildCreate {
                 .setTitle(`Hello ${guild.name} and thank you for choosing AvBot`)
                 .setColor("#1a8fe3")
                 .setDescription(
-                    `If you need any help regarding AvBot or have any suggestions join our [AvBot Support Server](https://link.avbot.in/support).
+                    `If you need any help regarding AvBot or have any suggestions join our [AvBot Support Server](https://go.av8.dev/support).
         To get started try \`!help\`.
-        [Buy me a coffee](https://link.avbot.in/donate)`
+        [Buy me a coffee](https://go.av8.dev/donate)`
                 )
                 .setFooter({
                     text: `${client.user.username} • @dr_ph4nt0m#8402 • Thank you for showing your support by using AvBot`
