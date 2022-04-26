@@ -166,9 +166,8 @@ export class Weather {
         let atisFound = false;
         const voiceChannel = ((interaction.member) as GuildMember).voice.channel;
         try {
-
-            atisFound = true;
             await this.play(voiceChannel, interaction, client, atisEmbed, icao);
+            atisFound = true;
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
