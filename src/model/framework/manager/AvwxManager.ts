@@ -14,8 +14,6 @@ import type {ISearchBase} from "../ISearchBase.js";
 import {defaultSearch, fuseOptions} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
 
-// TODO: skeptical!
-
 @singleton()
 export class AvwxManager extends AbstractRequestEngine implements ISearchBase<IcaoCode> {
 
