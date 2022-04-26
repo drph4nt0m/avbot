@@ -32,7 +32,7 @@ export function Property(prop: keyof propTypes, required = true): PropertyDecora
                 if (required && propValue === null) {
                     throw new Error(`Unable to find prop with key "${prop}"`);
                 }
-                if (!required && propValue === null && original != null) {
+                if (!required && propValue === null && original !== null && original !== undefined) {
                     return original;
                 }
                 return propValue ?? null;
