@@ -25,11 +25,6 @@ export async function PremiumGuild(arg: CommandInteraction, client: Client, next
         logger.error(`[${client.shard.ids}] ${guildId} tried using live command`);
         try {
             const premiumEmbed = new MessageEmbed()
-                .setColor("#0099ff")
-                .setFooter({
-                    text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
-
-                })
                 .setTimestamp()
                 .setColor("#00ff00")
                 .setDescription(
