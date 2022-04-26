@@ -11,7 +11,7 @@ const engines = factory.engines;
 
 /**
  * Get a property from the system. The location where the property is loaded from is agnostic and defined by the registered IPropertyResolutionEngine classes.
- * This acts the similar to Spring's Property annotation
+ * This acts the similar to Spring's Value annotation
  */
 export function Property(prop: keyof propTypes, required = true): PropertyDecorator {
     return (target, key): void => {

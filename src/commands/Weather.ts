@@ -5,13 +5,12 @@ import {
     createAudioResource,
     DiscordGatewayAdapterCreator,
     joinVoiceChannel,
-    VoiceConnection,
     VoiceConnectionStatus
 } from "@discordjs/voice";
 import {Category, NotBot} from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type {AutocompleteInteraction, CommandInteraction} from "discord.js";
+import type {AutocompleteInteraction, CommandInteraction, VoiceBasedChannel} from "discord.js";
 import {ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed} from "discord.js";
 import {Client, Discord, Guard, Slash, SlashOption} from "discordx";
 import Text2Speech from "node-gtts";
@@ -31,6 +30,9 @@ dayjs.extend(utc);
 @Category("Weather commands")
 @injectable()
 export class Weather {
+
+    private readonly _audioPlayer: AudioPlayer = createAudioPlayer();
+    private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
     public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager) {
     }
@@ -158,35 +160,11 @@ export class Weather {
             })
             .setTimestamp();
         let atisFound = false;
-        let connection: VoiceConnection = null;
-        let player: AudioPlayer = null;
         const voiceChannel = ((interaction.member) as GuildMember).voice.channel;
         try {
-            const {speech} = await this._avwxManager.getMetar(icao);
-            atisFound = true;
-            atisEmbed.setDescription(speech);
-            const file = await this.saveSpeechToFile(speech);
-            const resource = createAudioResource(file.name);
-            connection = joinVoiceChannel({
-                channelId: voiceChannel.id,
-                guildId: voiceChannel.guild.id,
-                adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator
-            });
 
-            player = createAudioPlayer();
-            connection.subscribe(player);
-            player.play(resource);
-            player.on(AudioPlayerStatus.Idle, () => {
-                connection.destroy();
-            });
-            connection.on(VoiceConnectionStatus.Disconnected, () => {
-                InteractionUtils.replyOrFollowUp(interaction, "AvBot left the voice channel");
-                interaction.deleteReply();
-            });
-            connection.on(VoiceConnectionStatus.Destroyed, () => {
-                // bot disconnected, remove the temp file
-                interaction.deleteReply();
-            });
+            atisFound = true;
+            await this.play(voiceChannel, interaction, client, atisEmbed, icao);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
@@ -194,7 +172,35 @@ export class Weather {
             // TODO change this error message
             return InteractionUtils.replyOrFollowUp(interaction, `${icao} not found`);
         }
-        const state = player.state.status;
+    }
+
+    private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: MessageEmbed, icao: string): Promise<void> {
+        const file = await this.saveSpeechToFile(icao, embed);
+        const resource = createAudioResource(file.name);
+        const connection = joinVoiceChannel({
+            channelId: voiceChannel.id,
+            guildId: voiceChannel.guild.id,
+            adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator
+        });
+        connection.subscribe(this._audioPlayer);
+        this._audioPlayer.play(resource);
+        this._audioPlayer.on(AudioPlayerStatus.Idle, async () => {
+            const isChannelEmpty = voiceChannel.members.filter(member => member.id !== client.user.id).size === 0;
+            if (isChannelEmpty) {
+                if (connection.state.status !== VoiceConnectionStatus.Destroyed) {
+                    connection.destroy();
+                }
+            } else {
+                const newFIle = await this.saveSpeechToFile(icao, embed);
+                this._audioPlayer.play(createAudioResource(newFIle.name));
+            }
+        });
+
+        connection.on(VoiceConnectionStatus.Destroyed, async () => {
+            await interaction.deleteReply();
+        });
+
+        const state = this._audioPlayer.state.status;
         const stopButton = new MessageButton()
             .setLabel("Stop")
             .setStyle("DANGER")
@@ -203,11 +209,13 @@ export class Weather {
         const row = new MessageActionRow().addComponents(stopButton);
 
         const message: Message = await interaction.followUp({
-            embeds: [atisEmbed],
+            embeds: [embed],
             fetchReply: true,
             components: [row]
         }) as Message;
+
         const collector = message.createMessageComponentCollector();
+
         collector.on("collect", async (collectInteraction: ButtonInteraction) => {
             const memberActivated = collectInteraction.member as GuildMember;
             // ensure the member who clicked this button is also in the voice channel
@@ -223,7 +231,16 @@ export class Weather {
         });
     }
 
-    private saveSpeechToFile(speech: string): Promise<Record<string, any>> {
+    private async saveSpeechToFile(icao: string, embed: MessageEmbed): Promise<Record<string, any>> {
+        const {speech} = await this._avwxManager.getMetar(icao);
+        if (this._atisMap.has(icao)) {
+            const storedSpeech = this._atisMap.get(icao);
+            if (storedSpeech.has(speech)) {
+                return storedSpeech.get(speech);
+            }
+        }
+
+        embed.setDescription(speech);
         const tmpObj = tmp.fileSync({
             unsafeCleanup: true,
             postfix: ".mp3"
@@ -231,6 +248,9 @@ export class Weather {
         return new Promise((resolve) => {
             const speechOb = Text2Speech("en-uk");
             speechOb.save(tmpObj.name, speech, () => {
+                const fileMap = new Map();
+                fileMap.set(speech, tmpObj);
+                this._atisMap.set(icao, fileMap);
                 resolve(tmpObj);
             });
         });
