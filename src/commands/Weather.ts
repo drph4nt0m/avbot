@@ -178,9 +178,9 @@ export class Weather {
             player.play(resource);
             player.on(AudioPlayerStatus.Idle, () => {
                 connection.destroy();
-                InteractionUtils.replyOrFollowUp(interaction, "AvBot left the voice channel");
             });
             connection.on(VoiceConnectionStatus.Disconnected, () => {
+                InteractionUtils.replyOrFollowUp(interaction, "AvBot left the voice channel");
                 interaction.deleteReply();
             });
             connection.on(VoiceConnectionStatus.Destroyed, () => {
@@ -289,7 +289,7 @@ export class Weather {
         textChannel: ["EMBED_LINKS"]
     }))
     private async nats(
-        @SlashOption("icao", {
+        @SlashOption("ident", {
             description: "Which track would you like to get information about?",
             required: false
         })
