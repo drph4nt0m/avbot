@@ -331,28 +331,28 @@ export class Weather {
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [natsEmbed]
             });
-        } else {
-            const natsEmbed = new MessageEmbed()
-                .setTitle("NATS")
-                .setColor("#0099ff")
-                .setFooter({
-                    text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
-                })
-                .setTimestamp();
-            try {
-                const nats = await this._natsManager.getAllTracks();
-
-                nats.forEach((track) => {
-                    natsEmbed.addField(`${track.ident}`, `${track.route.nodes[0].ident}-${track.route.nodes[track.route.nodes.length - 1].ident}`);
-                });
-            } catch (error) {
-                logger.error(`[${client.shard.ids}] ${error}`);
-                natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-            }
-            return InteractionUtils.replyOrFollowUp(interaction, {
-                embeds: [natsEmbed]
-            });
         }
+        const natsEmbed = new MessageEmbed()
+            .setTitle("NATS")
+            .setColor("#0099ff")
+            .setFooter({
+                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
+            })
+            .setTimestamp();
+        try {
+            const nats = await this._natsManager.getAllTracks();
+
+            nats.forEach((track) => {
+                natsEmbed.addField(`${track.ident}`, `${track.route.nodes[0].ident}-${track.route.nodes[track.route.nodes.length - 1].ident}`);
+            });
+        } catch (error) {
+            logger.error(`[${client.shard.ids}] ${error}`);
+            natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+        }
+        return InteractionUtils.replyOrFollowUp(interaction, {
+            embeds: [natsEmbed]
+        });
+
     }
 
     @Slash("taf", {
