@@ -140,3 +140,128 @@ export type NatsNode = {
     "lat": number,
     "lon": number
 };
+
+export type IvaoInfo = {
+    updatedAt: Date;
+    servers: IvaoServer[];
+    voiceServers: IvaoServer[];
+    clients: IvaoClients;
+    connections: IvaoConnections;
+};
+
+export type IvaoClients = {
+    pilots: IvaoPilot[];
+    atcs: IvaoAtc[];
+    followMe: any[];
+    observers: IvaoAtc[];
+};
+
+export type IvaoAtc = {
+    time: number;
+    id: number;
+    userId: number;
+    callsign: string;
+    serverId: string;
+    softwareTypeId: string;
+    softwareVersion: string;
+    rating: number;
+    createdAt: Date;
+    lastTrack: IvaoLastTrack;
+    atcSession: IvaoAtcSession;
+};
+
+export type IvaoAtcSession = {
+    frequency: number;
+    position: null | string;
+};
+
+export type IvaoLastTrack = {
+    altitude: number;
+    altitudeDifference: number;
+    arrivalDistance: number | null;
+    departureDistance: number | null;
+    groundSpeed: number;
+    heading: number;
+    latitude: number;
+    longitude: number;
+    onGround: boolean;
+    state: null | string;
+    timestamp: Date;
+    transponder: number;
+    transponderMode: string;
+    time: number;
+};
+
+export type IvaoPilot = {
+    time: number;
+    id: number;
+    userId: number;
+    callsign: string;
+    serverId: string;
+    softwareTypeId: string;
+    softwareVersion: string;
+    rating: number;
+    createdAt: Date;
+    lastTrack: IvaoLastTrack;
+    flightPlan: IvaoFlightPlan;
+    pilotSession: IvaoPilotSession;
+};
+
+export type IvaoFlightPlan = {
+    id: number;
+    revision: number;
+    aircraftId: string;
+    aircraftNumber: number;
+    departureId: string;
+    arrivalId: string;
+    alternativeId: null;
+    alternative2Id: null;
+    route: string;
+    remarks: string;
+    speed: string;
+    level: string;
+    flightRules: string;
+    flightType: string;
+    eet: number;
+    endurance: number;
+    departureTime: number;
+    actualDepartureTime: number;
+    peopleOnBoard: number;
+    createdAt: Date;
+    updatedAt: Date;
+    aircraftEquipments: string;
+    aircraftTransponderTypes: string;
+    aircraft: IvaoAircraft;
+};
+
+export type IvaoAircraft = {
+    icaoCode: string;
+    model: string;
+    wakeTurbulence: string;
+    isMilitary: boolean;
+    description: string;
+};
+
+export type IvaoPilotSession = {
+    simulatorId: string;
+};
+
+export type IvaoConnections = {
+    total: number;
+    supervisor: number;
+    atc: number;
+    observer: number;
+    pilot: number;
+    worldTour: number;
+};
+
+export type IvaoServer = {
+    id: string;
+    hostname: string;
+    ip: string;
+    description: string;
+    countryId: string;
+    currentConnections: number;
+    maximumConnections: number;
+};
+
