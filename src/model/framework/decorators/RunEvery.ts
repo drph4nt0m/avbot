@@ -3,6 +3,7 @@ import {AsyncTask, SimpleIntervalJob, ToadScheduler} from "toad-scheduler";
 import {container} from "tsyringe";
 
 import type METHOD_EXECUTOR_TIME_UNIT from "../../../enums/METHOD_EXECUTOR_TIME_UNIT.js";
+import logger from "../../../utils/LoggerFactory.js";
 
 
 export const scheduler = new ToadScheduler();
@@ -30,6 +31,7 @@ export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | str
                     runImmediately,
                     [timeUnit]: time
                 }, task);
+                logger.info(`Register method: "${target.constructor.name}.${propertyKey}()" to run every ${time} ${timeUnit}`);
                 scheduler.addSimpleIntervalJob(job);
             },
             {
