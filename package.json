@@ -1,8 +1,10 @@
 {
   "name": "avbot",
   "version": "4.0.0",
+  "description": "AvBot v4",
+  "author": "Rahul Singh <hey.singh@protonmail.com>",
+  "license": "GPL-3.0-only",
   "private": true,
-  "license": "MIT",
   "type": "module",
   "main": "build/main.js",
   "scripts": {
@@ -15,6 +17,14 @@
     "start_js": "npm run build & node build/main.js",
     "lint-fix": "eslint . --ext .ts --fix"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drph4nt0m/avbot-v3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/drph4nt0m/avbot-v3/issues"
+  },
+  "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
     "@discordjs/voice": "^0.9.0",
@@ -61,6 +71,11 @@
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "engines": {
     "node": ">=16.0.0",
