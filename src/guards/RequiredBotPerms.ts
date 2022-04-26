@@ -27,7 +27,7 @@ export function RequiredBotPerms(permissions: {
         const guild = arg.guild;
         const perms = typeof permissions.textChannel === "function" ? await permissions.textChannel(arg) : permissions.textChannel;
         if (!channel.permissionsFor(guild.me).has(perms)) {
-            return InteractionUtils.replyOrFollowUp(arg, `AvBot doesn't have permissions to send Embeds in this channel. Please enable "${perms.join(", ")}" under channel permissions for AvBot`);
+            return InteractionUtils.replyOrFollowUp(arg, `AvBot doesn't have the required permissions to perform the action in this channel. Please enable "${perms.join(", ")}" under channel permissions for AvBot`);
         }
 
         if (permissions.voice) {
