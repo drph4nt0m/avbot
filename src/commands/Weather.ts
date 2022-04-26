@@ -19,6 +19,7 @@ import {injectable} from "tsyringe";
 
 import {GuildOnly} from "../guards/GuildOnly.js";
 import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
+import {AirportManager} from "../model/framework/manager/AirportManager.js";
 import {AvwxManager} from "../model/framework/manager/AvwxManager.js";
 import {NatsManager} from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
@@ -34,7 +35,9 @@ export class Weather {
     private readonly _audioPlayer: AudioPlayer = createAudioPlayer();
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
-    public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager) {
+    public constructor(private _avwxManager: AvwxManager,
+                       private _natsManager: NatsManager,
+                       private _airportManager: AirportManager) {
     }
 
     @Slash("metar", {
@@ -45,7 +48,7 @@ export class Weather {
     }))
     private async metar(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AvwxManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give METAR for?",
             type: "STRING",
             required: true
@@ -102,7 +105,7 @@ export class Weather {
     }))
     private async atis(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AvwxManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: "STRING",
             required: true
@@ -141,7 +144,7 @@ export class Weather {
     }), GuildOnly)
     private async atisVoice(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AvwxManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: "STRING",
             required: true
@@ -264,7 +267,7 @@ export class Weather {
     }))
     private async brief(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AvwxManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to BRIEF you for?",
             type: "STRING",
             required: true
@@ -383,7 +386,7 @@ export class Weather {
     }))
     private async taf(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AvwxManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give TAF for?",
             type: "STRING",
             required: true
