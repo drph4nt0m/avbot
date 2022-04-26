@@ -223,7 +223,7 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
     private buildJson(resultData: Record<string, any>): IcaoCode[] {
         const ret: IcaoCode[] = [];
         for (const key in resultData) {
-            if (!resultData.hasOwnProperty(key)) {
+            if (!Object.prototype.hasOwnProperty.call(resultData, key)) {
                 continue;
             }
             const value: IcaoCode = resultData[key];
