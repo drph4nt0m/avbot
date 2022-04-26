@@ -8,7 +8,6 @@ import METHOD_EXECUTOR_TIME_UNIT from "../../../enums/METHOD_EXECUTOR_TIME_UNIT.
 import logger from "../../../utils/LoggerFactory.js";
 import {ObjectUtil} from "../../../utils/Utils.js";
 import type {IcaoCode} from "../../Typeings.js";
-import {PostConstruct} from "../decorators/PostConstruct.js";
 import {Property} from "../decorators/Property.js";
 import {RunEvery} from "../decorators/RunEvery.js";
 import type {ISearchBase} from "../ISearchBase.js";
@@ -23,7 +22,8 @@ export class AirportManager implements ISearchBase<IcaoCode> {
     @Property("AVWX_TOKEN")
     private readonly avwxToken: string;
 
-    @PostConstruct
+
+    @RunEvery(7, METHOD_EXECUTOR_TIME_UNIT.days, true)
     private async indexAirports(): Promise<void> {
         const callResponse = await axios.get("https://raw.githubusercontent.com/davidmegginson/ourairports-data/main/airports.csv");
         const fuseOptions = getFuseOptions<IcaoCode>(["ident", "iata_code", "name", "municipality"]);
@@ -37,11 +37,6 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         const index = Fuse.createIndex(fuseOptions.keys, buildJson);
         this._fuseCache = new AvFuse(buildJson, fuseOptions, index);
         logger.info(`indexed ${buildJson.length} icao locations`);
-    }
-
-    @RunEvery(7, METHOD_EXECUTOR_TIME_UNIT.days)
-    private poll(): Promise<void> {
-        return this.indexAirports();
     }
 
     private async getAvwxIcaoCodes(): Promise<string[]> {
