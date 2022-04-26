@@ -27,8 +27,6 @@ export class IvaoManager extends AbstractRequestEngine {
         this.ivaoInfo = info.data;
     }
 
-    public getClientInfo(callSign: string, type: "atc"): IvaoAtc;
-    public getClientInfo(callSign: string, type: "pilot"): IvaoPilot;
     public getClientInfo(callSign: string, type: "pilot" | "atc"): IvaoPilot | IvaoAtc {
         let retVal: IvaoPilot | IvaoAtc;
         const clients = this.ivaoInfo.clients;

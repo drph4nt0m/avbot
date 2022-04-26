@@ -15,6 +15,4 @@ export class PropertyResolutionFactory extends AbstractFactory<IPropertyResoluti
     protected populateEngines(): Immutable.Set<IPropertyResolutionEngine> {
         return Immutable.Set(container.resolveAll(Beans.IPropertyResolutionEngine));
     }
-
-
 }
