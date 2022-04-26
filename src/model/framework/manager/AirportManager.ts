@@ -9,6 +9,7 @@ import logger from "../../../utils/LoggerFactory.js";
 import {ObjectUtil} from "../../../utils/Utils.js";
 import type {IcaoCode} from "../../Typeings.js";
 import {PostConstruct} from "../decorators/PostConstruct.js";
+import {Property} from "../decorators/Property.js";
 import {RunEvery} from "../decorators/RunEvery.js";
 import type {ISearchBase} from "../ISearchBase.js";
 import {defaultSearch, getFuseOptions} from "../ISearchBase.js";
@@ -18,6 +19,9 @@ import {AvFuse} from "../logic/AvFuse.js";
 export class AirportManager implements ISearchBase<IcaoCode> {
 
     private _fuseCache: AvFuse<IcaoCode> = null;
+
+    @Property("AVWX_TOKEN")
+    private readonly avwxToken: string;
 
     @PostConstruct
     private async indexAirports(): Promise<void> {
@@ -29,7 +33,7 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         }
         const result = callResponse.data;
         const json = await csv().fromString(result);
-        const buildJson: IcaoCode[] = this.buildJson(json);
+        const buildJson: IcaoCode[] = await this.buildJson(json);
         const index = Fuse.createIndex(fuseOptions.keys, buildJson);
         this._fuseCache = new AvFuse(buildJson, fuseOptions, index);
         logger.info(`indexed ${buildJson.length} icao locations`);
@@ -40,7 +44,20 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         return this.indexAirports();
     }
 
-    private buildJson(resultData: Record<string, any>): IcaoCode[] {
+    private async getAvwxIcaoCodes(): Promise<string[]> {
+        const callResponse = await axios.get("https://avwx.rest/api/station/list", {
+            headers: {
+                Authorization: this.avwxToken
+            }
+        });
+        if (callResponse.status !== 200) {
+            return [];
+        }
+        return callResponse.data;
+    }
+
+    private async buildJson(resultData: Record<string, any>): Promise<IcaoCode[]> {
+        const avwxResponse = await this.getAvwxIcaoCodes();
         const ret: IcaoCode[] = [];
         for (const key in resultData) {
             if (!Object.prototype.hasOwnProperty.call(resultData, key)) {
@@ -48,9 +65,12 @@ export class AirportManager implements ISearchBase<IcaoCode> {
             }
             const value: IcaoCode = resultData[key];
             const {ident, name, iata_code, municipality} = value;
-            if (!ObjectUtil.validString(ident)) {
+
+            // check to make sure there is an Icao code and avwx supports it
+            if (!ObjectUtil.validString(ident) || !avwxResponse.includes(ident)) {
                 continue;
             }
+
             let fullName = "";
             if (ObjectUtil.validString(ident)) {
                 fullName += `${ident}`;
