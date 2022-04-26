@@ -299,6 +299,40 @@ export class Weather {
     ): Promise<void> {
         if (ObjectUtil.validString(ident)) {
             const natsEmbed = new MessageEmbed()
+                .setTitle(`NAT | Track ${ident}`)
+                .setColor("#0099ff")
+                .setFooter({
+                    text: client.user.username
+                })
+                .setTimestamp();
+            try {
+                const nat = await this._natsManager.getTrackInformation(ident);
+
+                let route = "";
+                nat.route.nodes.forEach((node) => {
+                    route += `${node.ident} `;
+                });
+                natsEmbed.addField("Route", `${route}`);
+                if (nat.route.eastLevels.length > 0) {
+                    natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
+                }
+                if (nat.route.westLevels.length > 0) {
+                    natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
+                }
+
+                natsEmbed.addField(
+                    "Validity",
+                    `${dayjs(nat.validFrom).utc().format("YYYY-MM-DD HH:mm:ss [Z]")} to ${dayjs(nat.validTo).utc().format("YYYY-MM-DD HH:mm:ss [Z]")}`
+                );
+            } catch (error) {
+                logger.error(`[${client.shard.ids}] ${error}`);
+                natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            }
+            return InteractionUtils.replyOrFollowUp(interaction, {
+                embeds: [natsEmbed]
+            });
+        } else {
+            const natsEmbed = new MessageEmbed()
                 .setTitle("NATS")
                 .setColor("#0099ff")
                 .setFooter({
@@ -319,41 +353,6 @@ export class Weather {
                 embeds: [natsEmbed]
             });
         }
-        const natsEmbed = new MessageEmbed()
-            .setTitle(`NAT | Track ${ident}`)
-            .setColor("#0099ff")
-            .setFooter({
-                text: client.user.username
-            })
-            .setTimestamp();
-
-        try {
-            const nat = await this._natsManager.getTrackInformation(ident);
-
-            let route = "";
-            nat.route.nodes.forEach((node) => {
-                route += `${node.ident} `;
-            });
-            natsEmbed.addField("Route", `${route}`);
-            if (nat.route.eastLevels.length > 0) {
-                natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
-            }
-            if (nat.route.westLevels.length > 0) {
-                natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
-            }
-
-            natsEmbed.addField(
-                "Validity",
-                `${dayjs(nat.validFrom).utc().format("YYYY-MM-DD HH:mm:ss [Z]")} to ${dayjs(nat.validTo).utc().format("YYYY-MM-DD HH:mm:ss [Z]")}`
-            );
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-            natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-        }
-
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [natsEmbed]
-        });
     }
 
     @Slash("taf", {
