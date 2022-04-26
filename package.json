@@ -32,6 +32,7 @@
     "@discordx/utilities": "4.2.4",
     "axios": "^0.26.1",
     "common-tags": "^1.8.0",
+    "csvtojson": "^2.0.10",
     "datadog-metrics": "^0.9.3",
     "dayjs": "^1.10.7",
     "dblapi.js": "^2.4.1",
