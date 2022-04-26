@@ -9,17 +9,22 @@ export type SearchBase = {
     value: string
 };
 
+export function getFuseOptions(keys: string[] = ["name"]) {
+    return {
+        keys: keys,
+        minMatchCharLength: 0,
+        threshold: 0.3,
+        includeScore: true,
+        useExtendedSearch: true,
+        shouldSort: true
+    };
+}
+
 /**
  * Fuse default options to comply with ISearchBase
  */
-export const fuseOptions = {
-    keys: ["name"],
-    minMatchCharLength: 0,
-    threshold: 0.3,
-    includeScore: true,
-    useExtendedSearch: true,
-    shouldSort: true
-};
+export const defaultFuseOptions = getFuseOptions();
+
 
 export interface ISearchBase<T extends SearchBase> {
     /**

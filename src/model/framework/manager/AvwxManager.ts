@@ -11,7 +11,7 @@ import {PostConstruct} from "../decorators/PostConstruct.js";
 import {Property} from "../decorators/Property.js";
 import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
 import type {ISearchBase} from "../ISearchBase.js";
-import {defaultSearch, fuseOptions} from "../ISearchBase.js";
+import {defaultSearch, getFuseOptions} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
 
 @singleton()
@@ -33,6 +33,7 @@ export class AvwxManager extends AbstractRequestEngine implements ISearchBase<Ic
     @PostConstruct
     private async init(): Promise<void> {
         const callResponse = await axios.get("https://raw.githubusercontent.com/mwgg/Airports/master/airports.json");
+        const fuseOptions = getFuseOptions(["icao", "iata", "name"]);
         if (callResponse.status !== 200) {
             this._fuseCache = new AvFuse([], fuseOptions);
             return;
