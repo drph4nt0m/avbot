@@ -135,7 +135,6 @@ export class Weather {
     }
 
 
-    // TODO: this needs looked, it works, but might need improvements
     @Slash("atis-voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
