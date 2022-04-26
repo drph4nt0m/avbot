@@ -245,7 +245,6 @@ export class Weather {
 
         embed.setDescription(speech);
         const tmpObj = tmp.fileSync({
-            unsafeCleanup: true,
             postfix: ".mp3"
         });
         return new Promise((resolve) => {
