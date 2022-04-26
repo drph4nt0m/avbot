@@ -33,7 +33,7 @@ dayjs.extend(utc);
 export class Weather {
 
     private readonly _audioPlayer: AudioPlayer = createAudioPlayer();
-    // map of <icao, <speechText>, File>
+    // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
     public constructor(private _avwxManager: AvwxManager,
