@@ -22,7 +22,7 @@ export async function PremiumGuild(arg: CommandInteraction, client: Client, next
     const isPremium = await mongo.isPremiumGuild(guildId);
     const member = arg.member;
     if (!isPremium) {
-        logger.error(`[${client.shard.ids}] ${guildId} tried using live command`);
+        logger.error(`[${client.shard.ids}] ${guildId} tried using ${arg.commandName} command`);
         try {
             const premiumEmbed = new MessageEmbed()
                 .setColor("#0099ff")
