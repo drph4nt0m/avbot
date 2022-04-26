@@ -236,6 +236,7 @@ export class Weather {
 
     private async saveSpeechToFile(icao: string, embed: MessageEmbed): Promise<Record<string, any>> {
         const {speech} = await this._avwxManager.getMetar(icao);
+        embed.setDescription(speech);
         if (this._atisMap.has(icao)) {
             const storedSpeech = this._atisMap.get(icao);
             if (storedSpeech.has(speech)) {
@@ -243,7 +244,6 @@ export class Weather {
             }
         }
 
-        embed.setDescription(speech);
         const tmpObj = tmp.fileSync({
             postfix: ".mp3"
         });
