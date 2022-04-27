@@ -100,6 +100,7 @@ export class Weather {
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
+        await interaction.deferReply();
         const atisEmbed = new MessageEmbed()
             .setTitle(`ATIS for ${icao.toUpperCase()}`)
             .setFooter({
