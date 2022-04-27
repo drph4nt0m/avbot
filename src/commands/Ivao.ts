@@ -73,7 +73,7 @@ export class Ivao {
                         },
                         {
                             name: "Departure",
-                            value: ivaoClient.flightPlan.departureAerodrome,
+                            value: ivaoClient.departureAerodrome,
                             inline: true
                         },
                         {
@@ -88,7 +88,7 @@ export class Ivao {
                         },
                         {
                             name: "Latitude",
-                            value: ivaoClient.latitude,
+                            value: ivaoClient.lastTrack.latitude,
                             inline: true
                         },
                         {
