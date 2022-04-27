@@ -95,7 +95,9 @@ export class AtisVoice {
         if (this._audioPlayers.has(guildId)) {
             return this._audioPlayers.get(guildId);
         }
-        this._audioPlayers.set(guildId, createAudioPlayer());
+        const audioPlayer = createAudioPlayer();
+        this._audioPlayers.set(guildId, audioPlayer);
+        return audioPlayer;
     }
 
     private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: MessageEmbed, icao: string): Promise<void> {
