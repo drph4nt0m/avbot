@@ -4,7 +4,10 @@ import {ObjectUtil} from "../../../utils/Utils.js";
 import type {SearchBase} from "../ISearchBase";
 
 export class AvFuse<T extends SearchBase> extends Fuse<T> {
-    public getFirstNItems(amount: number): Fuse.FuseResult<T>[] {
+    public getFirstNItems(amount: number, filter: {
+        key: keyof T,
+        value?: string
+    } = {key: "name"}): Fuse.FuseResult<T>[] {
         const json = this.getIndex();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -19,10 +22,18 @@ export class AvFuse<T extends SearchBase> extends Fuse<T> {
             if (i === len) {
                 break;
             }
+
             const item = collection[i];
-            if (!ObjectUtil.validString(item.name)) {
+            if (!ObjectUtil.validString(item[filter.key])) {
                 max++;
                 continue;
+            }
+            if (ObjectUtil.validString(filter.value)) {
+                const value: any = item[filter.key];
+                if (value !== filter.value) {
+                    max++;
+                    continue;
+                }
             }
             returnOb.push({
                 item: item,
