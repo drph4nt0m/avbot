@@ -37,7 +37,7 @@ export function RequiredBotPerms(permissions: {
                 const voiceChannel = member?.voice?.channel;
                 if (voiceChannel) {
                     if (!voiceChannel.permissionsFor(guild.me).has(voicePerms)) {
-                        return InteractionUtils.replyOrFollowUp(arg, "AvBot doesn't have permissions to connect and/or to speak in your voice channel. Please enable \"Connect\" and \"Speak\" under channel permissions for AvBot.");
+                        return InteractionUtils.replyOrFollowUp(arg, `AvBot doesn't have permissions to connect and/or to speak in your voice channel. Please enable "${perms.join(", ")}" under channel permissions for AvBot.`);
                     }
                     if (!voiceChannel.joinable) {
                         const embed = new MessageEmbed()
