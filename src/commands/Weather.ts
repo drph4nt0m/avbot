@@ -138,6 +138,7 @@ export class Weather {
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
+        await interaction.deferReply();
         const briefEmbed = new MessageEmbed()
             .setTitle(`BRIEF for ${icao}`)
             .setColor("#0099ff")
@@ -182,6 +183,7 @@ export class Weather {
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
+        await interaction.deferReply();
         if (ObjectUtil.validString(ident)) {
             const natsEmbed = new MessageEmbed()
                 .setTitle(`NAT | Track ${ident}`)
