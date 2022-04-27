@@ -4,11 +4,20 @@ import type {ArgsOf, Client} from "discordx";
 import {Discord, On} from "discordx";
 import {injectable} from "tsyringe";
 
+import {Property} from "../model/framework/decorators/Property.js";
+import type {NODE_ENV} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
+import {OnReady} from "./OnReady.js";
 
 @Discord()
 @injectable()
 export class GuildCreate {
+
+    @Property("NODE_ENV")
+    private readonly environment: NODE_ENV;
+
+    public constructor(private _onReady: OnReady) {
+    }
 
     @On("guildCreate")
     private async botJoins([guild]: ArgsOf<"guildCreate">, client: Client): Promise<void> {
@@ -33,6 +42,10 @@ export class GuildCreate {
             });
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
+        }
+
+        if (this.environment === "development") {
+            await this._onReady.initAppCommands(client);
         }
     }
 }
