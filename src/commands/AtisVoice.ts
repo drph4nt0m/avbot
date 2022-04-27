@@ -44,7 +44,7 @@ export class AtisVoice {
                        private _airportManager: AirportManager) {
     }
 
-    private readonly _audioPlayer: AudioPlayer = createAudioPlayer();
+    private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
 
     // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
@@ -91,7 +91,15 @@ export class AtisVoice {
         }
     }
 
+    private getAudioPlayer(guildId: string): AudioPlayer {
+        if (this._audioPlayers.has(guildId)) {
+            return this._audioPlayers.get(guildId);
+        }
+        this._audioPlayers.set(guildId, createAudioPlayer());
+    }
+
     private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: MessageEmbed, icao: string): Promise<void> {
+        const {guildId} = voiceChannel;
         const file = await this.saveSpeechToFile(icao, embed);
         const resource = createAudioResource(file.name);
         const connection = joinVoiceChannel({
@@ -99,9 +107,10 @@ export class AtisVoice {
             guildId: voiceChannel.guild.id,
             adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator
         });
-        connection.subscribe(this._audioPlayer);
-        this._audioPlayer.play(resource);
-        this._audioPlayer.on(AudioPlayerStatus.Idle, async () => {
+        const audioPlayer = this.getAudioPlayer(guildId);
+        connection.subscribe(audioPlayer);
+        audioPlayer.play(resource);
+        audioPlayer.on(AudioPlayerStatus.Idle, async () => {
             const isChannelEmpty = voiceChannel.members.filter(member => member.id !== client.user.id).size === 0;
             if (isChannelEmpty) {
                 if (connection.state.status !== VoiceConnectionStatus.Destroyed) {
@@ -109,15 +118,16 @@ export class AtisVoice {
                 }
             } else {
                 const newFIle = await this.saveSpeechToFile(icao, embed);
-                this._audioPlayer.play(createAudioResource(newFIle.name));
+                audioPlayer.play(createAudioResource(newFIle.name));
             }
         });
 
         connection.on(VoiceConnectionStatus.Destroyed, async () => {
             await interaction.deleteReply();
+            this._audioPlayers.delete(guildId);
         });
 
-        const state = this._audioPlayer.state.status;
+        const state = audioPlayer.state.status;
         const stopButton = new MessageButton()
             .setLabel("Stop")
             .setStyle("DANGER")
