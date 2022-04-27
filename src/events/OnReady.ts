@@ -61,7 +61,7 @@ export class OnReady {
         }
     }
 
-    private initAppCommands(client: Client): Promise<void> {
+    public initAppCommands(client: Client): Promise<void> {
         if (this.environment === "production") {
             return client.initGlobalApplicationCommands({
                 log: true
