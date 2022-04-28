@@ -1,11 +1,9 @@
 import type {AutocompleteInteraction} from "discord.js";
 import Fuse from "fuse.js";
 
-import METHOD_EXECUTOR_TIME_UNIT from "../../../enums/METHOD_EXECUTOR_TIME_UNIT.js";
 import logger from "../../../utils/LoggerFactory.js";
 import {ObjectUtil} from "../../../utils/Utils.js";
 import type {IvaoAtc, IvaoInfo, IvaoPilot, VatsimAti, VatsimInfo, VatsimPilot} from "../../Typeings.js";
-import {RunEvery} from "../decorators/RunEvery.js";
 import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
 import {getFuseOptions, ISearchBase, SearchBase} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
@@ -33,7 +31,6 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
         throw new Error(`no client available at the moment matching call sign ${partialCallSign}`);
     }
 
-    @RunEvery(3, METHOD_EXECUTOR_TIME_UNIT.minutes, true)
     protected async update(): Promise<void> {
         const info = await this.api.get(null);
         if (info.status !== 200) {
