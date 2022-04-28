@@ -9,6 +9,7 @@ import {IvaoManager} from "../model/framework/manager/IvaoManager.js";
 import type {IvaoAtc, IvaoPilot} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
+import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
 
 @Discord()
 @Category("IVAO commands")
@@ -72,7 +73,7 @@ export class Ivao {
                         },
                         {
                             name: "Rating",
-                            value: ivaoClient.rating.toString(),
+                            value: IvaoPilotRatingEnum[ivaoClient.rating.toString()],
                             inline: true
                         },
                         {
@@ -158,7 +159,7 @@ export class Ivao {
                         },
                         {
                             name: "Rating",
-                            value: ivaoClient.rating.toString(),
+                            value: IvaoAtcRatingEnum[ivaoClient.rating.toString()],
                             inline: true
                         },
                         {
