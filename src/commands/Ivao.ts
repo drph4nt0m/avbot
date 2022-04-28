@@ -54,11 +54,27 @@ export class Ivao {
 
         try {
             let ivaoClient = this._ivaoManager.getClientInfo(callSign, type) as IvaoPilot | IvaoAtc;
-            ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`).setURL(`https://webeye.ivao.aero/?callsign=${ivaoClient.callsign}`);
+            ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`);
             switch (type) {
                 case "pilot":
                     ivaoClient = ivaoClient as IvaoPilot;
+                    ivaoEmbed.setURL(`https://webeye.ivao.aero/?pilotId=${ivaoClient.id}`);
                     ivaoEmbed.addFields(
+                        {
+                            name: "Call Sign",
+                            value: ivaoClient.callsign,
+                            inline: true
+                        },
+                        {
+                            name: "VID",
+                            value: ivaoClient.userId.toString(),
+                            inline: true
+                        },
+                        {
+                            name: "Rating",
+                            value: ivaoClient.rating.toString(),
+                            inline: true
+                        },
                         {
                             name: "Departure",
                             value: ivaoClient.flightPlan.departureId,
@@ -121,9 +137,15 @@ export class Ivao {
                         },
                         {
                             name: "Route",
-                            value: ivaoClient.flightPlan.route,
-                            inline: true
-                        },
+                            value: "```" + ivaoClient.flightPlan.route + "```",
+                            inline: false
+                        }
+                    );
+                    break;
+                case "atc":
+                    ivaoClient = ivaoClient as IvaoAtc;
+                    ivaoEmbed.setURL(`https://webeye.ivao.aero/?atcId=${ivaoClient.id}`);
+                    ivaoEmbed.addFields(
                         {
                             name: "Call Sign",
                             value: ivaoClient.callsign,
@@ -138,12 +160,7 @@ export class Ivao {
                             name: "Rating",
                             value: ivaoClient.rating.toString(),
                             inline: true
-                        }
-                    );
-                    break;
-                case "atc":
-                    ivaoClient = ivaoClient as IvaoAtc;
-                    ivaoEmbed.addFields(
+                        },
                         {
                             name: "Position",
                             value: ivaoClient.atcSession.position,
@@ -157,22 +174,7 @@ export class Ivao {
                         {
                             name: "ATIS",
                             value: "```" + ivaoClient.atis.lines.join("\n") + "```",
-                            inline: true
-                        },
-                        {
-                            name: "Call Sign",
-                            value: ivaoClient.callsign,
-                            inline: true
-                        },
-                        {
-                            name: "VID",
-                            value: ivaoClient.userId.toString(),
-                            inline: true
-                        },
-                        {
-                            name: "Rating",
-                            value: ivaoClient.rating.toString(),
-                            inline: true
+                            inline: false
                         }
                     );
                     break;
