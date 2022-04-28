@@ -89,6 +89,9 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public search(interaction: AutocompleteInteraction): Fuse.FuseResult<SearchType>[] {
+        if (!this._fuseCache) {
+            return [];
+        }
         const query = interaction.options.getFocused(true).value as string;
         const selectedType: string = interaction.options.getString("type");
         if (!ObjectUtil.validString(query)) {

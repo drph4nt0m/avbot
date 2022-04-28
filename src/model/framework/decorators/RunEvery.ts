@@ -22,7 +22,7 @@ export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | str
         container.afterResolution(
             target.constructor as never,
             (_t, result) => {
-                const task = new AsyncTask("simple task", () => {
+                const task = new AsyncTask(`${target.constructor.name}.${propertyKey}`, () => {
                     return descriptor.value.call(result, client);
                 }, err => {
                     logger.error(err);
