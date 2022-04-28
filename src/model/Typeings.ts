@@ -393,3 +393,4 @@ export type VatsimServerElement = {
     is_sweatbox: boolean;
 };
 
+export type FlightSimNetwork = "Ivao" | "Vatsim";
