@@ -41,7 +41,7 @@
     "prettier": "^2.4.1",
     "remove-accents": "^0.4.2",
     "string": "^3.3.3",
-    "winston": "^3.3.3"
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
