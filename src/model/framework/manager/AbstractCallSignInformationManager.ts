@@ -3,7 +3,15 @@ import Fuse from "fuse.js";
 
 import logger from "../../../utils/LoggerFactory.js";
 import {ObjectUtil} from "../../../utils/Utils.js";
-import type {IvaoAtc, IvaoInfo, IvaoPilot, VatsimAti, VatsimInfo, VatsimPilot} from "../../Typeings.js";
+import type {
+    FlightSimNetwork,
+    IvaoAtc,
+    IvaoInfo,
+    IvaoPilot,
+    VatsimAti,
+    VatsimInfo,
+    VatsimPilot
+} from "../../Typeings.js";
 import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
 import {getFuseOptions, ISearchBase, SearchBase} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
@@ -14,6 +22,7 @@ type SearchType = SearchBase & { type: "pilot" | "atc" };
 export abstract class AbstractCallSignInformationManager extends AbstractRequestEngine implements ISearchBase<SearchType> {
 
     protected info: Merged;
+    protected abstract type: FlightSimNetwork;
 
     private _fuseCache: AvFuse<SearchType> = null;
 
@@ -35,7 +44,7 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
         const info = await this.api.get(null);
         if (info.status !== 200) {
             logger.error(`[x] ${info.statusText}`);
-            throw new Error("Unable to download Ivao info");
+            throw new Error(`Unable to download ${this.type} info`);
         }
         this.info = info.data;
 
@@ -65,7 +74,7 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
         }
         const fuseOptions = getFuseOptions<SearchType>();
         const index = Fuse.createIndex(fuseOptions.keys, searchObj);
-        logger.info(`indexed ${searchObj.length} Ivao objects`);
+        logger.info(`indexed ${searchObj.length} ${this.type} objects`);
         this._fuseCache = new AvFuse(searchObj, fuseOptions, index);
     }
 
@@ -102,7 +111,7 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
     }
 
     private isIvaoInfo(info: Merged): info is IvaoInfo {
-        return "clients" in info;
+        return this.type === "Ivao";
     }
 
     protected abstract updateInfo(): Promise<void>;
