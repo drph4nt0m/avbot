@@ -172,6 +172,11 @@ export class Ivao {
                             inline: true
                         },
                         {
+                            name: "ATIS Revision",
+                            value: ivaoClient.atis.revision,
+                            inline: true
+                        },
+                        {
                             name: "ATIS",
                             value: "```" + ivaoClient.atis.lines.join("\n") + "```",
                             inline: false
