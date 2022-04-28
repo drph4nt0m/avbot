@@ -8,7 +8,8 @@ import type {
     IvaoAtc,
     IvaoInfo,
     IvaoPilot,
-    VatsimAti,
+    VatsimAtc,
+    VatsimAtis,
     VatsimInfo,
     VatsimPilot
 } from "../../Typeings.js";
@@ -19,16 +20,16 @@ import {AvFuse} from "../logic/AvFuse.js";
 type Merged = VatsimInfo | IvaoInfo;
 type SearchType = SearchBase & { type: "pilot" | "atc" };
 
-export abstract class AbstractCallSignInformationManager extends AbstractRequestEngine implements ISearchBase<SearchType> {
+export abstract class AbstractCallSignInformationManager<T extends Merged> extends AbstractRequestEngine implements ISearchBase<SearchType> {
 
-    protected info: Merged;
+    private info: Merged;
     protected abstract type: FlightSimNetwork;
 
     private _fuseCache: AvFuse<SearchType> = null;
 
-    public getPartialAtcClientInfo(partialCallSign: string): (IvaoAtc | VatsimAti)[] {
+    public getPartialAtcClientInfo(partialCallSign: string): (IvaoAtc | VatsimAtis)[] {
         const clients = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.controllers;
-        const filteredResults: (IvaoAtc | VatsimAti)[] = [];
+        const filteredResults: (IvaoAtc | VatsimAtis)[] = [];
         for (const client of clients) {
             if (client.callsign.match(partialCallSign)) {
                 filteredResults.push(client);
@@ -41,13 +42,7 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
     }
 
     protected async update(): Promise<void> {
-        const info = await this.api.get(null);
-        if (info.status !== 200) {
-            logger.error(`[x] ${info.statusText}`);
-            throw new Error(`Unable to download ${this.type} info`);
-        }
-        this.info = info.data;
-
+        this.info = await this.getData();
         this.buildSearchIndex();
     }
 
@@ -78,13 +73,13 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
         this._fuseCache = new AvFuse(searchObj, fuseOptions, index);
     }
 
-    public getClientInfo(callSign: string, type: "pilot" | "atc"): IvaoPilot | IvaoAtc | VatsimPilot | VatsimAti {
-        let retVal: IvaoPilot | IvaoAtc | VatsimPilot | VatsimAti;
+    public getClientInfo(callSign: string, type: "pilot" | "atc"): IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc {
+        let retVal: IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc;
         const clients = this.isIvaoInfo(this.info) ? this.info.clients : this.info;
         if (type === "pilot") {
             retVal = (clients.pilots as (IvaoPilot | VatsimPilot)[]).find(pilot => pilot.callsign === callSign);
         } else {
-            const atcs: (IvaoAtc | VatsimAti)[] = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.atis;
+            const atcs: (IvaoAtc | VatsimAtc)[] = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.atis;
             retVal = atcs.find(atc => atc.callsign === callSign);
         }
         if (!retVal) {
@@ -115,5 +110,7 @@ export abstract class AbstractCallSignInformationManager extends AbstractRequest
     }
 
     protected abstract updateInfo(): Promise<void>;
+
+    protected abstract getData(): Promise<T>;
 
 }

@@ -55,21 +55,6 @@ export class Ivao {
         try {
             let ivaoClient = this._ivaoManager.getClientInfo(callSign, type) as IvaoPilot | IvaoAtc;
             ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`).setURL(`https://webeye.ivao.aero/?callsign=${ivaoClient.callsign}`);
-            ivaoEmbed.addFields({
-                    name: "Call Sign",
-                    value: ivaoClient.callsign,
-                    inline: true
-                },
-                {
-                    name: "VID",
-                    value: ivaoClient.userId.toString(),
-                    inline: true
-                },
-                {
-                    name: "Rating",
-                    value: ivaoClient.rating.toString(),
-                    inline: true
-                });
             switch (type) {
                 case "pilot":
                     ivaoClient = ivaoClient as IvaoPilot;
@@ -138,6 +123,21 @@ export class Ivao {
                             name: "Route",
                             value: ivaoClient.flightPlan.route,
                             inline: true
+                        },
+                        {
+                            name: "Call Sign",
+                            value: ivaoClient.callsign,
+                            inline: true
+                        },
+                        {
+                            name: "VID",
+                            value: ivaoClient.userId.toString(),
+                            inline: true
+                        },
+                        {
+                            name: "Rating",
+                            value: ivaoClient.rating.toString(),
+                            inline: true
                         }
                     );
                     break;
@@ -154,12 +154,27 @@ export class Ivao {
                             value: ivaoClient.atcSession.frequency.toString(),
                             inline: true
                         },
-                        // TODO: fix this
-                        /*   {
-                              name: "ATIS",
-                              value: ivaoClient.atis,
-                              inline: true
-                          } */);
+                        {
+                            name: "ATIS",
+                            value: "```" + ivaoClient.atis.lines.join("\n") + "```",
+                            inline: true
+                        },
+                        {
+                            name: "Call Sign",
+                            value: ivaoClient.callsign,
+                            inline: true
+                        },
+                        {
+                            name: "VID",
+                            value: ivaoClient.userId.toString(),
+                            inline: true
+                        },
+                        {
+                            name: "Rating",
+                            value: ivaoClient.rating.toString(),
+                            inline: true
+                        }
+                    );
                     break;
             }
         } catch (e) {

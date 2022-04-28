@@ -157,6 +157,15 @@ export type IvaoInfo = {
     connections: IvaoConnections;
 };
 
+export type IvaoAtis = {
+    lines: string[];
+    callsign: string;
+    revision: string;
+    timestamp: Date;
+    sessionId: number;
+};
+
+
 export type IvaoClients = {
     pilots: IvaoPilot[];
     atcs: IvaoAtc[];
@@ -175,6 +184,7 @@ export type IvaoAtc = {
     rating: number;
     createdAt: Date;
     lastTrack: IvaoLastTrack;
+    atis: IvaoAtis;
     atcSession: IvaoAtcSession;
 };
 
@@ -277,8 +287,8 @@ export type IvaoServer = {
 export type VatsimInfo = {
     general: VatsimGeneral;
     pilots: VatsimPilot[];
-    controllers: VatsimAti[];
-    atis: VatsimAti[];
+    controllers: VatsimAtc[];
+    atis: VatsimAtis[];
     servers: VatsimServerElement[];
     prefiles: VatsimPrefile[];
     facilities: VatsimFacility[];
@@ -286,7 +296,9 @@ export type VatsimInfo = {
     pilot_ratings: VatsimPilotRating[];
 };
 
-export type VatsimAti = {
+export type VatsimAtc = VatsimAtis;
+
+export type VatsimAtis = {
     cid: number;
     name: string;
     callsign: string;
@@ -300,6 +312,7 @@ export type VatsimAti = {
     last_updated: Date;
     logon_time: Date;
 };
+
 
 export enum VatsimServerEnum {
     Amsterdam = "AMSTERDAM",
