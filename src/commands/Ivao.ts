@@ -53,7 +53,7 @@ export class Ivao {
             .setTimestamp();
 
         try {
-            let ivaoClient = this._ivaoManager.getClientInfo(callSign, type);
+            let ivaoClient = this._ivaoManager.getClientInfo(callSign, type) as IvaoPilot | IvaoAtc;
             ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`).setURL(`https://webeye.ivao.aero/?callsign=${ivaoClient.callsign}`);
             ivaoEmbed.addFields({
                     name: "Call Sign",
@@ -154,6 +154,7 @@ export class Ivao {
                             value: ivaoClient.atcSession.frequency.toString(),
                             inline: true
                         },
+                        // TODO: fix this
                         /*   {
                               name: "ATIS",
                               value: ivaoClient.atis,
@@ -195,7 +196,7 @@ export class Ivao {
             .setTimestamp();
 
         try {
-            const atcList = this._ivaoManager.getPartialAtcClientInfo(partialCallSign);
+            const atcList = this._ivaoManager.getPartialAtcClientInfo(partialCallSign) as IvaoAtc[];
 
             ivaoEmbed.setTitle(`IVAO : ${partialCallSign}`);
 

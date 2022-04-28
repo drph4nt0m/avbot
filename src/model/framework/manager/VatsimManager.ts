@@ -5,10 +5,10 @@ import {RunEvery} from "../decorators/RunEvery.js";
 import {AbstractCallSignInformationManager} from "./AbstractCallSignInformationManager.js";
 
 @singleton()
-export class IvaoManager extends AbstractCallSignInformationManager {
+export class VatsimManager extends AbstractCallSignInformationManager {
 
     public constructor() {
-        super("https://api.ivao.aero/v2/tracker/whazzup");
+        super("https://data.vatsim.net/v3/vatsim-data.json");
     }
 
     @RunEvery(3, METHOD_EXECUTOR_TIME_UNIT.minutes, true)

@@ -273,3 +273,123 @@ export type IvaoServer = {
     maximumConnections: number;
 };
 
+
+export type VatsimInfo = {
+    general: VatsimGeneral;
+    pilots: VatsimPilot[];
+    controllers: VatsimAti[];
+    atis: VatsimAti[];
+    servers: VatsimServerElement[];
+    prefiles: VatsimPrefile[];
+    facilities: VatsimFacility[];
+    ratings: VatsimFacility[];
+    pilot_ratings: VatsimPilotRating[];
+};
+
+export type VatsimAti = {
+    cid: number;
+    name: string;
+    callsign: string;
+    frequency: string;
+    facility: number;
+    rating: number;
+    server: VatsimServerEnum;
+    visual_range: number;
+    atis_code?: null | string;
+    text_atis: string[] | null;
+    last_updated: Date;
+    logon_time: Date;
+};
+
+export enum VatsimServerEnum {
+    Amsterdam = "AMSTERDAM",
+    Canada = "CANADA",
+    Germany = "GERMANY",
+    Singapore = "SINGAPORE",
+    Uk = "UK",
+    UsaEast = "USA-EAST",
+    UsaWest = "USA-WEST",
+}
+
+export type VatsimFacility = {
+    id: number;
+    short: string;
+    long: string;
+};
+
+export type VatsimGeneral = {
+    version: number;
+    reload: number;
+    update: string;
+    update_timestamp: Date;
+    connected_clients: number;
+    unique_users: number;
+};
+
+export type VatsimPilotRating = {
+    id: number;
+    short_name: string;
+    long_name: string;
+};
+
+export type VatsimPilot = {
+    cid: number;
+    name: string;
+    callsign: string;
+    server: VatsimServerEnum;
+    pilot_rating: number;
+    latitude: number;
+    longitude: number;
+    altitude: number;
+    groundspeed: number;
+    transponder: string;
+    heading: number;
+    qnh_i_hg: number;
+    qnh_mb: number;
+    flight_plan: VatsimFlightPlan | null;
+    logon_time: Date;
+    last_updated: Date;
+};
+
+export type VatsimFlightPlan = {
+    flight_rules: VatsimFlightRules;
+    aircraft: string;
+    aircraft_faa: string;
+    aircraft_short: string;
+    departure: string;
+    arrival: string;
+    alternate: string;
+    cruise_tas: string;
+    altitude: string;
+    deptime: string;
+    enroute_time: string;
+    fuel_time: string;
+    remarks: string;
+    route: string;
+    revision_id: number;
+    assigned_transponder: string;
+};
+
+export enum VatsimFlightRules {
+    I = "I",
+    V = "V",
+}
+
+export type VatsimPrefile = {
+    cid: number;
+    name: string;
+    callsign: string;
+    flight_plan: VatsimFlightPlan;
+    last_updated: Date;
+};
+
+export type VatsimServerElement = {
+    ident: VatsimServerEnum;
+    hostname_or_ip: string;
+    location: string;
+    name: VatsimServerEnum;
+    clients_connection_allowed: number;
+    client_connections_allowed: boolean;
+    is_sweatbox: boolean;
+};
+
