@@ -14,7 +14,7 @@ import type {
     VatsimPilot
 } from "../../Typeings.js";
 import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
-import {getFuseOptions, ISearchBase, SearchBase} from "../ISearchBase.js";
+import {defaultFuseOptions, ISearchBase, SearchBase} from "../ISearchBase.js";
 import {AvFuse} from "../logic/AvFuse.js";
 
 type Merged = VatsimInfo | IvaoInfo;
@@ -67,7 +67,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
                 type: "atc"
             });
         }
-        const fuseOptions = getFuseOptions<SearchType>();
+        const fuseOptions = defaultFuseOptions;
         const index = Fuse.createIndex(fuseOptions.keys, searchObj);
         logger.info(`indexed ${searchObj.length} ${this.type} objects`);
         this._fuseCache = new AvFuse(searchObj, fuseOptions, index);
