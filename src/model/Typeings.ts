@@ -225,6 +225,33 @@ export type IvaoPilot = {
     pilotSession: IvaoPilotSession;
 };
 
+
+export enum IvaoAtcRatingEnum {
+    "Observer" = 1,
+    "ATC Applicant (AS1)" = 2,
+    "ATC Trainee (AS2)" = 3,
+    "Advanced ATC Trainee (AS3)" = 4,
+    "Aerodrome Controller (ADC)" = 5,
+    "Approach Controller (APC)" = 6,
+    "Center Controller (ACC)" = 7,
+    "Senior Controller (SEC)" = 8,
+    "Senior ATC Instructor (SAI)" = 9,
+    "Chief ATC Instructor (CAI)" = 10
+}
+
+export enum IvaoPilotRatingEnum {
+    "Observer" = 1,
+    "Basic Flight Student (FS1)" = 2,
+    "Flight Student (FS2)" = 3,
+    "Advanced Flight Student (FS3)" = 4,
+    "Private Pilot (PP)" = 5,
+    "Senior Private Pilot (SPP)" = 6,
+    "Commercial Pilot (CP)" = 7,
+    "Airline Transport Pilot (ATP)" = 8,
+    "Senior Flight Instructor (SFI)" = 9,
+    "Chief Flight Instructor (CFI)" = 10
+};
+
 export type IvaoFlightPlan = {
     id: number;
     revision: number;
