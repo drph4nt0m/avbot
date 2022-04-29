@@ -22,13 +22,13 @@ type SearchType = SearchBase & { type: "pilot" | "atc" };
 
 export abstract class AbstractCallSignInformationManager<T extends Merged> extends AbstractRequestEngine implements ISearchBase<SearchType> {
 
-    private info: Merged;
+    private _info: Merged;
     protected abstract type: FlightSimNetwork;
 
     private _fuseCache: AvFuse<SearchType> = null;
 
     public getPartialAtcClientInfo(partialCallSign: string): (IvaoAtc | VatsimAtis)[] {
-        const clients = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.controllers;
+        const clients = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.controllers;
         const filteredResults: (IvaoAtc | VatsimAtis)[] = [];
         for (const client of clients) {
             if (client.callsign.match(partialCallSign)) {
@@ -42,14 +42,18 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     protected async update(): Promise<void> {
-        this.info = await this.getData();
+        this._info = await this.getData();
         this.buildSearchIndex();
+    }
+
+    public get info(): T {
+        return this._info as T;
     }
 
     private buildSearchIndex(): void {
         const searchObj: SearchType[] = [];
-        const {pilots} = this.isIvaoInfo(this.info) ? this.info.clients : this.info;
-        const atcs = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.atis;
+        const {pilots} = this.isIvaoInfo(this._info) ? this._info.clients : this._info;
+        const atcs = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.atis;
 
         for (const pilot of pilots) {
             const {callsign} = pilot;
@@ -75,11 +79,11 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
 
     public getClientInfo(callSign: string, type: "pilot" | "atc"): IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc {
         let retVal: IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc;
-        const clients = this.isIvaoInfo(this.info) ? this.info.clients : this.info;
+        const clients = this.isIvaoInfo(this._info) ? this._info.clients : this._info;
         if (type === "pilot") {
             retVal = (clients.pilots as (IvaoPilot | VatsimPilot)[]).find(pilot => pilot.callsign === callSign);
         } else {
-            const atcs: (IvaoAtc | VatsimAtc)[] = this.isIvaoInfo(this.info) ? this.info.clients.atcs : this.info.atis;
+            const atcs: (IvaoAtc | VatsimAtc)[] = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.atis;
             retVal = atcs.find(atc => atc.callsign === callSign);
         }
         if (!retVal) {

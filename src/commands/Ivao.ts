@@ -7,9 +7,9 @@ import {GuildOnly} from "../guards/GuildOnly.js";
 import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
 import {IvaoManager} from "../model/framework/manager/IvaoManager.js";
 import type {IvaoAtc, IvaoPilot} from "../model/Typeings.js";
+import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
-import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
 
 @Discord()
 @Category("IVAO commands")
@@ -26,7 +26,7 @@ export class Ivao {
     @Guard(NotBot, RequiredBotPerms({
         textChannel: ["EMBED_LINKS"]
     }), GuildOnly)
-    private atisVoice(
+    private ivao(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             // TODO: fill this info out
