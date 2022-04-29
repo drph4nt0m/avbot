@@ -1,13 +1,10 @@
-import {container, singleton} from "tsyringe";
 import type winston from "winston";
 import {createLogger, format, transports} from "winston";
 import type * as Transport from "winston-transport";
 
-import {PostConstruct} from "../model/framework/decorators/PostConstruct.js";
 import {Property} from "../model/framework/decorators/Property.js";
 import type {NODE_ENV} from "../model/Typeings.js";
 
-@singleton()
 class LoggerFactory {
 
     @Property("DATADOG_API_KEY", false)
@@ -16,14 +13,13 @@ class LoggerFactory {
     @Property("NODE_ENV")
     private _environment: NODE_ENV;
 
-    private _logger: winston.Logger;
+    private readonly _logger: winston.Logger;
 
     public get logger(): winston.Logger {
         return this._logger;
     }
 
-    @PostConstruct
-    private init() {
+    public constructor() {
         const {combine, splat, timestamp, printf} = format;
         const transportsArray: Transport[] = [
             new transports.Console(),
@@ -55,5 +51,5 @@ class LoggerFactory {
     }
 }
 
-const logger = container.resolve(LoggerFactory).logger;
-export default logger;
+const logger = new LoggerFactory();
+export default logger.logger;
