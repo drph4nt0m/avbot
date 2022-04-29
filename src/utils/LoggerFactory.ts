@@ -51,5 +51,5 @@ class LoggerFactory {
     }
 }
 
-const logger = new LoggerFactory();
-export default logger.logger;
+const logger = (new LoggerFactory()).logger;
+export default logger;
