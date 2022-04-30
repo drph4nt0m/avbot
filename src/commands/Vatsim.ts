@@ -14,7 +14,7 @@ import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
 @Category("VATSIM commands")
 @injectable()
 export class Vatsim {
-    public constructor(private _ivaoManager: VatsimManager) {
+    public constructor(private _vatsimManager: VatsimManager) {
 
     }
 
@@ -27,8 +27,7 @@ export class Vatsim {
     private vatsim(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
-            // TODO: fill this info out
-            description: "Supply a description",
+            description: "What type of client would you like the bot to give information for?",
             type: "STRING",
             required: true
         })
@@ -52,7 +51,7 @@ export class Vatsim {
             .setTimestamp();
 
         try {
-            let vatsimClient = this._ivaoManager.getClientInfo(callSign, type) as VatsimPilot | VatsimAtc;
+            let vatsimClient = this._vatsimManager.getClientInfo(callSign, type) as VatsimPilot | VatsimAtc;
             vatsimEmbed.setTitle(`Vatsim : ${callSign}`);
             vatsimEmbed.addFields({
                     name: "Call Sign",
@@ -117,16 +116,6 @@ export class Vatsim {
                             name: "Cruising Level",
                             value: vatsimClient.flight_plan.alternate,
                             inline: true
-                        },
-                        {
-                            name: "Aircraft",
-                            value: vatsimClient.flight_plan.aircraft,
-                            inline: true
-                        },
-                        {
-                            name: "Route",
-                            value: vatsimClient.flight_plan.route,
-                            inline: true
                         }
                     );
                     const depTime = vatsimClient.flight_plan.departure;
@@ -138,13 +127,25 @@ export class Vatsim {
                     if (ObjectUtil.validString(eet)) {
                         vatsimEmbed.addField("EET", this.parseEet(vatsimClient), true);
                     }
+                    vatsimEmbed.addFields(
+                        {
+                            name: "Aircraft",
+                            value: vatsimClient.flight_plan.aircraft_faa,
+                            inline: true
+                        },
+                        {
+                            name: "Route",
+                            value: "```" + vatsimClient.flight_plan.route + "```",
+                            inline: false
+                        }
+                    );
                     break;
                 case "atc":
                     vatsimClient = vatsimClient as VatsimAtc;
                     vatsimEmbed.addFields(
                         {
                             name: "Position",
-                            value: this._ivaoManager.info.facilities[vatsimClient.facility].long,
+                            value: this._vatsimManager.info.facilities[vatsimClient.facility].long,
                             inline: true
                         },
                         {
@@ -154,8 +155,8 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: vatsimClient.text_atis.join("\n"),
-                            inline: true
+                            value: "```" + vatsimClient.text_atis.join("\n") + "```",
+                            inline: false
                         }
                     );
                     break;
@@ -195,7 +196,7 @@ export class Vatsim {
             .setTimestamp();
 
         try {
-            const atcList = this._ivaoManager.getPartialAtcClientInfo(partialCallSign) as VatsimAtis[];
+            const atcList = this._vatsimManager.getPartialAtcClientInfo(partialCallSign) as VatsimAtis[];
 
             vatsimEmbed.setTitle(`VATSIM : ${partialCallSign}`);
             for (const atc of atcList) {
