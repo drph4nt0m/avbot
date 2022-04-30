@@ -107,7 +107,7 @@ export class Misc {
                 {
                     name: "Runways",
                     value: this.getRunwaysStr(station.runways),
-                    inline: true
+                    inline: false
                 },
                 {
                     name: "More Info",
