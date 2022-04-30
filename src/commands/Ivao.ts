@@ -7,7 +7,7 @@ import {GuildOnly} from "../guards/GuildOnly.js";
 import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
 import {IvaoManager} from "../model/framework/manager/IvaoManager.js";
 import type {IvaoAtc, IvaoPilot} from "../model/Typeings.js";
-import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
+import {IvaoAtcRatingEnum} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
 
@@ -56,26 +56,26 @@ export class Ivao {
         try {
             let ivaoClient = this._ivaoManager.getClientInfo(callSign, type) as IvaoPilot | IvaoAtc;
             ivaoEmbed.setTitle(`IVAO : ${callSign} (open on Webeye)`);
+            ivaoEmbed.addFields({
+                    name: "Call Sign",
+                    value: ivaoClient.callsign,
+                    inline: true
+                },
+                {
+                    name: "VID",
+                    value: ivaoClient.userId.toString(),
+                    inline: true
+                },
+                {
+                    name: "Rating",
+                    value: IvaoAtcRatingEnum[ivaoClient.rating.toString()],
+                    inline: true
+                });
             switch (type) {
                 case "pilot":
                     ivaoClient = ivaoClient as IvaoPilot;
                     ivaoEmbed.setURL(`https://webeye.ivao.aero/?pilotId=${ivaoClient.id}`);
                     ivaoEmbed.addFields(
-                        {
-                            name: "Call Sign",
-                            value: ivaoClient.callsign,
-                            inline: true
-                        },
-                        {
-                            name: "VID",
-                            value: ivaoClient.userId.toString(),
-                            inline: true
-                        },
-                        {
-                            name: "Rating",
-                            value: IvaoPilotRatingEnum[ivaoClient.rating.toString()],
-                            inline: true
-                        },
                         {
                             name: "Departure",
                             value: ivaoClient.flightPlan.departureId,
@@ -147,21 +147,6 @@ export class Ivao {
                     ivaoClient = ivaoClient as IvaoAtc;
                     ivaoEmbed.setURL(`https://webeye.ivao.aero/?atcId=${ivaoClient.id}`);
                     ivaoEmbed.addFields(
-                        {
-                            name: "Call Sign",
-                            value: ivaoClient.callsign,
-                            inline: true
-                        },
-                        {
-                            name: "VID",
-                            value: ivaoClient.userId.toString(),
-                            inline: true
-                        },
-                        {
-                            name: "Rating",
-                            value: IvaoAtcRatingEnum[ivaoClient.rating.toString()],
-                            inline: true
-                        },
                         {
                             name: "Position",
                             value: ivaoClient.atcSession.position,
