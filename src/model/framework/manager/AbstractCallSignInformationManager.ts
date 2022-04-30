@@ -53,7 +53,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     private buildSearchIndex(): void {
         const searchObj: SearchType[] = [];
         const {pilots} = this.isIvaoInfo(this._info) ? this._info.clients : this._info;
-        const atcs = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.atis;
+        const atcs = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.controllers;
 
         for (const pilot of pilots) {
             const {callsign} = pilot;
@@ -83,7 +83,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
         if (type === "pilot") {
             retVal = (clients.pilots as (IvaoPilot | VatsimPilot)[]).find(pilot => pilot.callsign === callSign);
         } else {
-            const atcs: (IvaoAtc | VatsimAtc)[] = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.atis;
+            const atcs: (IvaoAtc | VatsimAtc)[] = this.isIvaoInfo(this._info) ? this._info.clients.atcs : this._info.controllers;
             retVal = atcs.find(atc => atc.callsign === callSign);
         }
         if (!retVal) {
