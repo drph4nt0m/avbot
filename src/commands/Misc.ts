@@ -40,7 +40,7 @@ export class Misc {
     private async icao(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
-            description: "What ICAO would you like the bot to give METAR for?",
+            description: "What ICAO would you like the bot to give station information for?",
             type: "STRING",
             required: true
         })
@@ -107,11 +107,12 @@ export class Misc {
                 {
                     name: "Runways",
                     value: this.getRunwaysStr(station.runways),
-                    inline: true
+                    inline: false
                 },
                 {
                     name: "More Info",
-                    value: this.getLinks(station)
+                    value: this.getLinks(station),
+                    inline: false
                 }
             );
         } catch (error) {
