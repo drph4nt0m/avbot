@@ -111,7 +111,8 @@ export class Misc {
                 },
                 {
                     name: "More Info",
-                    value: this.getLinks(station)
+                    value: this.getLinks(station),
+                    inline: false
                 }
             );
         } catch (error) {
