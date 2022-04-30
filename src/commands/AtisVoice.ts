@@ -86,8 +86,10 @@ export class AtisVoice {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
         if (!atisFound) {
-            // TODO change this error message
-            return InteractionUtils.replyOrFollowUp(interaction, `${icao} not found`);
+            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, no ATIS available at the moment for ${icao.toUpperCase()}`);
+            return InteractionUtils.replyOrFollowUp(interaction, {
+                embeds: [atisEmbed]
+            });
         }
     }
 

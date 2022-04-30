@@ -49,14 +49,16 @@ export class OnReady {
         try {
             await client.executeInteraction(interaction);
             if (interaction.isApplicationCommand()) {
-                await this._mongo.increaseCommandCount(interaction.commandName);
+                try {
+                    await this._mongo.increaseCommandCount(interaction.commandName);
+                } catch (e) {
+                    logger.error(`[${client.shard.ids}] ${e}`, interaction);
+                }
             }
         } catch (e) {
             if (interaction.isApplicationCommand() || interaction.isMessageComponent()) {
                 logger.error(`[${client.shard.ids}] ${e}`, interaction);
-
-                // TODO: change error
-                return InteractionUtils.replyOrFollowUp(interaction, "Change this error to something useful");
+                return InteractionUtils.replyOrFollowUp(interaction, "Oops, something went wrong. The best way to report this problem is to join our support server at <https://go.av8.dev/support>.");
             }
         }
     }
