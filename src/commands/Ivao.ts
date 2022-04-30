@@ -29,8 +29,7 @@ export class Ivao {
     private ivao(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
-            // TODO: fill this info out
-            description: "Supply a description",
+            description: "What type of client would you like the bot to give information for?",
             type: "STRING",
             required: true
         })
@@ -88,7 +87,7 @@ export class Ivao {
                         },
                         {
                             name: "Transponder",
-                            value: ivaoClient.lastTrack.transponder.toString(),
+                            value: ivaoClient.lastTrack.transponder.toString().padStart(4, '0'),
                             inline: true
                         },
                         {
@@ -128,6 +127,7 @@ export class Ivao {
                         },
                         {
                             name: "EET",
+                            // TODO: My bad, EET is not a time of day. It is just duration of flight from departure time. Check again once whazzup is back properly.
                             value: this.parseTime(ivaoClient.flightPlan.eet),
                             inline: true
                         },
@@ -222,6 +222,6 @@ export class Ivao {
     }
 
     private parseTime(time: number): string {
-        return ObjectUtil.dayJs.utc().startOf("day").add(time, "seconds").format("HH:mm Z");
+        return ObjectUtil.dayJs.utc().startOf("day").add(time, "seconds").format("HH:mm");
     }
 }
