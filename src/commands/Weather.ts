@@ -1,17 +1,17 @@
-import {Category, NotBot} from "@discordx/utilities";
+import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type {AutocompleteInteraction, CommandInteraction} from "discord.js";
-import {MessageEmbed} from "discord.js";
-import {Client, Discord, Guard, Slash, SlashOption} from "discordx";
-import {injectable} from "tsyringe";
+import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
+import { MessageEmbed } from "discord.js";
+import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
+import { injectable } from "tsyringe";
 
-import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
-import {AirportManager} from "../model/framework/manager/AirportManager.js";
-import {AvwxManager} from "../model/framework/manager/AvwxManager.js";
-import {NatsManager} from "../model/framework/manager/NatsManager.js";
+import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
+import { AirportManager } from "../model/framework/manager/AirportManager.js";
+import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
+import { NatsManager } from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
-import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 dayjs.extend(utc);
 
@@ -19,61 +19,67 @@ dayjs.extend(utc);
 @Category("Weather commands")
 @injectable()
 export class Weather {
-
-
-    public constructor(private _avwxManager: AvwxManager,
-                       private _natsManager: NatsManager,
-                       private _airportManager: AirportManager) {
-    }
+    public constructor(
+        private _avwxManager: AvwxManager,
+        private _natsManager: NatsManager,
+        private _airportManager: AirportManager
+    ) {}
 
     @Slash("metar", {
         description: "Gives you the live METAR for the chosen airport"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async metar(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give METAR for?",
             type: "STRING",
             required: true
         })
-            icao: string,
+        icao: string,
         @SlashOption("raw", {
             description: "Gives you the live raw METAR for the chosen airport",
             required: false
         })
-            rawData: boolean,
+        rawData: boolean,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
-        const title = rawData ? `Raw METAR for ${icao.toUpperCase()}` : `METAR for ${icao.toUpperCase()}`;
+        const title = rawData
+            ? `Raw METAR for ${icao.toUpperCase()}`
+            : `METAR for ${icao.toUpperCase()}`;
         const metarEmbed = new MessageEmbed()
             .setTitle(title)
             .setColor("#0099ff")
             .setTimestamp();
         try {
-            const {raw, readable} = await this._avwxManager.getMetar(icao);
+            const { raw, readable } = await this._avwxManager.getMetar(icao);
             if (rawData) {
                 metarEmbed.setDescription(raw);
             } else {
-                metarEmbed
-                    .addFields(
-                        {
-                            name: "Raw Report",
-                            value: raw
-                        },
-                        {
-                            name: "Readable Report",
-                            value: readable
-                        }
-                    );
+                metarEmbed.addFields(
+                    {
+                        name: "Raw Report",
+                        value: raw
+                    },
+                    {
+                        name: "Readable Report",
+                        value: readable
+                    }
+                );
             }
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
-            metarEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${err.message}`);
+            metarEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${err.message}`);
         }
         metarEmbed.setFooter({
             text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -86,17 +92,21 @@ export class Weather {
     @Slash("atis", {
         description: "Gives you the live ATIS for the chosen airport"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async atis(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: "STRING",
             required: true
         })
-            icao: string,
+        icao: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -108,11 +118,13 @@ export class Weather {
             })
             .setTimestamp();
         try {
-            const {speech} = await this._avwxManager.getMetar(icao);
+            const { speech } = await this._avwxManager.getMetar(icao);
             atisEmbed.setDescription(speech);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            atisEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
         }
 
         return InteractionUtils.replyOrFollowUp(interaction, {
@@ -120,21 +132,25 @@ export class Weather {
         });
     }
 
-
     @Slash("brief", {
-        description: "Gives you the live METAR, zulu time and the latest chart for the chosen airport"
+        description:
+            "Gives you the live METAR, zulu time and the latest chart for the chosen airport"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async brief(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to BRIEF you for?",
             type: "STRING",
             required: true
         })
-            icao: string,
+        icao: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -144,17 +160,19 @@ export class Weather {
             .setColor("#0099ff")
             .setTimestamp();
 
-        const zuluTime = ObjectUtil.dayJs.utc().format("YYYY-MM-DD HH:mm:ss [Z]");
+        const zuluTime = ObjectUtil.dayJs
+            .utc()
+            .format("YYYY-MM-DD HH:mm:ss [Z]");
         briefEmbed.addField("**Zulu**", `${zuluTime}`);
         try {
-            const {raw} = await this._avwxManager.getMetar(icao);
+            const { raw } = await this._avwxManager.getMetar(icao);
             briefEmbed.addField("**METAR**", raw);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
 
         try {
-            const {raw} = await this._avwxManager.getTaf(icao);
+            const { raw } = await this._avwxManager.getTaf(icao);
             briefEmbed.addField("**TAF**", raw);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
@@ -171,15 +189,18 @@ export class Weather {
     @Slash("nats", {
         description: "Gives you the latest North Atlantic Track information"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async nats(
         @SlashOption("ident", {
             description: "Which track would you like to get information about?",
             required: false
         })
-            ident: string,
+        ident: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -201,19 +222,33 @@ export class Weather {
                 });
                 natsEmbed.addField("Route", `${route}`);
                 if (nat.route.eastLevels.length > 0) {
-                    natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
+                    natsEmbed.addField(
+                        "East levels",
+                        `${nat.route.eastLevels.join(", ")}`
+                    );
                 }
                 if (nat.route.westLevels.length > 0) {
-                    natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
+                    natsEmbed.addField(
+                        "West levels",
+                        `${nat.route.westLevels.join(", ")}`
+                    );
                 }
 
                 natsEmbed.addField(
                     "Validity",
-                    `${dayjs(nat.validFrom).utc().format("YYYY-MM-DD HH:mm:ss [Z]")} to ${dayjs(nat.validTo).utc().format("YYYY-MM-DD HH:mm:ss [Z]")}`
+                    `${dayjs(nat.validFrom)
+                        .utc()
+                        .format("YYYY-MM-DD HH:mm:ss [Z]")} to ${dayjs(
+                        nat.validTo
+                    )
+                        .utc()
+                        .format("YYYY-MM-DD HH:mm:ss [Z]")}`
                 );
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
-                natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+                natsEmbed
+                    .setColor("#ff0000")
+                    .setDescription(`${interaction.member}, ${error.message}`);
             }
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [natsEmbed]
@@ -230,37 +265,47 @@ export class Weather {
             const nats = await this._natsManager.getAllTracks();
 
             nats.forEach((track) => {
-                natsEmbed.addField(`${track.ident}`, `${track.route.nodes[0].ident}-${track.route.nodes[track.route.nodes.length - 1].ident}`);
+                natsEmbed.addField(
+                    `${track.ident}`,
+                    `${track.route.nodes[0].ident}-${
+                        track.route.nodes[track.route.nodes.length - 1].ident
+                    }`
+                );
             });
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            natsEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
         }
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [natsEmbed]
         });
-
     }
 
     @Slash("taf", {
         description: "Gives you the live TAF for the chosen airport"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async taf(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give TAF for?",
             type: "STRING",
             required: true
         })
-            icao: string,
+        icao: string,
         @SlashOption("raw", {
             description: "Gives you the live raw TAF for the chosen airport",
             required: false
         })
-            rawData: boolean,
+        rawData: boolean,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -273,7 +318,7 @@ export class Weather {
             })
             .setTimestamp();
         try {
-            const {raw, readable} = await this._avwxManager.getTaf(icao);
+            const { raw, readable } = await this._avwxManager.getTaf(icao);
 
             if (rawData) {
                 const rawTafEmbed = new MessageEmbed()
@@ -290,17 +335,16 @@ export class Weather {
             }
 
             if (readable.length < 600) {
-                tafEmbed
-                    .addFields(
-                        {
-                            name: "Raw Report",
-                            value: raw
-                        },
-                        {
-                            name: "Readable Report",
-                            value: readable
-                        }
-                    );
+                tafEmbed.addFields(
+                    {
+                        name: "Raw Report",
+                        value: raw
+                    },
+                    {
+                        name: "Readable Report",
+                        value: readable
+                    }
+                );
 
                 return InteractionUtils.replyOrFollowUp(interaction, {
                     embeds: [tafEmbed]
@@ -330,7 +374,10 @@ export class Weather {
                     tempEmbed = new MessageEmbed()
                         .setTitle(`TAF for ${icao.toUpperCase()}`)
                         .setColor("#0099ff")
-                        .addField(`Readable Report [${tafEmbeds.length}]`, buffer)
+                        .addField(
+                            `Readable Report [${tafEmbeds.length}]`,
+                            buffer
+                        )
                         .setFooter({
                             text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                         })
@@ -343,14 +390,18 @@ export class Weather {
 
             tempEmbed = tafEmbed;
             if (buffer.length > 0) {
-                tafEmbeds.push(tempEmbed.addField(`Readable Report [${tafEmbeds.length}]`, buffer));
+                tafEmbeds.push(
+                    tempEmbed.addField(
+                        `Readable Report [${tafEmbeds.length}]`,
+                        buffer
+                    )
+                );
             }
             for (let i = 0; i < tafEmbeds.length; i += 1) {
                 tafEmbeds[i].setFooter({
-                    text:
-                        `${client.user.username} • Message ${i + 1} of ${
-                            tafEmbeds.length
-                        } • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
+                    text: `${client.user.username} • Message ${i + 1} of ${
+                        tafEmbeds.length
+                    } • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                 });
             }
 

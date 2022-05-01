@@ -1,50 +1,54 @@
-import {Category, RateLimit, TIME_UNIT} from "@discordx/utilities";
-import type {CommandInteraction} from "discord.js";
-import {AutocompleteInteraction, MessageEmbed} from "discord.js";
-import {Client, Discord, Guard, Slash, SlashOption} from "discordx";
+import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
+import type { CommandInteraction } from "discord.js";
+import { AutocompleteInteraction, MessageEmbed } from "discord.js";
+import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
-import {injectable} from "tsyringe";
+import { injectable } from "tsyringe";
 
-import {GuildOnly} from "../guards/GuildOnly.js";
-import {PremiumGuild} from "../guards/PremiumGuild.js";
-import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
-import {AeroDataBoxManager} from "../model/framework/manager/AeroDataBoxManager.js";
-import {AirportDataManager} from "../model/framework/manager/AirportDataManager.js";
-import {AirportManager} from "../model/framework/manager/AirportManager.js";
-import {AviationStackManager} from "../model/framework/manager/AviationStackManager.js";
-import {AvwxManager} from "../model/framework/manager/AvwxManager.js";
-import {OpenSkyManager} from "../model/framework/manager/OpenSkyManager.js";
-import type {Runway, Station} from "../model/Typeings.js";
+import { GuildOnly } from "../guards/GuildOnly.js";
+import { PremiumGuild } from "../guards/PremiumGuild.js";
+import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
+import { AeroDataBoxManager } from "../model/framework/manager/AeroDataBoxManager.js";
+import { AirportDataManager } from "../model/framework/manager/AirportDataManager.js";
+import { AirportManager } from "../model/framework/manager/AirportManager.js";
+import { AviationStackManager } from "../model/framework/manager/AviationStackManager.js";
+import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
+import { OpenSkyManager } from "../model/framework/manager/OpenSkyManager.js";
+import type { Runway, Station } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("Miscellaneous commands")
 @injectable()
 export class Misc {
-
-    public constructor(private _openSkyManager: OpenSkyManager,
-                       private _aviationStackManager: AviationStackManager,
-                       private _aeroDataBoxManager: AeroDataBoxManager,
-                       private _airportDataManager: AirportDataManager,
-                       private _airportManager: AirportManager,
-                       private _avwxManager: AvwxManager) {
-    }
+    public constructor(
+        private _openSkyManager: OpenSkyManager,
+        private _aviationStackManager: AviationStackManager,
+        private _aeroDataBoxManager: AeroDataBoxManager,
+        private _airportDataManager: AirportDataManager,
+        private _airportManager: AirportManager,
+        private _avwxManager: AvwxManager
+    ) {}
 
     @Slash("icao", {
         description: "Gives you the station information for the chosen airport"
     })
-    @Guard(RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async icao(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
-            description: "What ICAO would you like the bot to give station information for?",
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, AirportManager),
+            description:
+                "What ICAO would you like the bot to give station information for?",
             type: "STRING",
             required: true
         })
-            icao: string,
+        icao: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -71,17 +75,23 @@ export class Misc {
                 },
                 {
                     name: "Name",
-                    value: station.name ? accents.remove(station.name) : "Unknown",
+                    value: station.name
+                        ? accents.remove(station.name)
+                        : "Unknown",
                     inline: true
                 },
                 {
                     name: "City",
-                    value: station.city ? accents.remove(station.city) : "Unknown",
+                    value: station.city
+                        ? accents.remove(station.city)
+                        : "Unknown",
                     inline: true
                 },
                 {
                     name: "Country",
-                    value: station.country ? accents.remove(station.country) : "Unknown",
+                    value: station.country
+                        ? accents.remove(station.country)
+                        : "Unknown",
                     inline: true
                 },
                 {
@@ -101,7 +111,9 @@ export class Misc {
                 },
                 {
                     name: "Elevation",
-                    value: station.elevation_ft ? `${station.elevation_ft} ft` : "Unknown",
+                    value: station.elevation_ft
+                        ? `${station.elevation_ft} ft`
+                        : "Unknown",
                     inline: true
                 },
                 {
@@ -117,7 +129,9 @@ export class Misc {
             );
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            stationEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            stationEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
         }
 
         return InteractionUtils.replyOrFollowUp(interaction, {
@@ -126,12 +140,14 @@ export class Misc {
     }
 
     private getRunwaysStr(runways: Runway[]): string {
-        const stre = runways.map(rw => {
-            if (rw.length_ft !== 0 && rw.width_ft !== 0) {
-                return `${rw.ident1}-${rw.ident2} : Length - ${rw.length_ft} ft, Width - ${rw.width_ft} ft`;
-            }
-            return `${rw.ident1}-${rw.ident2} : Length - NA, Width - NA`;
-        }).join("\n");
+        const stre = runways
+            .map((rw) => {
+                if (rw.length_ft !== 0 && rw.width_ft !== 0) {
+                    return `${rw.ident1}-${rw.ident2} : Length - ${rw.length_ft} ft, Width - ${rw.width_ft} ft`;
+                }
+                return `${rw.ident1}-${rw.ident2} : Length - NA, Width - NA`;
+            })
+            .join("\n");
         return ObjectUtil.validString(stre) ? stre : "Unknown";
     }
 
@@ -149,17 +165,24 @@ export class Misc {
     }
 
     @Slash("live", {
-        description: "[premium] Gives you the information for the chosen call sign in real life"
+        description:
+            "[premium] Gives you the information for the chosen call sign in real life"
     })
-    @Guard(GuildOnly, PremiumGuild, RateLimit(TIME_UNIT.seconds, 90), RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }))
+    @Guard(
+        GuildOnly,
+        PremiumGuild,
+        RateLimit(TIME_UNIT.seconds, 90),
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
     private async live(
         @SlashOption("call-sign", {
-            description: "What call sign would you like the bot to give information for?",
+            description:
+                "What call sign would you like the bot to give information for?",
             required: true
         })
-            callSign: string,
+        callSign: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -174,11 +197,17 @@ export class Misc {
             .setTimestamp();
         let icao24 = null;
         try {
-            const flightInfo = await this._openSkyManager.getFlightInfo(callSign);
+            const flightInfo = await this._openSkyManager.getFlightInfo(
+                callSign
+            );
             icao24 = flightInfo.icao24;
             liveEmbed
-                .setTitle(`${callSign.toUpperCase()} (Track on OpenSky Network)`)
-                .setURL(`https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`)
+                .setTitle(
+                    `${callSign.toUpperCase()} (Track on OpenSky Network)`
+                )
+                .setURL(
+                    `https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`
+                )
                 .addFields([
                     {
                         name: "Callsign",
@@ -223,26 +252,36 @@ export class Misc {
                 ]);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            liveEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            liveEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [liveEmbed]
             });
         }
 
         try {
-            const flightInfo = await this._aviationStackManager.getFlightInfo(callSign);
+            const flightInfo = await this._aviationStackManager.getFlightInfo(
+                callSign
+            );
             liveEmbed.addFields([
                 {
                     name: "Departure",
                     value: flightInfo.departure
-                        ? flightInfo.departure.icao + (flightInfo.departure.airport ? ` | ${flightInfo.departure.airport}` : "")
+                        ? flightInfo.departure.icao +
+                          (flightInfo.departure.airport
+                              ? ` | ${flightInfo.departure.airport}`
+                              : "")
                         : "Unknown",
                     inline: true
                 },
                 {
                     name: "Arrival",
                     value: flightInfo.arrival.icao
-                        ? flightInfo.arrival.icao + (flightInfo.arrival.airport ? ` | ${flightInfo.arrival.airport}` : "")
+                        ? flightInfo.arrival.icao +
+                          (flightInfo.arrival.airport
+                              ? ` | ${flightInfo.arrival.airport}`
+                              : "")
                         : "Unknown",
                     inline: true
                 }
@@ -252,17 +291,23 @@ export class Misc {
         }
 
         try {
-            const aircraftInfo = await this._aeroDataBoxManager.getAircraftInfo(icao24);
+            const aircraftInfo = await this._aeroDataBoxManager.getAircraftInfo(
+                icao24
+            );
 
             liveEmbed.addFields([
                 {
                     name: "Airline",
-                    value: aircraftInfo.airlineName ? aircraftInfo.airlineName : "Unknown",
+                    value: aircraftInfo.airlineName
+                        ? aircraftInfo.airlineName
+                        : "Unknown",
                     inline: true
                 },
                 {
                     name: "Aircraft",
-                    value: aircraftInfo.typeName ? aircraftInfo.typeName : "Unknown",
+                    value: aircraftInfo.typeName
+                        ? aircraftInfo.typeName
+                        : "Unknown",
                     inline: true
                 },
                 {
@@ -276,9 +321,15 @@ export class Misc {
         }
 
         try {
-            const aircraftImage = await this._airportDataManager.getAircraftImage(icao24);
+            const aircraftImage =
+                await this._airportDataManager.getAircraftImage(icao24);
 
-            liveEmbed.setImage(aircraftImage.image).addField("Image Credits", `[${aircraftImage.photographer}](${aircraftImage.link})`);
+            liveEmbed
+                .setImage(aircraftImage.image)
+                .addField(
+                    "Image Credits",
+                    `[${aircraftImage.photographer}](${aircraftImage.link})`
+                );
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
@@ -287,5 +338,4 @@ export class Misc {
             embeds: [liveEmbed]
         });
     }
-
 }

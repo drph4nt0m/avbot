@@ -1,44 +1,61 @@
-import {Category, NotBot} from "@discordx/utilities";
-import {AutocompleteInteraction, CommandInteraction, MessageEmbed} from "discord.js";
-import {Client, Discord, Guard, Slash, SlashChoice, SlashOption} from "discordx";
-import {injectable} from "tsyringe";
+import { Category, NotBot } from "@discordx/utilities";
+import {
+    AutocompleteInteraction,
+    CommandInteraction,
+    MessageEmbed
+} from "discord.js";
+import {
+    Client,
+    Discord,
+    Guard,
+    Slash,
+    SlashChoice,
+    SlashOption
+} from "discordx";
+import { injectable } from "tsyringe";
 
-import {GuildOnly} from "../guards/GuildOnly.js";
-import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
-import {VatsimManager} from "../model/framework/manager/VatsimManager.js";
-import type {VatsimAtc, VatsimAtis, VatsimPilot} from "../model/Typeings.js";
+import { GuildOnly } from "../guards/GuildOnly.js";
+import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
+import { VatsimManager } from "../model/framework/manager/VatsimManager.js";
+import type { VatsimAtc, VatsimAtis, VatsimPilot } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("VATSIM commands")
 @injectable()
 export class Vatsim {
-    public constructor(private _vatsimManager: VatsimManager) {
-
-    }
+    public constructor(private _vatsimManager: VatsimManager) {}
 
     @Slash("vatsim", {
-        description: "Gives you the information for the chosen call sign on the VATSIM network"
+        description:
+            "Gives you the information for the chosen call sign on the VATSIM network"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }), GuildOnly)
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        }),
+        GuildOnly
+    )
     private vatsim(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
-            description: "What type of client would you like the bot to give information for?",
+            description:
+                "What type of client would you like the bot to give information for?",
             type: "STRING",
             required: true
         })
-            type: "atc" | "pilot",
+        type: "atc" | "pilot",
         @SlashOption("call-sign", {
-            description: "What call sign would you like the bot to give information for?",
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, VatsimManager),
+            description:
+                "What call sign would you like the bot to give information for?",
+            autocomplete: (interaction: AutocompleteInteraction) =>
+                InteractionUtils.search(interaction, VatsimManager),
             type: "STRING",
             required: true
         })
-            callSign: string,
+        callSign: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -51,9 +68,13 @@ export class Vatsim {
             .setTimestamp();
 
         try {
-            let vatsimClient = this._vatsimManager.getClientInfo(callSign, type) as VatsimPilot | VatsimAtc;
+            let vatsimClient = this._vatsimManager.getClientInfo(
+                callSign,
+                type
+            ) as VatsimPilot | VatsimAtc;
             vatsimEmbed.setTitle(`Vatsim : ${callSign}`);
-            vatsimEmbed.addFields({
+            vatsimEmbed.addFields(
+                {
                     name: "Call Sign",
                     value: vatsimClient.callsign,
                     inline: true
@@ -67,7 +88,8 @@ export class Vatsim {
                     name: "Name",
                     value: vatsimClient.name,
                     inline: true
-                });
+                }
+            );
             switch (type) {
                 case "pilot":
                     vatsimClient = vatsimClient as VatsimPilot;
@@ -120,12 +142,20 @@ export class Vatsim {
                     );
                     const depTime = vatsimClient.flight_plan.departure;
                     if (ObjectUtil.validString(depTime)) {
-                        vatsimEmbed.addField("Departure Time", this.parseDepartureTime(vatsimClient), true);
+                        vatsimEmbed.addField(
+                            "Departure Time",
+                            this.parseDepartureTime(vatsimClient),
+                            true
+                        );
                     }
 
                     const eet = vatsimClient.flight_plan.enroute_time;
                     if (ObjectUtil.validString(eet)) {
-                        vatsimEmbed.addField("EET", this.parseEet(vatsimClient), true);
+                        vatsimEmbed.addField(
+                            "EET",
+                            this.parseEet(vatsimClient),
+                            true
+                        );
                     }
                     vatsimEmbed.addFields(
                         {
@@ -135,7 +165,8 @@ export class Vatsim {
                         },
                         {
                             name: "Route",
-                            value: "```" + vatsimClient.flight_plan.route + "```",
+                            value:
+                                "```" + vatsimClient.flight_plan.route + "```",
                             inline: false
                         }
                     );
@@ -145,7 +176,9 @@ export class Vatsim {
                     vatsimEmbed.addFields(
                         {
                             name: "Position",
-                            value: this._vatsimManager.info.facilities[vatsimClient.facility].long,
+                            value: this._vatsimManager.info.facilities[
+                                vatsimClient.facility
+                            ].long,
                             inline: true
                         },
                         {
@@ -155,7 +188,10 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: "```" + vatsimClient.text_atis.join("\n") + "```",
+                            value:
+                                "```" +
+                                vatsimClient.text_atis.join("\n") +
+                                "```",
                             inline: false
                         }
                     );
@@ -163,7 +199,9 @@ export class Vatsim {
             }
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            vatsimEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            vatsimEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
         }
 
         return InteractionUtils.replyOrFollowUp(interaction, {
@@ -172,18 +210,24 @@ export class Vatsim {
     }
 
     @Slash("vatsim-online", {
-        description: "Gives you the information for all ATCs which match the given partial callsign on the VATSIM network"
+        description:
+            "Gives you the information for all ATCs which match the given partial callsign on the VATSIM network"
     })
-    @Guard(NotBot, RequiredBotPerms({
-        textChannel: ["EMBED_LINKS"]
-    }), GuildOnly)
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        }),
+        GuildOnly
+    )
     private vatsimOnline(
         @SlashOption("partial-callsign", {
-            description: "What partial call sign would you like the bot to give information for?",
+            description:
+                "What partial call sign would you like the bot to give information for?",
             type: "STRING",
             required: true
         })
-            partialCallSign: string,
+        partialCallSign: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
@@ -196,15 +240,22 @@ export class Vatsim {
             .setTimestamp();
 
         try {
-            const atcList = this._vatsimManager.getPartialAtcClientInfo(partialCallSign) as VatsimAtis[];
+            const atcList = this._vatsimManager.getPartialAtcClientInfo(
+                partialCallSign
+            ) as VatsimAtis[];
 
             vatsimEmbed.setTitle(`VATSIM : ${partialCallSign}`);
             for (const atc of atcList) {
-                vatsimEmbed.addField(`${atc.callsign}`, `CID: ${atc.cid}, Frequency: ${atc.frequency}`);
+                vatsimEmbed.addField(
+                    `${atc.callsign}`,
+                    `CID: ${atc.cid}, Frequency: ${atc.frequency}`
+                );
             }
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            vatsimEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+            vatsimEmbed
+                .setColor("#ff0000")
+                .setDescription(`${interaction.member}, ${error.message}`);
         }
 
         return InteractionUtils.replyOrFollowUp(interaction, {
@@ -217,8 +268,14 @@ export class Vatsim {
             ? c.flight_plan.deptime.length === 2
                 ? `00:${c.flight_plan.deptime.substring(0, 2)}z`
                 : c.flight_plan.deptime.length === 3
-                    ? `0${c.flight_plan.deptime.substring(0, 1)}:${c.flight_plan.deptime.substring(1, 3)}z`
-                    : `${c.flight_plan.deptime.substring(0, 2)}:${c.flight_plan.deptime.substring(2, 4)}z`
+                ? `0${c.flight_plan.deptime.substring(
+                      0,
+                      1
+                  )}:${c.flight_plan.deptime.substring(1, 3)}z`
+                : `${c.flight_plan.deptime.substring(
+                      0,
+                      2
+                  )}:${c.flight_plan.deptime.substring(2, 4)}z`
             : null;
     }
 
@@ -227,8 +284,14 @@ export class Vatsim {
             ? c.flight_plan.enroute_time.length === 2
                 ? `00:${c.flight_plan.enroute_time.substring(0, 2)}`
                 : c.flight_plan.enroute_time.length === 3
-                    ? `0${c.flight_plan.enroute_time.substring(0, 1)}:${c.flight_plan.enroute_time.substring(1, 3)}`
-                    : `${c.flight_plan.enroute_time.substring(0, 2)}:${c.flight_plan.enroute_time.substring(2, 4)}`
+                ? `0${c.flight_plan.enroute_time.substring(
+                      0,
+                      1
+                  )}:${c.flight_plan.enroute_time.substring(1, 3)}`
+                : `${c.flight_plan.enroute_time.substring(
+                      0,
+                      2
+                  )}:${c.flight_plan.enroute_time.substring(2, 4)}`
             : null;
     }
 }

@@ -1,12 +1,11 @@
 import type winston from "winston";
-import {createLogger, format, transports} from "winston";
+import { createLogger, format, transports } from "winston";
 import type * as Transport from "winston-transport";
 
-import {Property} from "../model/framework/decorators/Property.js";
-import type {NODE_ENV} from "../model/Typeings.js";
+import { Property } from "../model/framework/decorators/Property.js";
+import type { NODE_ENV } from "../model/Typeings.js";
 
 class LoggerFactory {
-
     @Property("DATADOG_API_KEY", false)
     private _apiKey: string = null;
 
@@ -20,7 +19,7 @@ class LoggerFactory {
     }
 
     public constructor() {
-        const {combine, splat, timestamp, printf} = format;
+        const { combine, splat, timestamp, printf } = format;
         const transportsArray: Transport[] = [
             new transports.Console(),
             new transports.File({
@@ -36,13 +35,15 @@ class LoggerFactory {
             transportsArray.push(new transports.Http(httpTransportOptions));
         }
 
-        const myFormat = printf(({level: l, message: m, timestamp: t, ...metadata}) => {
-            let msg = `⚡ ${t} [${l}] : ${m} `;
-            if (metadata && JSON.stringify(metadata) !== "{}") {
-                msg += JSON.stringify(metadata);
+        const myFormat = printf(
+            ({ level: l, message: m, timestamp: t, ...metadata }) => {
+                let msg = `⚡ ${t} [${l}] : ${m} `;
+                if (metadata && JSON.stringify(metadata) !== "{}") {
+                    msg += JSON.stringify(metadata);
+                }
+                return msg;
             }
-            return msg;
-        });
+        );
         this._logger = createLogger({
             format: combine(format.colorize(), splat(), timestamp(), myFormat),
             level: "debug",
@@ -51,5 +52,5 @@ class LoggerFactory {
     }
 }
 
-const logger = (new LoggerFactory()).logger;
+const logger = new LoggerFactory().logger;
 export default logger;

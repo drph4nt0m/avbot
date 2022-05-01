@@ -1,14 +1,13 @@
-import {singleton} from "tsyringe";
+import { singleton } from "tsyringe";
 
 import METHOD_EXECUTOR_TIME_UNIT from "../../../enums/METHOD_EXECUTOR_TIME_UNIT.js";
 import logger from "../../../utils/LoggerFactory.js";
-import type {FlightSimNetwork, VatsimInfo} from "../../Typeings";
-import {RunEvery} from "../decorators/RunEvery.js";
-import {AbstractCallSignInformationManager} from "./AbstractCallSignInformationManager.js";
+import type { FlightSimNetwork, VatsimInfo } from "../../Typeings";
+import { RunEvery } from "../decorators/RunEvery.js";
+import { AbstractCallSignInformationManager } from "./AbstractCallSignInformationManager.js";
 
 @singleton()
 export class VatsimManager extends AbstractCallSignInformationManager<VatsimInfo> {
-
     public constructor() {
         super("https://data.vatsim.net/v3/vatsim-data.json");
     }
@@ -30,5 +29,4 @@ export class VatsimManager extends AbstractCallSignInformationManager<VatsimInfo
         }
         return info.data;
     }
-
 }

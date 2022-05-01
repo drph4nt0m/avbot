@@ -1,17 +1,16 @@
-import type {Document} from "bson";
-import type {Collection, Db} from "mongodb";
-import {MongoClient} from "mongodb";
-import {singleton} from "tsyringe";
+import type { Document } from "bson";
+import type { Collection, Db } from "mongodb";
+import { MongoClient } from "mongodb";
+import { singleton } from "tsyringe";
 
 import logger from "../../utils/LoggerFactory.js";
-import {Utils} from "../../utils/Utils.js";
-import {PostConstruct} from "../framework/decorators/PostConstruct.js";
-import {Property} from "../framework/decorators/Property.js";
-import type {CommandCount} from "../Typeings.js";
+import { Utils } from "../../utils/Utils.js";
+import { PostConstruct } from "../framework/decorators/PostConstruct.js";
+import { Property } from "../framework/decorators/Property.js";
+import type { CommandCount } from "../Typeings.js";
 
 @singleton()
 export class Mongo {
-
     @Property("MONGODB_URI")
     private uri: string;
 
@@ -37,7 +36,7 @@ export class Mongo {
     public async isPremiumGuild(guildId: string): Promise<boolean> {
         try {
             const settings = await this.getCollection("settings");
-            const guildSettings = await settings.findOne({guild: guildId});
+            const guildSettings = await settings.findOne({ guild: guildId });
             return !!guildSettings.isPremium;
         } catch (error) {
             return false;
@@ -56,7 +55,7 @@ export class Mongo {
             for (const c of counts) {
                 total += c.count;
             }
-            return {counts, total};
+            return { counts, total };
         } catch (error) {
             return null;
         }
@@ -71,10 +70,17 @@ export class Mongo {
         return apiUsage.find().toArray();
     }
 
-    private async update(collectionName: string, value: string): Promise<boolean> {
+    private async update(
+        collectionName: string,
+        value: string
+    ): Promise<boolean> {
         const collection = await this.getCollection(collectionName);
         try {
-            const result = await collection.updateOne({value}, {$inc: {count: 1}}, {upsert: true});
+            const result = await collection.updateOne(
+                { value },
+                { $inc: { count: 1 } },
+                { upsert: true }
+            );
             return result.acknowledged;
         } catch (error) {
             logger.error(`[x] ${error}`);

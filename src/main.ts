@@ -1,21 +1,19 @@
 import "reflect-metadata";
 
-import {ShardingManager} from "discord.js";
+import { ShardingManager } from "discord.js";
 import dotenv from "dotenv";
 
-import {Property} from "./model/framework/decorators/Property.js";
+import { Property } from "./model/framework/decorators/Property.js";
 import logger from "./utils/LoggerFactory.js";
 
-
 class Main {
-
     @Property("DISCORD_TOKEN")
     private static readonly token: string;
 
     public static async start(): Promise<void> {
         dotenv.config();
         const manager = new ShardingManager("./build/Bot.js", {
-            token: Main.token,
+            token: Main.token
         });
 
         manager.on("shardCreate", (shard) => {
