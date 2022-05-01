@@ -4,6 +4,13 @@ import {ObjectUtil} from "../../../utils/Utils.js";
 import type {SearchBase} from "../ISearchBase";
 
 export class AvFuse<T extends SearchBase> extends Fuse<T> {
+
+    /**
+     * Get the first n items out of the internal fuse container <br />
+     * @param {number} amount
+     * @param {{key: keyof T, value?: string}} filter - ONLY use this for non-performant queries like if you want the first n times based off a key. do NOT use this for general searching. please use the search method on Fuse and filter the results
+     * @returns {Fuse.FuseResult<T>[]}
+     */
     public getFirstNItems(amount: number, filter: {
         key: keyof T,
         value?: string
