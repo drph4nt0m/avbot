@@ -5,12 +5,12 @@ import {injectable} from "tsyringe";
 
 import {GuildOnly} from "../guards/GuildOnly.js";
 import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
+import {AirportManager} from "../model/framework/manager/AirportManager.js";
 import {IvaoManager} from "../model/framework/manager/IvaoManager.js";
 import type {IvaoAtc, IvaoPilot} from "../model/Typeings.js";
 import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
-import {AirportManager} from "../model/framework/manager/AirportManager.js";
 
 @Discord()
 @Category("IVAO commands")
@@ -80,19 +80,17 @@ export class Ivao {
                         },
                         {
                             name: "Departure",
-                            value: ivaoClient.flightPlan.departureId
-                                + (departureAirportName ? ` (${departureAirportName.name})` : ""),
+                            value: `${ivaoClient.flightPlan.departureId}${departureAirportName ? ` (${departureAirportName.name})` : ""}`,
                             inline: true
                         },
                         {
                             name: "Destination",
-                            value: ivaoClient.flightPlan.arrivalId
-                                + (arrivalAirportName ? ` (${arrivalAirportName.name})` : ""),
+                            value: `${ivaoClient.flightPlan.arrivalId}${arrivalAirportName ? ` (${arrivalAirportName.name})` : ""}`,
                             inline: true
                         },
                         {
                             name: "Transponder",
-                            value: ivaoClient.lastTrack.transponder.toString().padStart(4, '0'),
+                            value: ivaoClient.lastTrack.transponder.toString().padStart(4, "0"),
                             inline: true
                         },
                         {
