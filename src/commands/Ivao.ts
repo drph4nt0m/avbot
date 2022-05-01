@@ -7,17 +7,18 @@ import {GuildOnly} from "../guards/GuildOnly.js";
 import {RequiredBotPerms} from "../guards/RequiredBotPerms.js";
 import {IvaoManager} from "../model/framework/manager/IvaoManager.js";
 import type {IvaoAtc, IvaoPilot} from "../model/Typeings.js";
-import {IvaoAtcRatingEnum} from "../model/Typeings.js";
+import {IvaoAtcRatingEnum, IvaoPilotRatingEnum} from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import {InteractionUtils, ObjectUtil} from "../utils/Utils.js";
+import {AirportManager} from "../model/framework/manager/AirportManager.js";
 
 @Discord()
 @Category("IVAO commands")
 @injectable()
 export class Ivao {
 
-    public constructor(private _ivaoManager: IvaoManager) {
-
+    public constructor(private _ivaoManager: IvaoManager,
+                       private _airportManager: AirportManager) {
     }
 
     @Slash("ivao", {
@@ -64,25 +65,29 @@ export class Ivao {
                     name: "VID",
                     value: ivaoClient.userId.toString(),
                     inline: true
-                },
-                {
-                    name: "Rating",
-                    value: IvaoAtcRatingEnum[ivaoClient.rating.toString()],
-                    inline: true
                 });
             switch (type) {
                 case "pilot":
                     ivaoClient = ivaoClient as IvaoPilot;
                     ivaoEmbed.setURL(`https://webeye.ivao.aero/?pilotId=${ivaoClient.id}`);
+                    const departureAirportName = this._airportManager.getAirport(ivaoClient.flightPlan.departureId);
+                    const arrivalAirportName = this._airportManager.getAirport(ivaoClient.flightPlan.arrivalId);
                     ivaoEmbed.addFields(
                         {
+                            name: "Rating",
+                            value: ivaoClient.rating ? IvaoPilotRatingEnum[ivaoClient.rating.toString()] : "Unknown",
+                            inline: true
+                        },
+                        {
                             name: "Departure",
-                            value: ivaoClient.flightPlan.departureId,
+                            value: ivaoClient.flightPlan.departureId
+                                + (departureAirportName ? ` (${departureAirportName.name})` : ""),
                             inline: true
                         },
                         {
                             name: "Destination",
-                            value: ivaoClient.flightPlan.arrivalId,
+                            value: ivaoClient.flightPlan.arrivalId
+                                + (arrivalAirportName ? ` (${arrivalAirportName.name})` : ""),
                             inline: true
                         },
                         {
@@ -122,12 +127,11 @@ export class Ivao {
                         },
                         {
                             name: "Departure Time",
-                            value: this.parseTime(ivaoClient.flightPlan.departureTime),
+                            value: this.parseTime(ivaoClient.flightPlan.departureTime) + "z",
                             inline: true
                         },
                         {
                             name: "EET",
-                            // TODO: My bad, EET is not a time of day. It is just duration of flight from departure time. Check again once whazzup is back properly.
                             value: this.parseTime(ivaoClient.flightPlan.eet),
                             inline: true
                         },
@@ -148,13 +152,18 @@ export class Ivao {
                     ivaoEmbed.setURL(`https://webeye.ivao.aero/?atcId=${ivaoClient.id}`);
                     ivaoEmbed.addFields(
                         {
+                            name: "Rating",
+                            value: ivaoClient.rating ? IvaoAtcRatingEnum[ivaoClient.rating.toString()] : "Unknown",
+                            inline: true
+                        },
+                        {
                             name: "Position",
                             value: ivaoClient.atcSession.position,
                             inline: true
                         },
                         {
                             name: "Frequency",
-                            value: ivaoClient.atcSession.frequency.toString(),
+                            value: ivaoClient.atcSession.frequency.toFixed(3).toString(),
                             inline: true
                         },
                         {
@@ -164,7 +173,7 @@ export class Ivao {
                         },
                         {
                             name: "ATIS",
-                            value: "```" + ivaoClient.atis.lines.join("\n") + "```",
+                            value: "```" + ivaoClient.atis.lines.map((line) => line.trim()).join("\n") + "```",
                             inline: false
                         }
                     );

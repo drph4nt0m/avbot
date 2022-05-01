@@ -94,4 +94,9 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         }
         return retArr;
     }
+
+    public getAirport(icao: string): IcaoCode {
+        if (!ObjectUtil.validString(icao) || icao === 'ZZZZ') return null;
+        return this._fuseCache.getFirstNItems(1, {key: 'ident', value: icao}).pop().item;
+    }
 }
