@@ -96,7 +96,11 @@ export class AirportManager implements ISearchBase<IcaoCode> {
     }
 
     public getAirport(icao: string): IcaoCode {
-        if (!ObjectUtil.validString(icao) || icao === "ZZZZ") {return null;}
-        return this._fuseCache.getFirstNItems(1, {key: "ident", value: icao}).pop().item;
+        if (!ObjectUtil.validString(icao) || icao === "ZZZZ") {
+            return null;
+        }
+        return this._fuseCache.search(icao, {
+            limit: 1
+        }).pop().item;
     }
 }
