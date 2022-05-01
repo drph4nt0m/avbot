@@ -1,16 +1,14 @@
 import accents from "remove-accents";
-import {singleton} from "tsyringe";
+import { singleton } from "tsyringe";
 
 import logger from "../../../utils/LoggerFactory.js";
-import {ObjectUtil} from "../../../utils/Utils.js";
-import type {MetarInfo, Station, TafInfo} from "../../Typeings.js";
-import {Property} from "../decorators/Property.js";
-import {AbstractRequestEngine} from "../engine/impl/AbstractRequestEngine.js";
+import { ObjectUtil } from "../../../utils/Utils.js";
+import type { MetarInfo, Station, TafInfo } from "../../Typeings.js";
+import { Property } from "../decorators/Property.js";
+import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 
 @singleton()
 export class AvwxManager extends AbstractRequestEngine {
-
-
     @Property("AVWX_TOKEN")
     private static readonly avwxToken: string;
 
@@ -26,35 +24,63 @@ export class AvwxManager extends AbstractRequestEngine {
         try {
             const response = await this.api.get(`/station/${icao}`);
             if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
+                return Promise.reject(
+                    new Error(`no station available at the moment near ${icao}`)
+                );
             }
             return response.data;
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(
+                new Error(
+                    error.response
+                        ? error.response.data.error
+                        : `no station available at the moment near ${icao}`
+                )
+            );
         }
     }
 
-    public async getStationsByCoords(latitude: number, longitude: number, location: string): Promise<Station> {
+    public async getStationsByCoords(
+        latitude: number,
+        longitude: number,
+        location: string
+    ): Promise<Station> {
         try {
-            const response = await this.api.get(`/station/near/${latitude},${longitude}?n=10`);
+            const response = await this.api.get(
+                `/station/near/${latitude},${longitude}?n=10`
+            );
 
             if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${location}`));
+                return Promise.reject(
+                    new Error(
+                        `no station available at the moment near ${location}`
+                    )
+                );
             }
             return response.data;
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${location}`));
+            return Promise.reject(
+                new Error(
+                    error.response
+                        ? error.response.data.error
+                        : `no station available at the moment near ${location}`
+                )
+            );
         }
     }
 
     public async getTaf(icao: string): Promise<TafInfo> {
         try {
-            const response = await this.api.get(`/taf/${icao}?options=info,translate,speech`);
+            const response = await this.api.get(
+                `/taf/${icao}?options=info,translate,speech`
+            );
 
             if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
+                return Promise.reject(
+                    new Error(`no station available at the moment near ${icao}`)
+                );
             }
             const taf: Record<string, any> = response.data;
 
@@ -75,7 +101,9 @@ export class AvwxManager extends AbstractRequestEngine {
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(taf.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            readable += `**Observed at : ** ${ObjectUtil.dayJs
+                .utc(taf.time.dt)
+                .format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
 
             readable += `**Report : ** ${taf.speech}`;
 
@@ -86,16 +114,26 @@ export class AvwxManager extends AbstractRequestEngine {
             };
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(
+                new Error(
+                    error.response
+                        ? error.response.data.error
+                        : `no station available at the moment near ${icao}`
+                )
+            );
         }
     }
 
     public async getMetar(icao: string): Promise<MetarInfo> {
         try {
-            const response = await this.api.get(`/metar/${icao}?options=info,translate,speech`);
+            const response = await this.api.get(
+                `/metar/${icao}?options=info,translate,speech`
+            );
 
             if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
+                return Promise.reject(
+                    new Error(`no station available at the moment near ${icao}`)
+                );
             }
             const metar = response.data;
             let readable = "";
@@ -115,7 +153,9 @@ export class AvwxManager extends AbstractRequestEngine {
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(metar.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            readable += `**Observed at : ** ${ObjectUtil.dayJs
+                .utc(metar.time.dt)
+                .format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
 
             if (metar.translate.wind) {
                 readable += `**Wind : ** ${metar.translate.wind} \n`;
@@ -156,11 +196,17 @@ export class AvwxManager extends AbstractRequestEngine {
             };
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(
+                new Error(
+                    error.response
+                        ? error.response.data.error
+                        : `no station available at the moment near ${icao}`
+                )
+            );
         }
     }
 
-    private getStationName({info}: Record<string, any>): string {
+    private getStationName({ info }: Record<string, any>): string {
         let station = "";
         if (info.name || info.city) {
             if (info.name) {
@@ -187,5 +233,4 @@ export class AvwxManager extends AbstractRequestEngine {
         }
         return station;
     }
-
 }

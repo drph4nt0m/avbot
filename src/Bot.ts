@@ -1,15 +1,14 @@
 import "reflect-metadata";
 
-import {dirname, importx} from "@discordx/importer";
-import {Intents} from "discord.js";
-import {Client, DIService} from "discordx";
-import {container} from "tsyringe";
+import { dirname, importx } from "@discordx/importer";
+import { Intents } from "discord.js";
+import { Client, DIService } from "discordx";
+import { container } from "tsyringe";
 
-import {Property} from "./model/framework/decorators/Property.js";
-import type {NODE_ENV} from "./model/Typeings.js";
+import { Property } from "./model/framework/decorators/Property.js";
+import type { NODE_ENV } from "./model/Typeings.js";
 
 class Bot {
-
     @Property("DISCORD_TOKEN")
     private static readonly token: string;
 
@@ -31,14 +30,18 @@ class Bot {
             silent: false
         };
         if (this.environment === "development") {
-            clientOps["botGuilds"] = [(client) => client.guilds.cache.map((guild) => guild.id)];
+            clientOps["botGuilds"] = [
+                (client) => client.guilds.cache.map((guild) => guild.id)
+            ];
         }
         const client = new Client(clientOps);
 
         if (!container.isRegistered(Client)) {
             container.registerInstance(Client, client);
         }
-        await importx(dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}");
+        await importx(
+            dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}"
+        );
         await client.login(Bot.token);
     }
 }

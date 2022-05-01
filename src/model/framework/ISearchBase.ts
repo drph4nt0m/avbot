@@ -1,15 +1,17 @@
-import type {AutocompleteInteraction} from "discord.js";
+import type { AutocompleteInteraction } from "discord.js";
 import type Fuse from "fuse.js";
 
-import {ObjectUtil} from "../../utils/Utils.js";
-import type {AvFuse} from "./logic/AvFuse.js";
+import { ObjectUtil } from "../../utils/Utils.js";
+import type { AvFuse } from "./logic/AvFuse.js";
 
 export type SearchBase = {
-    name: string,
-    value: string
+    name: string;
+    value: string;
 };
 
-export function getFuseOptions<T extends SearchBase>(keys: (keyof T)[] = ["name"]) {
+export function getFuseOptions<T extends SearchBase>(
+    keys: (keyof T)[] = ["name"]
+) {
     return {
         keys: keys,
         minMatchCharLength: 0,
@@ -25,13 +27,14 @@ export function getFuseOptions<T extends SearchBase>(keys: (keyof T)[] = ["name"
  */
 export const defaultFuseOptions = getFuseOptions();
 
-
 export interface ISearchBase<T extends SearchBase> {
     /**
      * Preform a search on the Fuse container
      * @param interaction
      */
-    search(interaction: AutocompleteInteraction): Fuse.FuseResult<T>[] | Promise<Fuse.FuseResult<T>[]>;
+    search(
+        interaction: AutocompleteInteraction
+    ): Fuse.FuseResult<T>[] | Promise<Fuse.FuseResult<T>[]>;
 }
 
 /**
@@ -39,7 +42,10 @@ export interface ISearchBase<T extends SearchBase> {
  * @param interaction
  * @param cache
  */
-export function defaultSearch<T extends SearchBase>(interaction: AutocompleteInteraction, cache: AvFuse<T>): Fuse.FuseResult<T>[] {
+export function defaultSearch<T extends SearchBase>(
+    interaction: AutocompleteInteraction,
+    cache: AvFuse<T>
+): Fuse.FuseResult<T>[] {
     if (!cache) {
         return [];
     }

@@ -1,27 +1,28 @@
-import type {AxiosInstance, AxiosRequestHeaders} from "axios";
+import type { AxiosInstance, AxiosRequestHeaders } from "axios";
 import axios from "axios";
-import {container} from "tsyringe";
+import { container } from "tsyringe";
 
 import logger from "../../../../utils/LoggerFactory.js";
-import {Mongo} from "../../../db/Mongo.js";
+import { Mongo } from "../../../db/Mongo.js";
 
 export type InterceptorOptions = {
-    headers?: AxiosRequestHeaders,
-    params?: Record<string, any>
+    headers?: AxiosRequestHeaders;
+    params?: Record<string, any>;
 };
 
 export abstract class AbstractRequestEngine {
-
     protected readonly api: AxiosInstance;
 
     private readonly mongo: Mongo;
 
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
-        this.api = this.axiosInterceptor(axios.create({
-            baseURL,
-            timeout: 10000,
-            ...opts,
-        }));
+        this.api = this.axiosInterceptor(
+            axios.create({
+                baseURL,
+                timeout: 10000,
+                ...opts
+            })
+        );
         this.mongo = container.resolve(Mongo);
     }
 
@@ -37,5 +38,4 @@ export abstract class AbstractRequestEngine {
         });
         return axiosInstance;
     }
-
 }

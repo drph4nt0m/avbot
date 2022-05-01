@@ -1,34 +1,33 @@
-import type {Document} from "bson";
+import type { Document } from "bson";
 
 export type propTypes = envTypes;
 export type envTypes = {
-    AERO_DATA_BOX_TOKEN: string,
-    AVBRIEF3_TOKEN: string,
-    AVIATION_STACK_TOKEN: string,
-    AVWX_TOKEN: string,
-    BOT_OWNERS: string,
-    BOT_RESTART_CHANNEL: string,
-    DATADOG_API_KEY: string,
-    DBL_TOKEN: string,
-    DISCORD_APPLICATION_ID: string,
-    DISCORD_PUBLIC_KEY: string,
-    DISCORD_TOKEN: string,
-    GEONAMES_USERNAME: string,
-    LOG_WEBHOOK: string,
-    MONGODB_URI: string,
-    NEW_GUILDS_CHANNEL: string,
-    NODE_ENV: string,
-    PORT: string,
-    SUPPORT_SERVER_INVITE: string
+    AERO_DATA_BOX_TOKEN: string;
+    AVBRIEF3_TOKEN: string;
+    AVIATION_STACK_TOKEN: string;
+    AVWX_TOKEN: string;
+    BOT_OWNERS: string;
+    BOT_RESTART_CHANNEL: string;
+    DATADOG_API_KEY: string;
+    DBL_TOKEN: string;
+    DISCORD_APPLICATION_ID: string;
+    DISCORD_PUBLIC_KEY: string;
+    DISCORD_TOKEN: string;
+    GEONAMES_USERNAME: string;
+    LOG_WEBHOOK: string;
+    MONGODB_URI: string;
+    NEW_GUILDS_CHANNEL: string;
+    NODE_ENV: string;
+    PORT: string;
+    SUPPORT_SERVER_INVITE: string;
 };
 
 export type NODE_ENV = "production" | "development";
 
 export type CommandCount = {
-    counts: Document[],
-    total: number
+    counts: Document[];
+    total: number;
 } | null;
-
 
 export type IcaoCode = {
     id: string;
@@ -48,105 +47,104 @@ export type IcaoCode = {
     local_code: string;
     home_link: string;
     wikipedia_link: string;
-    keywords: string,
-    value: string,
-    fullInfo: string
+    keywords: string;
+    value: string;
+    fullInfo: string;
 };
 
 export type Station = {
-    "city": string,
-    "country": string,
-    "elevation_ft": number,
-    "elevation_m": number,
-    "iata": string,
-    "icao": string,
-    "latitude": number,
-    "longitude": number,
-    "name": string,
-    "note": string,
-    "reporting": true,
-    "runways": Runway[],
-    "state": string,
-    "type": string,
-    "website": string,
-    "wiki": string
+    city: string;
+    country: string;
+    elevation_ft: number;
+    elevation_m: number;
+    iata: string;
+    icao: string;
+    latitude: number;
+    longitude: number;
+    name: string;
+    note: string;
+    reporting: true;
+    runways: Runway[];
+    state: string;
+    type: string;
+    website: string;
+    wiki: string;
 };
 
 export type Runway = {
-    "length_ft": number,
-    "width_ft": number,
-    "ident1": string,
-    "ident2": string
+    length_ft: number;
+    width_ft: number;
+    ident1: string;
+    ident2: string;
 };
 
 export type TafInfo = {
-    raw: string,
-    readable: string,
-    speech: string
+    raw: string;
+    readable: string;
+    speech: string;
 };
 
 export type MetarInfo = TafInfo;
 
-
 export type FlightInfo = {
-    icao24: string,
-    callsign: string,
-    origin_country: string,
-    time_position: string,
-    last_contact: string,
-    longitude: string,
-    latitude: string,
-    baro_altitude: string,
-    on_ground: string,
-    velocity: string,
-    true_track: string,
-    vertical_rate: string,
-    sensors: string,
-    geo_altitude: string,
-    squawk: string,
-    spi: string,
-    position_source: string
+    icao24: string;
+    callsign: string;
+    origin_country: string;
+    time_position: string;
+    last_contact: string;
+    longitude: string;
+    latitude: string;
+    baro_altitude: string;
+    on_ground: string;
+    velocity: string;
+    true_track: string;
+    vertical_rate: string;
+    sensors: string;
+    geo_altitude: string;
+    squawk: string;
+    spi: string;
+    position_source: string;
 };
 
 type stackI = {
-    airport: string,
-    icao: string
+    airport: string;
+    icao: string;
 };
 
 export type AviationStackInfo = {
-    departure: stackI
-    arrival: stackI
+    departure: stackI;
+    arrival: stackI;
 };
 
 export type AeroDataBoxInfo = {
-    airlineName: string,
-    typeName: string,
-    reg: string
+    airlineName: string;
+    typeName: string;
+    reg: string;
 };
 
 export type AircraftInfo = {
-    "image": string,
-    "link": string,
-    "photographer": string
+    image: string;
+    link: string;
+    photographer: string;
 };
 
 export type Nats = {
-    ident: string,
-    validFrom: string,
-    validTo: string,
+    ident: string;
+    validFrom: string;
+    validTo: string;
     route: {
-        westLevels: string[],
-        eastLevels: string[],
-        nodes: NatsNode[]
-    }
+        westLevels: string[];
+        eastLevels: string[];
+        nodes: NatsNode[];
+    };
 };
 
 export type NatsNode = {
-    "id": number,
-    "ident": string,
-    "type": string,
-    "lat": number,
-    "lon": number
+    id: number;
+    ident: string;
+    type: string;
+    lat: number;
+    lon: number;
 };
 
 export type IvaoInfo = {
@@ -164,7 +162,6 @@ export type IvaoAtis = {
     timestamp: Date;
     sessionId: number;
 };
-
 
 export type IvaoClients = {
     pilots: IvaoPilot[];
@@ -225,7 +222,6 @@ export type IvaoPilot = {
     pilotSession: IvaoPilotSession;
 };
 
-
 export enum IvaoAtcRatingEnum {
     "Observer" = 1,
     "ATC Applicant (AS1)" = 2,
@@ -250,7 +246,7 @@ export enum IvaoPilotRatingEnum {
     "Airline Transport Pilot (ATP)" = 8,
     "Senior Flight Instructor (SFI)" = 9,
     "Chief Flight Instructor (CFI)" = 10
-};
+}
 
 export type IvaoFlightPlan = {
     id: number;
@@ -310,7 +306,6 @@ export type IvaoServer = {
     maximumConnections: number;
 };
 
-
 export type VatsimInfo = {
     general: VatsimGeneral;
     pilots: VatsimPilot[];
@@ -340,7 +335,6 @@ export type VatsimAtis = {
     logon_time: Date;
 };
 
-
 export enum VatsimServerEnum {
     Amsterdam = "AMSTERDAM",
     Canada = "CANADA",
@@ -348,7 +342,7 @@ export enum VatsimServerEnum {
     Singapore = "SINGAPORE",
     Uk = "UK",
     UsaEast = "USA-EAST",
-    UsaWest = "USA-WEST",
+    UsaWest = "USA-WEST"
 }
 
 export type VatsimFacility = {
@@ -412,7 +406,7 @@ export type VatsimFlightPlan = {
 
 export enum VatsimFlightRules {
     I = "I",
-    V = "V",
+    V = "V"
 }
 
 export type VatsimPrefile = {

@@ -1,4 +1,4 @@
-import dayjs, {Dayjs} from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type {
     AutocompleteInteraction,
@@ -6,11 +6,13 @@ import type {
     MessageComponentInteraction,
     MessageOptions
 } from "discord.js";
-import {container} from "tsyringe";
+import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
-import type {ISearchBase, SearchBase} from "../model/framework/ISearchBase.js";
-
+import type {
+    ISearchBase,
+    SearchBase
+} from "../model/framework/ISearchBase.js";
 
 export class Utils {
     public static sleep(ms: number): Promise<void> {
@@ -21,7 +23,6 @@ export class Utils {
 }
 
 export class ObjectUtil {
-
     static {
         dayjs.extend(utc);
     }
@@ -61,13 +62,12 @@ export class ObjectUtil {
     public static isValidArray(array: any): array is any[] {
         return Array.isArray(array) && array.length > 0;
     }
-
 }
 
 export class InteractionUtils {
     public static async replyOrFollowUp(
         interaction: BaseCommandInteraction | MessageComponentInteraction,
-        replyOptions: (MessageOptions & { ephemeral?: boolean; }) | string
+        replyOptions: (MessageOptions & { ephemeral?: boolean }) | string
     ): Promise<void> {
         // if interaction is already replied
         if (interaction.replied) {
@@ -85,11 +85,14 @@ export class InteractionUtils {
         await interaction.reply(replyOptions);
     }
 
-    public static async search<T extends ISearchBase<SearchBase>>(interaction: AutocompleteInteraction, contextHandler: constructor<T>): Promise<void> {
+    public static async search<T extends ISearchBase<SearchBase>>(
+        interaction: AutocompleteInteraction,
+        contextHandler: constructor<T>
+    ): Promise<void> {
         const handler = container.resolve(contextHandler);
         const searchResults = await handler.search(interaction);
         if (ObjectUtil.isValidArray(searchResults)) {
-            const responseMap = searchResults.map(searchResult => {
+            const responseMap = searchResults.map((searchResult) => {
                 return {
                     name: searchResult.item.name,
                     value: searchResult.item.value

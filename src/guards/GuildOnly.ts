@@ -1,5 +1,5 @@
-import type {CommandInteraction} from "discord.js";
-import type {Client, Next} from "discordx";
+import type { CommandInteraction } from "discord.js";
+import type { Client, Next } from "discordx";
 
 /**
  * Prevent the command from running on DM
@@ -8,7 +8,11 @@ import type {Client, Next} from "discordx";
  * @param {Next} next
  * @constructor
  */
-export function GuildOnly(arg: CommandInteraction, client: Client, next: Next): Promise<unknown> {
+export function GuildOnly(
+    arg: CommandInteraction,
+    client: Client,
+    next: Next
+): Promise<unknown> {
     if (arg.inGuild()) {
         return next();
     }

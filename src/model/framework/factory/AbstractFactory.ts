@@ -1,9 +1,8 @@
 import Immutable from "immutable";
 
-import type {IDiFactory} from "./IDiFactory.js";
+import type { IDiFactory } from "./IDiFactory.js";
 
 export abstract class AbstractFactory<T> implements IDiFactory<T> {
-
     private readonly _engines: Immutable.Set<T>;
 
     public static readonly factories: AbstractFactory<unknown>[] = [];

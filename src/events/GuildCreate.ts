@@ -1,29 +1,32 @@
-import type {TextChannel} from "discord.js";
-import {MessageEmbed} from "discord.js";
-import type {ArgsOf, Client} from "discordx";
-import {Discord, On} from "discordx";
-import {injectable} from "tsyringe";
+import type { TextChannel } from "discord.js";
+import { MessageEmbed } from "discord.js";
+import type { ArgsOf, Client } from "discordx";
+import { Discord, On } from "discordx";
+import { injectable } from "tsyringe";
 
-import {Property} from "../model/framework/decorators/Property.js";
-import type {NODE_ENV} from "../model/Typeings.js";
+import { Property } from "../model/framework/decorators/Property.js";
+import type { NODE_ENV } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import {OnReady} from "./OnReady.js";
+import { OnReady } from "./OnReady.js";
 
 @Discord()
 @injectable()
 export class GuildCreate {
-
     @Property("NODE_ENV")
     private readonly environment: NODE_ENV;
 
-    public constructor(private _onReady: OnReady) {
-    }
+    public constructor(private _onReady: OnReady) {}
 
     @On("guildCreate")
-    private async botJoins([guild]: ArgsOf<"guildCreate">, client: Client): Promise<void> {
+    private async botJoins(
+        [guild]: ArgsOf<"guildCreate">,
+        client: Client
+    ): Promise<void> {
         try {
             const welcomeEmbed = new MessageEmbed()
-                .setTitle(`Hello ${guild.name} and thank you for choosing AvBot`)
+                .setTitle(
+                    `Hello ${guild.name} and thank you for choosing AvBot`
+                )
                 .setColor("#1a8fe3")
                 .setDescription(
                     `If you need any help regarding AvBot or have any suggestions join our [AvBot Support Server](https://go.av8.dev/support).
