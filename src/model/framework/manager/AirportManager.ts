@@ -99,8 +99,6 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         if (!ObjectUtil.validString(icao) || icao === "ZZZZ") {
             return null;
         }
-        return this._fuseCache.search(icao, {
-            limit: 1
-        }).pop().item;
+        return this._fuseCache.search(icao).find(searchResult => searchResult.item.ident === icao).item;
     }
 }
