@@ -21,21 +21,13 @@ export class AeroDataBoxManager extends AbstractRequestEngine {
 
     public async getAircraftInfo(icao24: string): Promise<AeroDataBoxInfo> {
         if (!ObjectUtil.validString(icao24)) {
-            return Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with icao24 ${icao24}`
-                )
-            );
+            return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         }
         try {
             return (await this.api.get(`/icao24/${icao24}`)).data;
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with icao24 ${icao24}`
-                )
-            );
+            return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         }
     }
 }

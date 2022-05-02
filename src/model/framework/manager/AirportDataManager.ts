@@ -25,18 +25,10 @@ export class AirportDataManager extends AbstractRequestEngine {
             if (data.data.length > 0) {
                 return data.data[Math.floor(Math.random() * data.data.length)];
             }
-            return Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with icao24 ${icao24}`
-                )
-            );
+            return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         } catch (error) {
             logger.error(`[x] ${error}`);
-            Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with icao24 ${icao24}`
-                )
-            );
+            Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         }
     }
 }

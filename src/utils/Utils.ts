@@ -1,18 +1,10 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type {
-    AutocompleteInteraction,
-    BaseCommandInteraction,
-    MessageComponentInteraction,
-    MessageOptions
-} from "discord.js";
+import type { AutocompleteInteraction, BaseCommandInteraction, MessageComponentInteraction, MessageOptions } from "discord.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
-import type {
-    ISearchBase,
-    SearchBase
-} from "../model/framework/ISearchBase.js";
+import type { ISearchBase, SearchBase } from "../model/framework/ISearchBase.js";
 
 export class Utils {
     public static sleep(ms: number): Promise<void> {
@@ -65,10 +57,7 @@ export class ObjectUtil {
 }
 
 export class InteractionUtils {
-    public static async replyOrFollowUp(
-        interaction: BaseCommandInteraction | MessageComponentInteraction,
-        replyOptions: (MessageOptions & { ephemeral?: boolean }) | string
-    ): Promise<void> {
+    public static async replyOrFollowUp(interaction: BaseCommandInteraction | MessageComponentInteraction, replyOptions: (MessageOptions & { ephemeral?: boolean }) | string): Promise<void> {
         // if interaction is already replied
         if (interaction.replied) {
             await interaction.followUp(replyOptions);
@@ -85,10 +74,7 @@ export class InteractionUtils {
         await interaction.reply(replyOptions);
     }
 
-    public static async search<T extends ISearchBase<SearchBase>>(
-        interaction: AutocompleteInteraction,
-        contextHandler: constructor<T>
-    ): Promise<void> {
+    public static async search<T extends ISearchBase<SearchBase>>(interaction: AutocompleteInteraction, contextHandler: constructor<T>): Promise<void> {
         const handler = container.resolve(contextHandler);
         const searchResults = await handler.search(interaction);
         if (ObjectUtil.isValidArray(searchResults)) {

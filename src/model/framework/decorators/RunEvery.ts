@@ -15,17 +15,9 @@ export const scheduler = new ToadScheduler();
  * @param runImmediately
  * @constructor
  */
-export function RunEvery(
-    time: number,
-    timeUnit: METHOD_EXECUTOR_TIME_UNIT | string,
-    runImmediately = false
-) {
+export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | string, runImmediately = false) {
     const client = container.resolve(Client);
-    return function (
-        target: unknown,
-        propertyKey: string,
-        descriptor: PropertyDescriptor
-    ): void {
+    return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): void {
         container.afterResolution(
             target.constructor as never,
             (_t, result) => {
@@ -45,9 +37,7 @@ export function RunEvery(
                     },
                     task
                 );
-                logger.info(
-                    `Register method: "${target.constructor.name}.${propertyKey}()" to run every ${time} ${timeUnit}`
-                );
+                logger.info(`Register method: "${target.constructor.name}.${propertyKey}()" to run every ${time} ${timeUnit}`);
                 scheduler.addSimpleIntervalJob(job);
             },
             {

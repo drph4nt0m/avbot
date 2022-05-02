@@ -1,9 +1,6 @@
 import { singleton } from "tsyringe";
 
-import type {
-    IPropertyResolutionEngine,
-    Property
-} from "../IPropertyResolutionEngine";
+import type { IPropertyResolutionEngine, Property } from "../IPropertyResolutionEngine";
 
 @singleton()
 export class EnvPropertyResolutionEngine implements IPropertyResolutionEngine {

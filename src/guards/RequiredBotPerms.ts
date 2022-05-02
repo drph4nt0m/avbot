@@ -18,54 +18,36 @@ export function RequiredBotPerms(permissions: {
      */
     voice?: PermissionsType;
 }): GuardFunction<CommandInteraction> {
-    return async function (
-        arg: CommandInteraction,
-        client: Client,
-        next: Next
-    ) {
+    return async function (arg: CommandInteraction, client: Client, next: Next) {
         const channel = arg.channel;
         if (!(channel instanceof GuildChannel) || !arg.inGuild()) {
             return next();
         }
         const guild = arg.guild;
-        const perms =
-            typeof permissions.textChannel === "function"
-                ? await permissions.textChannel(arg)
-                : permissions.textChannel;
+        const perms = typeof permissions.textChannel === "function" ? await permissions.textChannel(arg) : permissions.textChannel;
         if (!channel.permissionsFor(guild.me).has(perms)) {
             return InteractionUtils.replyOrFollowUp(
                 arg,
-                `AvBot doesn't have the required permissions to perform the action in this channel. Please enable "${perms.join(
-                    ", "
-                )}" under channel permissions for AvBot`
+                `AvBot doesn't have the required permissions to perform the action in this channel. Please enable "${perms.join(", ")}" under channel permissions for AvBot`
             );
         }
 
         if (permissions.voice) {
-            const voicePerms =
-                typeof permissions.voice === "function"
-                    ? await permissions.voice(arg)
-                    : permissions.voice;
+            const voicePerms = typeof permissions.voice === "function" ? await permissions.voice(arg) : permissions.voice;
             const member = arg.member;
             if (member instanceof GuildMember) {
                 const voiceChannel = member?.voice?.channel;
                 if (voiceChannel) {
-                    if (
-                        !voiceChannel.permissionsFor(guild.me).has(voicePerms)
-                    ) {
+                    if (!voiceChannel.permissionsFor(guild.me).has(voicePerms)) {
                         return InteractionUtils.replyOrFollowUp(
                             arg,
-                            `AvBot doesn't have permissions to connect and/or to speak in your voice channel. Please enable "${voicePerms.join(
-                                ", "
-                            )}" under channel permissions for AvBot.`
+                            `AvBot doesn't have permissions to connect and/or to speak in your voice channel. Please enable "${voicePerms.join(", ")}" under channel permissions for AvBot.`
                         );
                     }
                     if (!voiceChannel.joinable) {
                         const embed = new MessageEmbed()
                             .setColor("#ff0000")
-                            .setDescription(
-                                `${member}, AvBot is unable to join the voice channel as it is already full.`
-                            )
+                            .setDescription(`${member}, AvBot is unable to join the voice channel as it is already full.`)
                             .setFooter({
                                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
                             })
@@ -75,10 +57,7 @@ export function RequiredBotPerms(permissions: {
                         });
                     }
                 } else {
-                    return InteractionUtils.replyOrFollowUp(
-                        arg,
-                        "You need to join a voice channel first!"
-                    );
+                    return InteractionUtils.replyOrFollowUp(arg, "You need to join a voice channel first!");
                 }
             }
         }

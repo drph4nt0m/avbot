@@ -41,10 +41,8 @@ export class Misc {
     )
     private async icao(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) =>
-                InteractionUtils.search(interaction, AirportManager),
-            description:
-                "What ICAO would you like the bot to give station information for?",
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            description: "What ICAO would you like the bot to give station information for?",
             type: "STRING",
             required: true
         })
@@ -75,23 +73,17 @@ export class Misc {
                 },
                 {
                     name: "Name",
-                    value: station.name
-                        ? accents.remove(station.name)
-                        : "Unknown",
+                    value: station.name ? accents.remove(station.name) : "Unknown",
                     inline: true
                 },
                 {
                     name: "City",
-                    value: station.city
-                        ? accents.remove(station.city)
-                        : "Unknown",
+                    value: station.city ? accents.remove(station.city) : "Unknown",
                     inline: true
                 },
                 {
                     name: "Country",
-                    value: station.country
-                        ? accents.remove(station.country)
-                        : "Unknown",
+                    value: station.country ? accents.remove(station.country) : "Unknown",
                     inline: true
                 },
                 {
@@ -111,9 +103,7 @@ export class Misc {
                 },
                 {
                     name: "Elevation",
-                    value: station.elevation_ft
-                        ? `${station.elevation_ft} ft`
-                        : "Unknown",
+                    value: station.elevation_ft ? `${station.elevation_ft} ft` : "Unknown",
                     inline: true
                 },
                 {
@@ -129,9 +119,7 @@ export class Misc {
             );
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            stationEmbed
-                .setColor("#ff0000")
-                .setDescription(`${interaction.member}, ${error.message}`);
+            stationEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
         }
 
         return InteractionUtils.replyOrFollowUp(interaction, {
@@ -165,8 +153,7 @@ export class Misc {
     }
 
     @Slash("live", {
-        description:
-            "[premium] Gives you the information for the chosen call sign in real life"
+        description: "[premium] Gives you the information for the chosen call sign in real life"
     })
     @Guard(
         GuildOnly,
@@ -178,8 +165,7 @@ export class Misc {
     )
     private async live(
         @SlashOption("call-sign", {
-            description:
-                "What call sign would you like the bot to give information for?",
+            description: "What call sign would you like the bot to give information for?",
             required: true
         })
         callSign: string,
@@ -197,17 +183,11 @@ export class Misc {
             .setTimestamp();
         let icao24 = null;
         try {
-            const flightInfo = await this._openSkyManager.getFlightInfo(
-                callSign
-            );
+            const flightInfo = await this._openSkyManager.getFlightInfo(callSign);
             icao24 = flightInfo.icao24;
             liveEmbed
-                .setTitle(
-                    `${callSign.toUpperCase()} (Track on OpenSky Network)`
-                )
-                .setURL(
-                    `https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`
-                )
+                .setTitle(`${callSign.toUpperCase()} (Track on OpenSky Network)`)
+                .setURL(`https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`)
                 .addFields([
                     {
                         name: "Callsign",
@@ -252,37 +232,23 @@ export class Misc {
                 ]);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
-            liveEmbed
-                .setColor("#ff0000")
-                .setDescription(`${interaction.member}, ${error.message}`);
+            liveEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [liveEmbed]
             });
         }
 
         try {
-            const flightInfo = await this._aviationStackManager.getFlightInfo(
-                callSign
-            );
+            const flightInfo = await this._aviationStackManager.getFlightInfo(callSign);
             liveEmbed.addFields([
                 {
                     name: "Departure",
-                    value: flightInfo.departure
-                        ? flightInfo.departure.icao +
-                          (flightInfo.departure.airport
-                              ? ` | ${flightInfo.departure.airport}`
-                              : "")
-                        : "Unknown",
+                    value: flightInfo.departure ? flightInfo.departure.icao + (flightInfo.departure.airport ? ` | ${flightInfo.departure.airport}` : "") : "Unknown",
                     inline: true
                 },
                 {
                     name: "Arrival",
-                    value: flightInfo.arrival.icao
-                        ? flightInfo.arrival.icao +
-                          (flightInfo.arrival.airport
-                              ? ` | ${flightInfo.arrival.airport}`
-                              : "")
-                        : "Unknown",
+                    value: flightInfo.arrival.icao ? flightInfo.arrival.icao + (flightInfo.arrival.airport ? ` | ${flightInfo.arrival.airport}` : "") : "Unknown",
                     inline: true
                 }
             ]);
@@ -291,23 +257,17 @@ export class Misc {
         }
 
         try {
-            const aircraftInfo = await this._aeroDataBoxManager.getAircraftInfo(
-                icao24
-            );
+            const aircraftInfo = await this._aeroDataBoxManager.getAircraftInfo(icao24);
 
             liveEmbed.addFields([
                 {
                     name: "Airline",
-                    value: aircraftInfo.airlineName
-                        ? aircraftInfo.airlineName
-                        : "Unknown",
+                    value: aircraftInfo.airlineName ? aircraftInfo.airlineName : "Unknown",
                     inline: true
                 },
                 {
                     name: "Aircraft",
-                    value: aircraftInfo.typeName
-                        ? aircraftInfo.typeName
-                        : "Unknown",
+                    value: aircraftInfo.typeName ? aircraftInfo.typeName : "Unknown",
                     inline: true
                 },
                 {
@@ -321,15 +281,9 @@ export class Misc {
         }
 
         try {
-            const aircraftImage =
-                await this._airportDataManager.getAircraftImage(icao24);
+            const aircraftImage = await this._airportDataManager.getAircraftImage(icao24);
 
-            liveEmbed
-                .setImage(aircraftImage.image)
-                .addField(
-                    "Image Credits",
-                    `[${aircraftImage.photographer}](${aircraftImage.link})`
-                );
+            liveEmbed.setImage(aircraftImage.image).addField("Image Credits", `[${aircraftImage.photographer}](${aircraftImage.link})`);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }

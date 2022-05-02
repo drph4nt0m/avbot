@@ -70,17 +70,10 @@ export class Mongo {
         return apiUsage.find().toArray();
     }
 
-    private async update(
-        collectionName: string,
-        value: string
-    ): Promise<boolean> {
+    private async update(collectionName: string, value: string): Promise<boolean> {
         const collection = await this.getCollection(collectionName);
         try {
-            const result = await collection.updateOne(
-                { value },
-                { $inc: { count: 1 } },
-                { upsert: true }
-            );
+            const result = await collection.updateOne({ value }, { $inc: { count: 1 } }, { upsert: true });
             return result.acknowledged;
         } catch (error) {
             logger.error(`[x] ${error}`);
