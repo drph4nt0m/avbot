@@ -30,18 +30,14 @@ class Bot {
             silent: false
         };
         if (this.environment === "development") {
-            clientOps["botGuilds"] = [
-                (client) => client.guilds.cache.map((guild) => guild.id)
-            ];
+            clientOps["botGuilds"] = [(client: Client): string[] => client.guilds.cache.map((guild) => guild.id)];
         }
         const client = new Client(clientOps);
 
         if (!container.isRegistered(Client)) {
             container.registerInstance(Client, client);
         }
-        await importx(
-            dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}"
-        );
+        await importx(dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}");
         await client.login(Bot.token);
     }
 }

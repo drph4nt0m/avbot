@@ -18,15 +18,10 @@ export class GuildCreate {
     public constructor(private _onReady: OnReady) {}
 
     @On("guildCreate")
-    private async botJoins(
-        [guild]: ArgsOf<"guildCreate">,
-        client: Client
-    ): Promise<void> {
+    private async botJoins([guild]: ArgsOf<"guildCreate">, client: Client): Promise<void> {
         try {
             const welcomeEmbed = new MessageEmbed()
-                .setTitle(
-                    `Hello ${guild.name} and thank you for choosing AvBot`
-                )
+                .setTitle(`Hello ${guild.name} and thank you for choosing AvBot`)
                 .setColor("#1a8fe3")
                 .setDescription(
                     `If you need any help regarding AvBot or have any suggestions join our [AvBot Support Server](https://go.av8.dev/support).
@@ -37,9 +32,7 @@ export class GuildCreate {
                     text: `${client.user.username} • @dr_ph4nt0m#8402 • Thank you for showing your support by using AvBot`
                 })
                 .setTimestamp();
-            const textChannel = guild.channels.cache
-                .filter((c) => c.type === "GUILD_TEXT")
-                .first() as TextChannel;
+            const textChannel = guild.channels.cache.filter((c) => c.type === "GUILD_TEXT").first() as TextChannel;
             await textChannel.send({
                 embeds: [welcomeEmbed]
             });

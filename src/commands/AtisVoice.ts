@@ -1,26 +1,8 @@
-import {
-    AudioPlayer,
-    AudioPlayerStatus,
-    createAudioPlayer,
-    createAudioResource,
-    DiscordGatewayAdapterCreator,
-    joinVoiceChannel,
-    VoiceConnectionStatus
-} from "@discordjs/voice";
+import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
 import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import {
-    AutocompleteInteraction,
-    ButtonInteraction,
-    CommandInteraction,
-    GuildMember,
-    Message,
-    MessageActionRow,
-    MessageButton,
-    MessageEmbed,
-    VoiceBasedChannel
-} from "discord.js";
+import { AutocompleteInteraction, ButtonInteraction, CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
 import tmp from "tmp";
@@ -39,16 +21,12 @@ dayjs.extend(utc);
 @Category("Weather commands")
 @injectable()
 export class AtisVoice {
-    public constructor(
-        private _avwxManager: AvwxManager,
-        private _airportManager: AirportManager
-    ) {}
+    public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
 
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
 
     // map of <icao, <speechText, File>>
-    private readonly _atisMap: Map<string, Map<string, Record<string, any>>> =
-        new Map();
+    private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
     @Slash("atis-voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
@@ -63,8 +41,7 @@ export class AtisVoice {
     )
     private async atisVoice(
         @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) =>
-                InteractionUtils.search(interaction, AirportManager),
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: "STRING",
             required: true
@@ -91,13 +68,7 @@ export class AtisVoice {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
         if (!atisFound) {
-            atisEmbed
-                .setColor("#ff0000")
-                .setDescription(
-                    `${
-                        interaction.member
-                    }, no ATIS available at the moment for ${icao.toUpperCase()}`
-                );
+            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, no ATIS available at the moment for ${icao.toUpperCase()}`);
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [atisEmbed]
             });
@@ -113,34 +84,22 @@ export class AtisVoice {
         return audioPlayer;
     }
 
-    private async play(
-        voiceChannel: VoiceBasedChannel,
-        interaction: CommandInteraction,
-        client: Client,
-        embed: MessageEmbed,
-        icao: string
-    ): Promise<void> {
+    private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: MessageEmbed, icao: string): Promise<void> {
         const { guildId } = voiceChannel;
         const file = await this.saveSpeechToFile(icao, embed);
         const resource = createAudioResource(file.name);
         const connection = joinVoiceChannel({
             channelId: voiceChannel.id,
             guildId: voiceChannel.guild.id,
-            adapterCreator: voiceChannel.guild
-                .voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator
+            adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator
         });
         const audioPlayer = this.getAudioPlayer(guildId);
         connection.subscribe(audioPlayer);
         audioPlayer.play(resource);
         audioPlayer.on(AudioPlayerStatus.Idle, async () => {
-            const isChannelEmpty =
-                voiceChannel.members.filter(
-                    (member) => member.id !== client.user.id
-                ).size === 0;
+            const isChannelEmpty = voiceChannel.members.filter((member) => member.id !== client.user.id).size === 0;
             if (isChannelEmpty) {
-                if (
-                    connection.state.status !== VoiceConnectionStatus.Destroyed
-                ) {
+                if (connection.state.status !== VoiceConnectionStatus.Destroyed) {
                     connection.destroy();
                 }
             } else {
@@ -170,29 +129,22 @@ export class AtisVoice {
 
         const collector = message.createMessageComponentCollector();
 
-        collector.on(
-            "collect",
-            async (collectInteraction: ButtonInteraction) => {
-                const memberActivated =
-                    collectInteraction.member as GuildMember;
-                // ensure the member who clicked this button is also in the voice channel
-                if (memberActivated?.voice?.channelId !== voiceChannel.id) {
-                    return;
-                }
-                await collectInteraction.deferUpdate();
-                const buttonId = collectInteraction.customId;
-                if (buttonId === "btn-stop") {
-                    connection.destroy();
-                }
-                collector.stop();
+        collector.on("collect", async (collectInteraction: ButtonInteraction) => {
+            const memberActivated = collectInteraction.member as GuildMember;
+            // ensure the member who clicked this button is also in the voice channel
+            if (memberActivated?.voice?.channelId !== voiceChannel.id) {
+                return;
             }
-        );
+            await collectInteraction.deferUpdate();
+            const buttonId = collectInteraction.customId;
+            if (buttonId === "btn-stop") {
+                connection.destroy();
+            }
+            collector.stop();
+        });
     }
 
-    private async saveSpeechToFile(
-        icao: string,
-        embed: MessageEmbed
-    ): Promise<Record<string, any>> {
+    private async saveSpeechToFile(icao: string, embed: MessageEmbed): Promise<Record<string, any>> {
         const { speech } = await this._avwxManager.getMetar(icao);
         embed.setDescription(speech);
         if (this._atisMap.has(icao)) {

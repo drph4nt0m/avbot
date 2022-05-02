@@ -25,18 +25,12 @@ export class NatsManager extends AbstractRequestEngine {
     }
 
     private async getNatsInfo(ident?: string): Promise<Nats[]> {
-        const errorMessage = ObjectUtil.validString(ident)
-            ? `no NAT available at the moment with ident ${ident}`
-            : "no NATs available at the moment";
+        const errorMessage = ObjectUtil.validString(ident) ? `no NAT available at the moment with ident ${ident}` : "no NATs available at the moment";
         try {
             const { data } = await this.api.get(null);
-            let filteredNats = data.filter((nat) =>
-                dayjs().isBetween(nat.validFrom, nat.validTo, "minute", "[]")
-            );
+            let filteredNats = data.filter((nat) => dayjs().isBetween(nat.validFrom, nat.validTo, "minute", "[]"));
             if (ObjectUtil.validString(ident)) {
-                filteredNats = filteredNats.filter(
-                    (nat) => nat.ident === ident
-                );
+                filteredNats = filteredNats.filter((nat) => nat.ident === ident);
             }
             if (filteredNats.length > 0) {
                 return filteredNats;

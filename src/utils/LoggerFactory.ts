@@ -35,15 +35,13 @@ class LoggerFactory {
             transportsArray.push(new transports.Http(httpTransportOptions));
         }
 
-        const myFormat = printf(
-            ({ level: l, message: m, timestamp: t, ...metadata }) => {
-                let msg = `⚡ ${t} [${l}] : ${m} `;
-                if (metadata && JSON.stringify(metadata) !== "{}") {
-                    msg += JSON.stringify(metadata);
-                }
-                return msg;
+        const myFormat = printf(({level: l, message: m, timestamp: t, ...metadata}) => {
+            let msg = `⚡ ${t} [${l}] : ${m} `;
+            if (metadata && JSON.stringify(metadata) !== "{}") {
+                msg += JSON.stringify(metadata);
             }
-        );
+            return msg;
+        });
         this._logger = createLogger({
             format: combine(format.colorize(), splat(), timestamp(), myFormat),
             level: "debug",

@@ -8,11 +8,7 @@ import type { Client, Next } from "discordx";
  * @param {Next} next
  * @constructor
  */
-export function GuildOnly(
-    arg: CommandInteraction,
-    client: Client,
-    next: Next
-): Promise<unknown> {
+export function GuildOnly(arg: CommandInteraction, client: Client, next: Next): Promise<unknown> {
     if (arg.inGuild()) {
         return next();
     }

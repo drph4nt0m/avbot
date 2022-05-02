@@ -29,18 +29,10 @@ export class AviationStackManager extends AbstractRequestEngine {
             if (data.data.length > 0) {
                 return data.data[0];
             }
-            return Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with call sign ${callsign}`
-                )
-            );
+            return Promise.reject(new Error(`no aircraft available at the moment with call sign ${callsign}`));
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(
-                new Error(
-                    `no aircraft available at the moment with call sign ${callsign}`
-                )
-            );
+            return Promise.reject(new Error(`no aircraft available at the moment with call sign ${callsign}`));
         }
     }
 }

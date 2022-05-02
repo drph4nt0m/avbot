@@ -15,8 +15,6 @@ import { AbstractFactory } from "../AbstractFactory.js";
 @singleton()
 export class PropertyResolutionFactory extends AbstractFactory<IPropertyResolutionEngine> {
     protected populateEngines(): Immutable.Set<IPropertyResolutionEngine> {
-        return Immutable.Set(
-            container.resolveAll(Beans.IPropertyResolutionEngine)
-        );
+        return Immutable.Set(container.resolveAll(Beans.IPropertyResolutionEngine));
     }
 }

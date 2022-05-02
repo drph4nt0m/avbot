@@ -16,18 +16,12 @@ const mongo = container.resolve(Mongo);
  * @param {Next} next
  * @constructor
  */
-export async function PremiumGuild(
-    arg: CommandInteraction,
-    client: Client,
-    next: Next
-): Promise<unknown> {
+export async function PremiumGuild(arg: CommandInteraction, client: Client, next: Next): Promise<unknown> {
     const guildId = arg.guildId;
     const isPremium = await mongo.isPremiumGuild(guildId);
     const member = arg.member;
     if (!isPremium) {
-        logger.error(
-            `[${client.shard.ids}] ${guildId} tried using ${arg.commandName} command`
-        );
+        logger.error(`[${client.shard.ids}] ${guildId} tried using ${arg.commandName} command`);
         try {
             const premiumEmbed = new MessageEmbed()
                 .setTimestamp()
