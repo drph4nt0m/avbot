@@ -7,7 +7,7 @@ export type SearchBase = {
 
 export interface ISearchBase<T extends SearchBase> {
     /**
-     * Preform a search on the Fuse container
+     * Preform a search on the search microservice
      * @param interaction
      */
     search(interaction: AutocompleteInteraction): Promise<T[]>;
