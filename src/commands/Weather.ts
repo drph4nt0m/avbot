@@ -1,3 +1,4 @@
+import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
@@ -351,7 +352,6 @@ export class Weather {
                 });
             }
 
-            // TODO: you can use discordx pagination
             const tafEmbeds: MessageEmbed[] = [];
             let tempEmbed = new MessageEmbed()
                 .setTitle(`TAF for ${icao.toUpperCase()}`)
@@ -374,10 +374,7 @@ export class Weather {
                     tempEmbed = new MessageEmbed()
                         .setTitle(`TAF for ${icao.toUpperCase()}`)
                         .setColor("#0099ff")
-                        .addField(
-                            `Readable Report [${tafEmbeds.length}]`,
-                            buffer
-                        )
+                        .addField(`Readable Report`, buffer)
                         .setFooter({
                             text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                         })
@@ -390,24 +387,26 @@ export class Weather {
 
             tempEmbed = tafEmbed;
             if (buffer.length > 0) {
-                tafEmbeds.push(
-                    tempEmbed.addField(
-                        `Readable Report [${tafEmbeds.length}]`,
-                        buffer
-                    )
-                );
+                tafEmbeds.push(tempEmbed.addField(`Readable Report`, buffer));
             }
             for (let i = 0; i < tafEmbeds.length; i += 1) {
                 tafEmbeds[i].setFooter({
-                    text: `${client.user.username} • Message ${i + 1} of ${
+                    text: `${client.user.username} • Page ${i + 1} of ${
                         tafEmbeds.length
                     } • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                 });
             }
 
-            return InteractionUtils.replyOrFollowUp(interaction, {
-                embeds: tafEmbeds
-            });
+            await new Pagination(
+                interaction,
+                tafEmbeds.map((taf) => ({
+                    embeds: [taf]
+                })),
+                {
+                    type: PaginationType.Button
+                }
+            ).send();
+            return;
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
