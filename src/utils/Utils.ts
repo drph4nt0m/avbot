@@ -94,8 +94,8 @@ export class InteractionUtils {
         if (ObjectUtil.isValidArray(searchResults)) {
             const responseMap = searchResults.map((searchResult) => {
                 return {
-                    name: searchResult.item.name,
-                    value: searchResult.item.value
+                    name: searchResult.name,
+                    value: searchResult.value
                 };
             });
             return interaction.respond(responseMap);
