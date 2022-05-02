@@ -35,7 +35,7 @@ class LoggerFactory {
             transportsArray.push(new transports.Http(httpTransportOptions));
         }
 
-        const myFormat = printf(({level: l, message: m, timestamp: t, ...metadata}) => {
+        const myFormat = printf(({ level: l, message: m, timestamp: t, ...metadata }) => {
             let msg = `⚡ ${t} [${l}] : ${m} `;
             if (metadata && JSON.stringify(metadata) !== "{}") {
                 msg += JSON.stringify(metadata);
