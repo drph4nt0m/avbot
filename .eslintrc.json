@@ -26,6 +26,7 @@
         "spaced-comment": "error",
         "sort-imports": "off",
         "no-unused-vars": "off",
+        "max-len": "off",
         // typescript-eslint suggestion: off
         "curly": "error",
         "camelcase": "off",
