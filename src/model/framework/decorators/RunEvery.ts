@@ -15,7 +15,7 @@ export const scheduler = new ToadScheduler();
  * @param runImmediately
  * @constructor
  */
-export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | string, runImmediately = false) {
+export function RunEvery(time: number, timeUnit: METHOD_EXECUTOR_TIME_UNIT | string, runImmediately = false): (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) => void {
     const client = container.resolve(Client);
     return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): void {
         container.afterResolution(
