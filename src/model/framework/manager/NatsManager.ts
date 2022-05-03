@@ -7,10 +7,12 @@ import { ObjectUtil } from "../../../utils/Utils.js";
 import type { Nats } from "../../Typeings.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 
-dayjs.extend(isBetween);
-
 @singleton()
 export class NatsManager extends AbstractRequestEngine {
+    static {
+        dayjs.extend(isBetween);
+    }
+
     public constructor() {
         super("https://api.flightplandatabase.com/nav/NATS");
     }

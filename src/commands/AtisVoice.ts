@@ -15,12 +15,14 @@ import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
-dayjs.extend(utc);
-
 @Discord()
 @Category("Weather commands")
 @injectable()
 export class AtisVoice {
+    static {
+        dayjs.extend(utc);
+    }
+
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
     // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
