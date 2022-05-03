@@ -52,30 +52,63 @@ export type IcaoCode = {
     fullInfo: string;
 };
 
+export type StationsByCoord = {
+    station: Station;
+    coordinate_distance: number;
+    nautical_miles: number;
+    miles: number;
+    kilometers: number;
+};
+
 export type Station = {
     city: string;
-    country: string;
+    country: Country;
     elevation_ft: number;
     elevation_m: number;
-    iata: string;
-    icao: string;
+    gps: string;
+    iata: null | string;
+    icao: null | string;
     latitude: number;
+    local: null;
     longitude: number;
     name: string;
-    note: string;
-    reporting: true;
+    note: null | string;
+    reporting: boolean;
     runways: Runway[];
-    state: string;
-    type: string;
+    state: State;
+    type: Type;
     website: string;
     wiki: string;
 };
 
+export enum Country {
+    GB = "GB"
+}
+
+export enum Surface {
+    Asphalt = "asphalt",
+    Concrete = "concrete",
+    Gravel = "gravel"
+}
+
+export enum State {
+    Eng = "ENG"
+}
+
+export enum Type {
+    LargeAirport = "large_airport",
+    MediumAirport = "medium_airport"
+}
+
 export type Runway = {
     length_ft: number;
     width_ft: number;
+    surface: Surface;
+    lights: boolean;
     ident1: string;
     ident2: string;
+    bearing1: number;
+    bearing2: number;
 };
 
 export type TafInfo = {
@@ -428,3 +461,44 @@ export type VatsimServerElement = {
 };
 
 export type FlightSimNetwork = "ivao" | "vatsim";
+
+export type GeonamesCoordinates = {
+    totalResultsCount: number;
+    geonames: Geoname[];
+};
+
+export type Geoname = {
+    lng: string;
+    geonameId: number;
+    toponymName: string;
+    countryId: string;
+    fcl: string;
+    population: number;
+    countryCode: string;
+    name: string;
+    fclName: string;
+    countryName: string;
+    fcodeName: string;
+    adminName1: string;
+    lat: string;
+    fcode: string;
+};
+
+export type GeonamesTimeZone = {
+    sunrise: string;
+    lng: number;
+    countryCode: string;
+    gmtOffset: number;
+    rawOffset: number;
+    sunset: string;
+    timezoneId: string;
+    dstOffset: number;
+    countryName: string;
+    time: string;
+    lat: number;
+};
+
+export type LatLong = {
+    latitude: string;
+    longitude: string;
+};
