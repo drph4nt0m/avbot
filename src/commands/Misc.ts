@@ -421,8 +421,8 @@ export class Misc {
             } else {
                 timeString = dayjs().utcOffset(data.gmtOffset).hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).utc().format("DD/MM HHmm");
             }
-
-            localEmbed.setTitle(`${type} Time at ${icao} when zulu time is ${time}hrs`).setDescription(`${timeString}hrs`);
+            const opposite = type === "Local" ? "Zulu" : "Local";
+            localEmbed.setTitle(`${type} Time at ${icao} when ${opposite} time is ${time}hrs`).setDescription(`${timeString}hrs`);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
             localEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
