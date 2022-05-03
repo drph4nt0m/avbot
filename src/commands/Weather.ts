@@ -14,12 +14,14 @@ import { NatsManager } from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
-dayjs.extend(utc);
-
 @Discord()
 @Category("Weather commands")
 @injectable()
 export class Weather {
+    static {
+        dayjs.extend(utc);
+    }
+
     public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager, private _airportManager: AirportManager) {}
 
     @Slash("metar", {
