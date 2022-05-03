@@ -25,6 +25,15 @@ export class OnReady {
 
     public constructor(private _mongo: Mongo) {}
 
+    public initAppCommands(client: Client): Promise<void> {
+        if (this.environment === "production") {
+            return client.initGlobalApplicationCommands({
+                log: true
+            });
+        }
+        return client.initApplicationCommands();
+    }
+
     @On("ready")
     private async initialise([client]: [Client]): Promise<void> {
         this.initDi();
@@ -58,15 +67,6 @@ export class OnReady {
                 return InteractionUtils.replyOrFollowUp(interaction, "Oops, something went wrong. The best way to report this problem is to join our support server at <https://go.av8.dev/support>.");
             }
         }
-    }
-
-    public initAppCommands(client: Client): Promise<void> {
-        if (this.environment === "production") {
-            return client.initGlobalApplicationCommands({
-                log: true
-            });
-        }
-        return client.initApplicationCommands();
     }
 
     private async setStatus(client: Client): Promise<void> {
