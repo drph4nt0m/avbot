@@ -1,16 +1,8 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": [
-        "@typescript-eslint",
-        "simple-import-sort",
-        "import"
-    ],
-    "extends": [
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ],
+    "plugins": ["@typescript-eslint", "simple-import-sort", "import"],
+    "extends": ["plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended", "prettier"],
     "rules": {
         // simple-import-sort
         "simple-import-sort/imports": "error",
@@ -52,10 +44,7 @@
     },
     "overrides": [
         {
-            "files": [
-                "*.ts",
-                "*.tsx"
-            ],
+            "files": ["*.ts", "*.tsx"],
             "rules": {
                 "@typescript-eslint/explicit-function-return-type": [
                     "error",

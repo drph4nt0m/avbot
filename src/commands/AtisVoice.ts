@@ -21,12 +21,11 @@ dayjs.extend(utc);
 @Category("Weather commands")
 @injectable()
 export class AtisVoice {
-    public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
-
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
-
     // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
+
+    public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
 
     @Slash("atis-voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"

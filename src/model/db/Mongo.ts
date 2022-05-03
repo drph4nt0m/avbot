@@ -16,19 +16,6 @@ export class Mongo {
 
     private _db: Db;
 
-    @PostConstruct
-    private async init(): Promise<void> {
-        // useNewUrlParser and useUnifiedTopology are no longer supported:  https://mongoosejs.com/docs/migrating_to_6.html#no-more-deprecation-warning-options and https://stackoverflow.com/questions/56306484/type-error-using-usenewurlparser-with-mongoose-in-typescript
-        let mongoClient: MongoClient = null;
-        try {
-            mongoClient = await MongoClient.connect(this.uri);
-            logger.info("MongoDB Connected");
-            this._db = mongoClient.db("avbot");
-        } catch (error) {
-            logger.error(error);
-        }
-    }
-
     public get db(): Db {
         return this._db;
     }
@@ -68,6 +55,19 @@ export class Mongo {
     public async getAPIUsage(): Promise<Document[]> {
         const apiUsage = await this.getCollection("api-usage");
         return apiUsage.find().toArray();
+    }
+
+    @PostConstruct
+    private async init(): Promise<void> {
+        // useNewUrlParser and useUnifiedTopology are no longer supported:  https://mongoosejs.com/docs/migrating_to_6.html#no-more-deprecation-warning-options and https://stackoverflow.com/questions/56306484/type-error-using-usenewurlparser-with-mongoose-in-typescript
+        let mongoClient: MongoClient = null;
+        try {
+            mongoClient = await MongoClient.connect(this.uri);
+            logger.info("MongoDB Connected");
+            this._db = mongoClient.db("avbot");
+        } catch (error) {
+            logger.error(error);
+        }
     }
 
     private async update(collectionName: string, value: string): Promise<boolean> {

@@ -14,10 +14,6 @@ class LoggerFactory {
 
     private readonly _logger: winston.Logger;
 
-    public get logger(): winston.Logger {
-        return this._logger;
-    }
-
     public constructor() {
         const { combine, splat, timestamp, printf } = format;
         const transportsArray: Transport[] = [
@@ -47,6 +43,10 @@ class LoggerFactory {
             level: "debug",
             transports: transportsArray
         });
+    }
+
+    public get logger(): winston.Logger {
+        return this._logger;
     }
 }
 
