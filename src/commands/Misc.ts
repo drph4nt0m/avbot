@@ -13,6 +13,7 @@ import { AirportDataManager } from "../model/framework/manager/AirportDataManage
 import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AviationStackManager } from "../model/framework/manager/AviationStackManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
+import { GeonamesManager } from "../model/framework/manager/GeonamesManager.js";
 import { OpenSkyManager } from "../model/framework/manager/OpenSkyManager.js";
 import type { Runway, Station } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
@@ -28,7 +29,8 @@ export class Misc {
         private _aeroDataBoxManager: AeroDataBoxManager,
         private _airportDataManager: AirportDataManager,
         private _airportManager: AirportManager,
-        private _avwxManager: AvwxManager
+        private _avwxManager: AvwxManager,
+        private _geonamesManager: GeonamesManager
     ) {}
 
     @Slash("icao", {
@@ -290,6 +292,65 @@ export class Misc {
 
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [liveEmbed]
+        });
+    }
+
+    @Slash("search", {
+        description: "Gives you the nearest airport for a chosen location"
+    })
+    @Guard(
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
+    private async search(
+        @SlashOption("location", {
+            description: "What location would you like the bot to search for?",
+            type: "STRING",
+            required: true
+        })
+        location: string,
+        interaction: CommandInteraction,
+        client: Client
+    ): Promise<void> {
+        await interaction.deferReply();
+        const searchEmbed = new MessageEmbed()
+            .setTitle(`Search : ${location.toUpperCase()}`)
+            .setColor("#0099ff")
+            .setFooter({
+                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: GeoNames | AVWX`
+            })
+            .setTimestamp();
+        try {
+            const { latitude, longitude } = await this._geonamesManager.getCoordinates(location);
+
+            searchEmbed.setTitle(`Search : ${location.toUpperCase()} [${latitude}, ${longitude}]`);
+
+            const stations = await this._avwxManager.getStationsByCoords(latitude, longitude, location);
+
+            for (const { station } of stations) {
+                let title = "";
+                if (station.icao) {
+                    title += `${station.icao}`;
+                }
+                if (station.iata) {
+                    if (title !== "") {
+                        title += " / ";
+                    }
+                    title += `${station.iata}`;
+                }
+                const desc = `${station.name}\n`;
+                if (ObjectUtil.validString(desc, title)) {
+                    searchEmbed.addField(title, accents.remove(desc));
+                }
+            }
+        } catch (error) {
+            logger.error(`[${client.shard.ids}] ${error}`);
+            searchEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+        }
+
+        return InteractionUtils.replyOrFollowUp(interaction, {
+            embeds: [searchEmbed]
         });
     }
 }

@@ -24,7 +24,7 @@ export class ObjectUtil {
     }
 
     /**
-     * Ensures value is a string and has a size after trim
+     * Ensures value(s) strings and has a size after trim
      * @param strings
      * @returns {boolean}
      */

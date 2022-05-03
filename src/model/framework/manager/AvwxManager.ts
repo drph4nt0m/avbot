@@ -3,7 +3,7 @@ import { singleton } from "tsyringe";
 
 import logger from "../../../utils/LoggerFactory.js";
 import { ObjectUtil } from "../../../utils/Utils.js";
-import type { MetarInfo, Station, TafInfo } from "../../Typeings.js";
+import type { MetarInfo, Station, StationsByCoord, TafInfo } from "../../Typeings.js";
 import { Property } from "../decorators/Property.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 
@@ -33,9 +33,9 @@ export class AvwxManager extends AbstractRequestEngine {
         }
     }
 
-    public async getStationsByCoords(latitude: number, longitude: number, location: string): Promise<Station> {
+    public async getStationsByCoords(latitude: string, longitude: string, location: string): Promise<StationsByCoord[]> {
         try {
-            const response = await this.api.get(`/station/near/${latitude},${longitude}?n=10`);
+            const response = await this.api.get<StationsByCoord[]>(`/station/near/${latitude},${longitude}?n=10`);
 
             if (response.status !== 200) {
                 return Promise.reject(new Error(`no station available at the moment near ${location}`));
