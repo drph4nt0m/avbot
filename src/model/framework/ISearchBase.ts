@@ -13,4 +13,5 @@ export interface ISearchBase<T extends SearchBase> {
     search(interaction: AutocompleteInteraction): Promise<T[]>;
 }
 
-export const autoCompleteBaseUrl = "http://localhost:8083/rest";
+export const autoCompleteAppUrl = "http://localhost:8083";
+export const autoCompleteBaseUrl = `${autoCompleteAppUrl}/rest`;
