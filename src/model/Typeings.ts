@@ -52,7 +52,7 @@ export type IcaoCode = {
     fullInfo: string;
 };
 
-export type StationsByCoord = {
+export type StationInfo = {
     station: Station;
     coordinate_distance: number;
     nautical_miles: number;
