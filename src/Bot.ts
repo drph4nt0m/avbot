@@ -6,6 +6,7 @@ import { Client, DIService } from "discordx";
 import { container } from "tsyringe";
 
 import { Property } from "./model/framework/decorators/Property.js";
+import { AutoCompleteHealthChecker } from "./model/logic/AutoCompleteHealthChecker.js";
 import type { NODE_ENV } from "./model/Typeings.js";
 
 class Bot {
@@ -37,6 +38,8 @@ class Bot {
         if (!container.isRegistered(Client)) {
             container.registerInstance(Client, client);
         }
+        const healthChecker = container.resolve(AutoCompleteHealthChecker);
+        await healthChecker.healthCheck();
         await importx(dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}");
         await client.login(Bot.token);
     }
