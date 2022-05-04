@@ -1,7 +1,7 @@
 import type { AutocompleteInteraction } from "discord.js";
 
 import { ObjectUtil } from "../../../utils/Utils.js";
-import type { FlightSimNetwork, IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimAtis, VatsimInfo, VatsimPilot } from "../../Typeings.js";
+import type { IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimAtis, VatsimInfo, VatsimPilot } from "../../Typeings.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 import type { ISearchBase, SearchBase } from "../ISearchBase.js";
 
@@ -9,8 +9,6 @@ type SearchType = SearchBase & { type: "pilot" | "atc" };
 type Merged = VatsimInfo | IvaoInfo;
 
 export abstract class AbstractCallSignInformationManager<T extends Merged> extends AbstractRequestEngine implements ISearchBase<SearchType> {
-    protected abstract type: FlightSimNetwork;
-
     public async getPartialAtcClientInfo(partialCallSign: string): Promise<(IvaoAtc | VatsimAtis)[]> {
         const result = await this.api.get<(IvaoAtc | VatsimAtis)[]>("/getPartialAtcClientInfo", {
             params: {
@@ -25,7 +23,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public async getInfo(): Promise<T> {
-        const result = await this.api.get<T>(`/${this.type}`);
+        const result = await this.api.get<T>(`/`);
         return result.data;
     }
 
