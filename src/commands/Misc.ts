@@ -304,7 +304,7 @@ export class Misc {
     }
 
     @Slash("search", {
-        description: "Gives you the nearest airport for a chosen location"
+        description: "Gives you the nearest airports for a chosen location"
     })
     @Guard(
         RequiredBotPerms({
