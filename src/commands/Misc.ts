@@ -380,7 +380,7 @@ export class Misc {
         icao: string,
         @SlashChoice("Zulu", "Local")
         @SlashOption("type", {
-            description: "Do you want to get the local time from zulu ot zulu from local?",
+            description: "Do you want to get the local time from zulu or zulu from local?",
             type: "STRING",
             required: true
         })
