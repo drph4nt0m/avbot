@@ -5,6 +5,7 @@ import { injectable } from "tsyringe";
 
 import { GuildOnly } from "../guards/GuildOnly.js";
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
+import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { VatsimManager } from "../model/framework/manager/VatsimManager.js";
 import type { VatsimAtc, VatsimAtis, VatsimPilot } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
@@ -14,7 +15,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 @Category("VATSIM commands")
 @injectable()
 export class Vatsim {
-    public constructor(private _vatsimManager: VatsimManager) {}
+    public constructor(private _vatsimManager: VatsimManager, private _airportManager: AirportManager) {}
 
     @Slash("vatsim", {
         description: "Gives you the information for the chosen call sign on the VATSIM network"
@@ -75,15 +76,17 @@ export class Vatsim {
             switch (type) {
                 case "pilot":
                     vatsimClient = vatsimClient as VatsimPilot;
+                    const departureAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.departure);
+                    const arrivalAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.arrival);
                     vatsimEmbed.addFields(
                         {
                             name: "Departure",
-                            value: vatsimClient.flight_plan.departure,
+                            value: departureAirport.name,
                             inline: true
                         },
                         {
                             name: "Destination",
-                            value: vatsimClient.flight_plan.arrival,
+                            value: arrivalAirport.name,
                             inline: true
                         },
                         {

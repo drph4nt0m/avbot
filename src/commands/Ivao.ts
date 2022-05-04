@@ -73,8 +73,8 @@ export class Ivao {
                 case "pilot":
                     ivaoClient = ivaoClient as IvaoPilot;
                     ivaoEmbed.setURL(`https://webeye.ivao.aero/?pilotId=${ivaoClient.id}`);
-                    const departureAirportName = await this._airportManager.getAirport(ivaoClient.flightPlan.departureId);
-                    const arrivalAirportName = await this._airportManager.getAirport(ivaoClient.flightPlan.arrivalId);
+                    const departureAirport = await this._airportManager.getAirport(ivaoClient.flightPlan.departureId);
+                    const arrivalAirport = await this._airportManager.getAirport(ivaoClient.flightPlan.arrivalId);
                     ivaoEmbed.addFields(
                         {
                             name: "Rating",
@@ -83,12 +83,12 @@ export class Ivao {
                         },
                         {
                             name: "Departure",
-                            value: `${ivaoClient.flightPlan.departureId}${departureAirportName ? ` (${departureAirportName.name})` : ""}`,
+                            value: departureAirport.name,
                             inline: true
                         },
                         {
                             name: "Destination",
-                            value: `${ivaoClient.flightPlan.arrivalId}${arrivalAirportName ? ` (${arrivalAirportName.name})` : ""}`,
+                            value: arrivalAirport.name,
                             inline: true
                         },
                         {
