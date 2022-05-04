@@ -1,5 +1,15 @@
 version = 1
 
+exclude_patterns = [
+    "public/**,",
+    "build/**",
+    "node_modules/**"
+]
+
+[[analyzers]]
+name = "docker"
+enabled = true
+
 [[analyzers]]
 name = "secrets"
 enabled = true
@@ -8,9 +18,13 @@ enabled = true
 name = "javascript"
 enabled = true
 
-[[analyzers]]
-name = "docker"
-enabled = true
+    [analyzers.meta]
+    module_system = "es-modules"
+    environment = [
+        "nodejs",
+    ]
+    dialect = "typescript"
+    skip_doc_coverage = ["class-expression", "method-definition"]
 
 [[transformers]]
 name = "prettier"
