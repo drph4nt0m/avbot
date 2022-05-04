@@ -40,7 +40,7 @@ class Bot {
         }
         const healthChecker = container.resolve(AutoCompleteHealthChecker);
         await healthChecker.healthCheck();
-        await importx(dirname(import.meta.url) + "/{events,commands}/**/*.{ts,js}");
+        await importx(`${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`);
         await client.login(Bot.token);
     }
 }
