@@ -1,22 +1,34 @@
 import { dirname, resolve } from "@discordx/importer";
 import { Server } from "@overnightjs/core";
 import bodyParser from "body-parser";
+import cors from "cors";
 import type * as http from "http";
 import { container, singleton } from "tsyringe";
 
 import { PostConstruct } from "../model/framework/decorators/PostConstruct.js";
 import { Property } from "../model/framework/decorators/Property.js";
+import type { NODE_ENV } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 
 @singleton()
 export class BotServer extends Server {
     @Property("API_SERVER_PORT")
-    private static readonly port: number;
+    private readonly port: number;
+
+    @Property("NODE_ENV")
+    private readonly env: NODE_ENV;
 
     private readonly classesToLoad = `${dirname(import.meta.url)}/controllers/**/*.{ts,js}`;
 
     constructor() {
         super();
+        if (this.env === "development") {
+            this.app.use(
+                cors({
+                    origin: "*"
+                })
+            );
+        }
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     }
@@ -48,6 +60,6 @@ export class BotServer extends Server {
             super.addControllers(instance);
             logger.info(`load ${moduleKey}`);
         }
-        this._server = this.start(BotServer.port);
+        this._server = this.start(this.port);
     }
 }
