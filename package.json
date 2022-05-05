@@ -33,6 +33,7 @@
     "@discordx/utilities": "4.2.4",
     "@overnightjs/core": "^1.7.6",
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "datadog-metrics": "^0.9.3",
     "dayjs": "^1.10.7",
