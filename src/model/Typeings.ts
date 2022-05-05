@@ -18,7 +18,7 @@ export type envTypes = {
     MONGODB_URI: string;
     NEW_GUILDS_CHANNEL: string;
     NODE_ENV: string;
-    PORT: string;
+    API_SERVER_PORT: number;
     SUPPORT_SERVER_INVITE: string;
 };
 
@@ -560,7 +560,6 @@ export type ShardGuild = {
 export type BotInfoFromApi = {
     numberOfGuilds?: number;
     totalCommandsUsed?: number;
-    totalUsersServed?: number;
     totalMembers?: number;
     top?: DiscordServerInfo[];
 };
