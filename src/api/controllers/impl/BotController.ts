@@ -28,15 +28,6 @@ export class BotController extends baseController {
         // non unique members
         retObj["totalMembers"] = this._shardGuilds.reduce((partialSum, a) => partialSum + a.memberCount, 0);
 
-        // get all the members in all the guilds as an id string array
-        const allMembers = this._shardGuilds.flatMap((shardGuild) => shardGuild.members.map((member) => member));
-
-        // turn it into a set, removing duplicates
-        const allMembersUnique = new Set(allMembers);
-
-        // unique members
-        retObj["totalUsersServed"] = allMembersUnique.size;
-
         const commandCount = await this._mongo.getCommandCounts();
         retObj["totalCommandsUsed"] = commandCount.total;
         const top = req.query.top as string;
