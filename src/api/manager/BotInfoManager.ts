@@ -1,9 +1,9 @@
 import { ShardingManager } from "discord.js";
 import { singleton } from "tsyringe";
 
-import { Mongo } from "../../model/db/Mongo";
-import type { BotInfoFromApi, DiscordServerInfo, ShardGuild } from "../../model/Typeings";
-import { ObjectUtil } from "../../utils/Utils";
+import { Mongo } from "../../model/db/Mongo.js";
+import type { BotInfoFromApi, DiscordServerInfo, ShardGuild } from "../../model/Typeings.js";
+import { ObjectUtil } from "../../utils/Utils.js";
 
 @singleton()
 export class BotInfoManager {
@@ -49,12 +49,12 @@ export class BotInfoManager {
     }
 
     private async getShardGuilds(): Promise<ShardGuild[]> {
-        let retArr: ShardGuild[] = [];
+        const retArr: ShardGuild[] = [];
         for (const [, shard] of this._shardingManager.shards) {
             const promise = shard.fetchClientValue("guilds.cache") as Promise<ShardGuild[]>;
             const guilds: ShardGuild[] = await promise;
             if (ObjectUtil.isValidArray(guilds)) {
-                retArr = guilds;
+                retArr.push(...guilds);
             }
         }
         return retArr;

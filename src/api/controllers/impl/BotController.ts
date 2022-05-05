@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { singleton } from "tsyringe";
 
-import { BotInfoManager } from "../../manager/BotInfoManager";
+import { BotInfoManager } from "../../manager/BotInfoManager.js";
 import { baseController } from "../BaseController.js";
 
 @singleton()
