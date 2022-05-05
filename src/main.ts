@@ -6,8 +6,6 @@ import { container } from "tsyringe";
 
 import { BotServer } from "./api/BotServer.js";
 import { Property } from "./model/framework/decorators/Property.js";
-import { Beans } from "./model/framework/DI/Beans.js";
-import type { ShardGuild } from "./model/Typeings.js";
 import logger from "./utils/LoggerFactory.js";
 
 class Main {
@@ -30,21 +28,10 @@ class Main {
             timeout: -1
         });
 
-        setTimeout(() => Main.registerShardGuilds(manager), 10000);
-    }
-
-    private static async registerShardGuilds(manager: ShardingManager): Promise<void> {
-        for (const [, shard] of manager.shards) {
-            const promise = shard.fetchClientValue("guilds.cache") as Promise<ShardGuild[]>;
-            const guilds: ShardGuild[] = await promise;
-            for (const guild of guilds) {
-                container.registerInstance(Beans.IShardGuild, guild);
-            }
-        }
-        if (!container.isRegistered(Beans.IShardGuild)) {
-            container.registerInstance(Beans.IShardGuild, []);
-        }
-        container.resolve(BotServer);
+        setTimeout(() => {
+            container.registerInstance(ShardingManager, manager);
+            container.resolve(BotServer);
+        }, 10000);
     }
 }
 
