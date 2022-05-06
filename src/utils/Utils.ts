@@ -89,7 +89,7 @@ export class ObjectUtil {
         if (Number.isNaN(seconds)) {
             throw new Error("Unknown error");
         }
-        const levels = [
+        const levels: [number, string][] = [
             [Math.floor(seconds / 31536000), "years"],
             [Math.floor((seconds % 31536000) / 86400), "days"],
             [Math.floor(((seconds % 31536000) % 86400) / 3600), "hours"],
@@ -102,8 +102,6 @@ export class ObjectUtil {
             if (levels[i][0] === 0) {
                 continue;
             }
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             returnText += ` ${levels[i][0]} ${levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length - 1) : levels[i][1]}`;
         }
         return returnText.trim();
