@@ -4,6 +4,7 @@ import type { AutocompleteInteraction, BaseCommandInteraction, MessageComponentI
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
+import TIME_UNIT from "../enums/TIME_UNIT.js";
 import type { ISearchBase, SearchBase } from "../model/framework/ISearchBase.js";
 
 export class Utils {
@@ -53,6 +54,59 @@ export class ObjectUtil {
      */
     public static isValidArray(array: any): array is any[] {
         return Array.isArray(array) && array.length > 0;
+    }
+
+    public static convertToMilli(value: number, unit: TIME_UNIT): number {
+        switch (unit) {
+            case TIME_UNIT.seconds:
+                return value * 1000;
+            case TIME_UNIT.minutes:
+                return value * 60000;
+            case TIME_UNIT.hours:
+                return value * 3600000;
+            case TIME_UNIT.days:
+                return value * 86400000;
+            case TIME_UNIT.weeks:
+                return value * 604800000;
+            case TIME_UNIT.months:
+                return value * 2629800000;
+            case TIME_UNIT.years:
+                return value * 31556952000;
+            case TIME_UNIT.decades:
+                return value * 315569520000;
+        }
+    }
+
+    public static timeToHuman(value: number, timeUnit: TIME_UNIT = TIME_UNIT.milliseconds): string {
+        let seconds: number;
+        if (timeUnit === TIME_UNIT.milliseconds) {
+            seconds = Math.round(value / 1000);
+        } else if (timeUnit !== TIME_UNIT.seconds) {
+            seconds = Math.round(ObjectUtil.convertToMilli(value, timeUnit) / 1000);
+        } else {
+            seconds = Math.round(value);
+        }
+        if (Number.isNaN(seconds)) {
+            throw new Error("Unknown error");
+        }
+        const levels = [
+            [Math.floor(seconds / 31536000), "years"],
+            [Math.floor((seconds % 31536000) / 86400), "days"],
+            [Math.floor(((seconds % 31536000) % 86400) / 3600), "hours"],
+            [Math.floor((((seconds % 31536000) % 86400) % 3600) / 60), "minutes"],
+            [(((seconds % 31536000) % 86400) % 3600) % 60, "seconds"]
+        ];
+        let returnText = "";
+
+        for (let i = 0, max = levels.length; i < max; i++) {
+            if (levels[i][0] === 0) {
+                continue;
+            }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            returnText += ` ${levels[i][0]} ${levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length - 1) : levels[i][1]}`;
+        }
+        return returnText.trim();
     }
 }
 
