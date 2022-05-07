@@ -1,5 +1,6 @@
 import type { AutocompleteInteraction } from "discord.js";
 
+import logger from "../../../utils/LoggerFactory.js";
 import { ObjectUtil } from "../../../utils/Utils.js";
 import type { IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimAtis, VatsimInfo, VatsimPilot } from "../../Typeings.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
@@ -23,7 +24,11 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public async getInfo(): Promise<T> {
-        const result = await this.api.get<T>(`/`);
+        const result = await this.api.get(`/`);
+        if (result.status !== 200) {
+            logger.error(`[x] ${result.data.message}`);
+            throw new Error(result.data.message);
+        }
         return result.data;
     }
 
