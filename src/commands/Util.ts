@@ -11,8 +11,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 @Category("Utility commands")
 export class Util {
     @Slash("info", {
-        // TODO: add better description
-        description: "Info of this bot"
+        description: "Provides information about AvBot, and links for adding the bot and joining the support server"
     })
     @Guard(
         NotBot,
@@ -24,17 +23,20 @@ export class Util {
         const infoEmbed = new MessageEmbed()
             .setTitle("AvBot")
             .setColor("#1a8fe3")
+            // TODO: Change the thumbnail url after new site is deployed
+            .setThumbnail("https://bot.av8.dev/assets/logo.png")
             .setFooter({
                 text: `${client.user.username} • @dr_ph4nt0m#8402`
             })
             .setTimestamp();
 
-        // invite
-        // TODO: Replace this URL with the direct bot invite URL, this will prevent redirects
-        const inviteButton = new MessageButton().setLabel("Add to Discord").setStyle("LINK").setURL("https://go.av8.dev/invite");
-        const donateButton = new MessageButton().setLabel("Support Avbot").setStyle("LINK").setURL("https://link.avbot.in/donate");
-        const supportServerInvite = new MessageButton().setLabel("Join out support Server").setStyle("LINK").setURL("https://discord.gg/fjNqtz6");
-        const inviteRow = new MessageActionRow().addComponents(inviteButton, donateButton, supportServerInvite);
+        const inviteButton = new MessageButton()
+            .setLabel("Add to Discord")
+            .setStyle("LINK")
+            .setURL("https://discord.com/oauth2/authorize?client_id=494888240617095168&permissions=274885302528&scope=bot%20applications.commands");
+        const supportServerInvite = new MessageButton().setLabel("Join our support server").setStyle("LINK").setURL("https://discord.gg/fjNqtz6");
+        const donateButton = new MessageButton().setLabel("Support Avbot").setStyle("LINK").setURL("https://go.av8.dev/donate");
+        const buttonsRow = new MessageActionRow().addComponents(inviteButton, supportServerInvite, donateButton);
 
         const shardUptime = process.uptime();
         const humanReadableUptime = ObjectUtil.timeToHuman(shardUptime, TIME_UNIT.seconds);
@@ -42,7 +44,7 @@ export class Util {
         infoEmbed.addField("Owner", "dr_ph4nt0m#8402");
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [infoEmbed],
-            components: [inviteRow]
+            components: [buttonsRow]
         });
     }
 }
