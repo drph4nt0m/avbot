@@ -235,6 +235,6 @@ export class Ivao {
     }
 
     private parseTime(time: number): string {
-        return ObjectUtil.dayJs.utc().startOf("day").add(time, "seconds").format("HH:mm");
+        return ObjectUtil.dayJsAsUtc.utc().startOf("day").add(time, "seconds").format("HH:mm");
     }
 }

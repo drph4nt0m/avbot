@@ -22,7 +22,7 @@ export class Weather {
         dayjs.extend(utc);
     }
 
-    public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager, private _airportManager: AirportManager) {}
+    public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager) {}
 
     @Slash("atis", {
         description: "Gives you the live ATIS for the chosen airport"
@@ -87,7 +87,7 @@ export class Weather {
         await interaction.deferReply();
         const briefEmbed = new MessageEmbed().setTitle(`BRIEF for ${icao}`).setColor("#0099ff").setTimestamp();
 
-        const zuluTime = ObjectUtil.dayJs.utc().format("YYYY-MM-DD HH:mm:ss [Z]");
+        const zuluTime = ObjectUtil.dayJsAsUtc.utc().format("YYYY-MM-DD HH:mm:ss [Z]");
         briefEmbed.addField("**Zulu**", `${zuluTime}`);
         try {
             const { raw } = await this._avwxManager.getMetar(icao);

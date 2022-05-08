@@ -20,7 +20,7 @@ export class ObjectUtil {
         dayjs.extend(utc);
     }
 
-    public static get dayJs(): Dayjs {
+    public static get dayJsAsUtc(): Dayjs {
         return dayjs();
     }
 

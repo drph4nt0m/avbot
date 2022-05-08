@@ -27,7 +27,7 @@ export class AtisVoice {
     // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
-    public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
+    public constructor(private _avwxManager: AvwxManager) {}
 
     @Slash("atis-voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
