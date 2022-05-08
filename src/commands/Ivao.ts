@@ -24,7 +24,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 import { AirportManager } from "../model/framework/manager/AirportManager.js";
 
 @Discord()
-@Category("IVAO commands")
+@Category("IVAO")
 @injectable()
 export class Ivao {
     public constructor(

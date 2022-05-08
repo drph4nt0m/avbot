@@ -10,7 +10,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather commands")
+@Category("Weather")
 @injectable()
 export class Metar {
     public constructor(private _avwxManager: AvwxManager) {}

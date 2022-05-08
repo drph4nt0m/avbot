@@ -8,7 +8,7 @@ import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@Category("Utility commands")
+@Category("Utility")
 export class Util {
     @Slash("info", {
         description: "Provides information about AvBot, and links for adding the bot and joining the support server"

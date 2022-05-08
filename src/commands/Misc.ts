@@ -23,7 +23,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@Category("Miscellaneous commands")
+@Category("Miscellaneous")
 @injectable()
 export class Misc {
     static {
