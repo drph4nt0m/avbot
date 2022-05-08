@@ -33,7 +33,7 @@ export class Metar {
         })
         icao: string,
         @SlashOption("raw-only", {
-            description: "Gives you the live raw METAR for the chosen airport",
+            description: "Gives you only the raw METAR for the chosen airport",
             required: false
         })
         rawOnlyData: boolean,
