@@ -27,7 +27,7 @@ export class Help {
     }
 
     @Slash("help", {
-        description: "Get the description of a command or all commands"
+        description: "Get the description of all commands"
     })
     @Guard(NotBot, GuildOnly)
     private help(interaction: CommandInteraction, client: Client): Promise<void> {
@@ -44,8 +44,8 @@ export class Help {
         const botImage = client.user.displayAvatarURL({ dynamic: true });
         if (category === "categories") {
             const embed = new MessageEmbed()
-                .setTitle(`${client.user.username} modules`)
-                .setDescription(`The items shown below are all the modules supported by this bot`)
+                .setTitle(`${client.user.username} commands`)
+                .setDescription(`The items shown below are all the commands supported by this bot`)
                 .setAuthor({
                     name: `${client.user.username}`,
                     iconURL: botImage
