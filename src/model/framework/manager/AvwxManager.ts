@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
 import accents from "remove-accents";
 import { singleton } from "tsyringe";
 
@@ -9,6 +11,10 @@ import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 
 @singleton()
 export class AvwxManager extends AbstractRequestEngine {
+    static {
+        dayjs.extend(utc);
+    }
+
     @Property("AVWX_TOKEN")
     private static readonly avwxToken: string;
 
@@ -113,7 +119,8 @@ export class AvwxManager extends AbstractRequestEngine {
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(metar.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            const observedTime = dayjs(metar.time.dt).utc();
+            readable += `**Observed at : ** ${observedTime.format("HHmm[Z]")} (<t:${observedTime.unix()}:R>)\n`;
 
             if (metar.translate.wind) {
                 readable += `**Wind : ** ${metar.translate.wind} \n`;
