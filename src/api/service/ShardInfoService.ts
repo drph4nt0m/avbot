@@ -23,9 +23,12 @@ export class ShardInfoService {
     ): Promise<(ShardInfo & { id: number })[]> {
         const spawnedShards = await this._shardingManager.spawn(options);
         if (options.delay > 0) {
-            let sleepAmount = options.delay + 500;
+            let sleepAmount: number;
             if (typeof options.amount === "number") {
-                sleepAmount = sleepAmount * options.amount;
+                // add 500ms delay to each shard spawned
+                sleepAmount = options.delay * options.amount + 500 * options.amount;
+            } else {
+                sleepAmount = options.delay + 500;
             }
             await Utils.sleep(sleepAmount);
         } else {
