@@ -568,3 +568,8 @@ export type DiscordServerInfo = {
     iconUrl: string;
     members: number;
 };
+
+export type ShardInfo = {
+    uptime: string,
+    servers: DiscordServerInfo[]
+}
