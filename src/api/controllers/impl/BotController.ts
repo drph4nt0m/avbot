@@ -1,22 +1,24 @@
-import { Controller, Get } from "@overnightjs/core";
+import { ChildControllers, Controller, Get } from "@overnightjs/core";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { singleton } from "tsyringe";
 
-import { BotInfoManager } from "../../manager/BotInfoManager.js";
-import { baseController } from "../BaseController.js";
+import { BotInfoService } from "../../service/BotInfoService.js";
+import { BaseController } from "../BaseController.js";
+import { ShardController } from "./ShardController.js";
 
 @singleton()
 @Controller("api/bot")
-export class BotController extends baseController {
-    public constructor(private _botInfoManager: BotInfoManager) {
+@ChildControllers([new ShardController()])
+export class BotController extends BaseController {
+    public constructor(private _botInfoService: BotInfoService) {
         super();
     }
 
     @Get("info")
     private async info(req: Request, res: Response): Promise<Response> {
         try {
-            const info = await this._botInfoManager.getBotInfo(req.query.top as string);
+            const info = await this._botInfoService.getBotInfo(req.query.top as string);
             return super.ok(res, info);
         } catch (e) {
             return super.doError(res, e.message, StatusCodes.BAD_REQUEST);

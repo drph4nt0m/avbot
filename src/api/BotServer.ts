@@ -56,9 +56,11 @@ export class BotServer extends Server {
         for (const module of modules) {
             const moduleKey = Object.keys(module)[0];
             const clazz = module[moduleKey];
-            const instance = container.resolve(clazz);
-            super.addControllers(instance);
-            logger.info(`load ${moduleKey}`);
+            if (container.isRegistered(clazz)) {
+                const instance = container.resolve(clazz);
+                super.addControllers(instance);
+                logger.info(`load ${moduleKey}`);
+            }
         }
         this._server = this.start(this.port);
     }
