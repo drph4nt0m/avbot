@@ -79,7 +79,8 @@ export class AvwxManager extends AbstractRequestEngine {
 
             readable += "\n";
 
-            readable += `**Observed at : ** ${ObjectUtil.dayJs.utc(taf.time.dt).format("YYYY-MM-DD HH:mm:ss [Z]")} \n`;
+            const observedTime = dayjs(taf.time.dt).utc();
+            readable += `**Observed at : ** ${observedTime.format("HHmm[Z]")} (<t:${observedTime.unix()}:R>)\n`;
 
             readable += `**Report : ** ${taf.speech}`;
 

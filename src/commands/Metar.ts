@@ -13,10 +13,6 @@ import { InteractionUtils } from "../utils/Utils.js";
 @Category("Weather commands")
 @injectable()
 export class Metar {
-    // static {
-    //     dayjs.extend(utc);
-    // }
-
     public constructor(private _avwxManager: AvwxManager) {}
 
     @Slash("metar", {
@@ -37,7 +33,7 @@ export class Metar {
         })
         icao: string,
         @SlashOption("raw-only", {
-            description: "Gives you the live raw METAR for the chosen airport",
+            description: "Gives you only the raw METAR for the chosen airport",
             required: false
         })
         rawOnlyData: boolean,
