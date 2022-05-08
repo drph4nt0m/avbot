@@ -13,10 +13,6 @@ import { InteractionUtils } from "../utils/Utils.js";
 @Category("Weather commands")
 @injectable()
 export class Metar {
-    // static {
-    //     dayjs.extend(utc);
-    // }
-
     public constructor(private _avwxManager: AvwxManager) {}
 
     @Slash("metar", {
