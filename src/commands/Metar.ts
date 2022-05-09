@@ -46,12 +46,12 @@ export class Metar {
         try {
             const { raw, readable } = await this._avwxManager.getMetar(icao);
             if (rawOnlyData) {
-                metarEmbed.setDescription(raw);
+                metarEmbed.setDescription("```" + raw + "```");
             } else {
                 metarEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: raw
+                        value: "```" + raw + "```"
                     },
                     {
                         name: "Readable Report",
