@@ -11,7 +11,7 @@ export abstract class AbstractFactory<T> implements IDiFactory<T> {
         AbstractFactory.factories.push(this);
     }
 
-    get engines(): Immutable.Set<T> {
+    public get engines(): Immutable.Set<T> {
         return Immutable.Set(this._engines);
     }
 

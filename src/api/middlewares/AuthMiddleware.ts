@@ -4,9 +4,9 @@ import { Property } from "../../model/framework/decorators/Property.js";
 
 export class AuthMiddleware {
     @Property("API_ADMIN_TOKEN")
-    static adminToken: string;
+    private static adminToken: string;
 
-    static isAdmin(req: Partial<Request>, res: Partial<Response>, next: NextFunction): void {
+    public static isAdmin(req: Partial<Request>, res: Partial<Response>, next: NextFunction): void {
         const token = req.headers?.["authorization"];
         if (token === AuthMiddleware.adminToken) {
             next();
