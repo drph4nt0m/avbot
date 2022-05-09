@@ -16,7 +16,11 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Weather")
-@SlashGroup({ name: "atis", description: "Gives you the latest ATIS for the chosen airport" })
+@SlashGroup({
+    name: "atis",
+    description: "Gives you the latest ATIS for the chosen airport"
+})
+@SlashGroup("atis")
 @injectable()
 export class Atis {
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
@@ -28,7 +32,6 @@ export class Atis {
     @Slash("text", {
         description: "Gives you the live ATIS as text for the chosen airport"
     })
-    @SlashGroup("atis")
     @Guard(
         NotBot,
         RequiredBotPerms({
@@ -69,7 +72,6 @@ export class Atis {
     @Slash("voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
-    @SlashGroup("atis")
     @Guard(
         NotBot,
         RequiredBotPerms({
