@@ -1,9 +1,10 @@
-import { Category, NotBot, TIME_UNIT } from "@discordx/utilities";
+import { Category, NotBot } from "@discordx/utilities";
 import { oneLine } from "common-tags";
 import { CommandInteraction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash } from "discordx";
 import process from "process";
 
+import TIME_UNIT from "../enums/TIME_UNIT.js";
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
