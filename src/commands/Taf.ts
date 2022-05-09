@@ -59,7 +59,7 @@ export class Taf {
                     .setFooter({
                         text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                     })
-                    .setDescription(raw)
+                    .setDescription("```" + raw + "```")
                     .setTimestamp();
                 return InteractionUtils.replyOrFollowUp(interaction, {
                     embeds: [rawTafEmbed]
@@ -70,7 +70,7 @@ export class Taf {
                 tafEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: raw
+                        value: "```" + raw + "```"
                     },
                     {
                         name: "Readable Report",
@@ -87,7 +87,7 @@ export class Taf {
             let tempEmbed = new MessageEmbed()
                 .setTitle(`TAF for ${icao.toUpperCase()}`)
                 .setColor("#0099ff")
-                .addField("Raw Report", raw)
+                .addField("Raw Report", "```" + raw + "```")
                 .setFooter({
                     text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                 })
