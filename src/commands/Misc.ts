@@ -183,7 +183,6 @@ export class Misc {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
-        await interaction.channel.sendTyping();
         const liveEmbed = new MessageEmbed()
             .setTitle(`${callSign.toUpperCase()}`)
             .setColor("#0099ff")
