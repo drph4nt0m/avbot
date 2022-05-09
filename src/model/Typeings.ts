@@ -19,6 +19,7 @@ export type envTypes = {
     NEW_GUILDS_CHANNEL: string;
     NODE_ENV: string;
     API_SERVER_PORT: number;
+    API_ADMIN_TOKEN: string;
     SUPPORT_SERVER_INVITE: string;
 };
 
@@ -570,6 +571,6 @@ export type DiscordServerInfo = {
 };
 
 export type ShardInfo = {
-    uptime: string,
-    servers: DiscordServerInfo[]
-}
+    uptime: string;
+    servers: DiscordServerInfo[];
+};

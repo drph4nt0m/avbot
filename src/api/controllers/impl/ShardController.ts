@@ -1,13 +1,15 @@
-import { Controller, Get, Post } from "@overnightjs/core";
+import { ClassMiddleware, Controller, Get, Post } from "@overnightjs/core";
 import type { MultipleShardSpawnOptions } from "discord.js";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { container } from "tsyringe";
 
+import { AuthMiddleware } from "../../middlewares/AuthMiddleware.js";
 import { ShardInfoService } from "../../service/ShardInfoService.js";
 import { BaseController } from "../BaseController.js";
 
 @Controller("shard")
+@ClassMiddleware(AuthMiddleware.isAdmin)
 export class ShardController extends BaseController {
     private readonly _shardInfoService: ShardInfoService;
 
