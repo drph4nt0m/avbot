@@ -1,9 +1,8 @@
 import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
 import { Category, NotBot } from "@discordx/utilities";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
-import { AutocompleteInteraction, ButtonInteraction, CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
-import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
+import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
+import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
+import { Client, Discord, Guard, Slash, SlashGroup, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
 import tmp from "tmp";
 import { injectable } from "tsyringe";
@@ -17,21 +16,60 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Weather")
+@SlashGroup({ name: "atis", description: "Gives you the latest ATIS for the chosen airport" })
 @injectable()
-export class AtisVoice {
-    static {
-        dayjs.extend(utc);
-    }
-
+export class Atis {
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
     // map of <icao, <speechText, File>>
     private readonly _atisMap: Map<string, Map<string, Record<string, any>>> = new Map();
 
     public constructor(private _avwxManager: AvwxManager) {}
 
-    @Slash("atis-voice", {
+    @Slash("text", {
+        description: "Gives you the live ATIS as text for the chosen airport"
+    })
+    @SlashGroup("atis")
+    @Guard(
+        NotBot,
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
+    private async atisText(
+        @SlashOption("icao", {
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            description: "What ICAO would you like the bot to give ATIS for?",
+            type: "STRING",
+            required: true
+        })
+        icao: string,
+        interaction: CommandInteraction,
+        client: Client
+    ): Promise<void> {
+        await interaction.deferReply();
+        const atisEmbed = new MessageEmbed()
+            .setTitle(`ATIS for ${icao.toUpperCase()}`)
+            .setFooter({
+                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
+            })
+            .setTimestamp();
+        try {
+            const { speech } = await this._avwxManager.getMetar(icao);
+            atisEmbed.setDescription(speech);
+        } catch (error) {
+            logger.error(`[${client.shard.ids}] ${error}`);
+            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
+        }
+
+        return InteractionUtils.replyOrFollowUp(interaction, {
+            embeds: [atisEmbed]
+        });
+    }
+
+    @Slash("voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
+    @SlashGroup("atis")
     @Guard(
         NotBot,
         RequiredBotPerms({
