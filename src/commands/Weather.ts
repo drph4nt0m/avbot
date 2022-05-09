@@ -1,13 +1,12 @@
 import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
+import type { CommandInteraction } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
-import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import { NatsManager } from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
@@ -22,93 +21,6 @@ export class Weather {
     }
 
     public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager) {}
-
-    @Slash("atis", {
-        description: "Gives you the live ATIS for the chosen airport"
-    })
-    @Guard(
-        NotBot,
-        RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
-        })
-    )
-    private async atis(
-        @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
-            description: "What ICAO would you like the bot to give ATIS for?",
-            type: "STRING",
-            required: true
-        })
-        icao: string,
-        interaction: CommandInteraction,
-        client: Client
-    ): Promise<void> {
-        await interaction.deferReply();
-        const atisEmbed = new MessageEmbed()
-            .setTitle(`ATIS for ${icao.toUpperCase()}`)
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-            })
-            .setTimestamp();
-        try {
-            const { speech } = await this._avwxManager.getMetar(icao);
-            atisEmbed.setDescription(speech);
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-        }
-
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [atisEmbed]
-        });
-    }
-
-    @Slash("brief", {
-        description: "Gives you the live METAR, zulu time and the latest chart for the chosen airport"
-    })
-    @Guard(
-        NotBot,
-        RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
-        })
-    )
-    private async brief(
-        @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
-            description: "What ICAO would you like the bot to BRIEF you for?",
-            type: "STRING",
-            required: true
-        })
-        icao: string,
-        interaction: CommandInteraction,
-        client: Client
-    ): Promise<void> {
-        await interaction.deferReply();
-        const briefEmbed = new MessageEmbed().setTitle(`BRIEF for ${icao}`).setColor("#0099ff").setTimestamp();
-
-        const zuluTime = ObjectUtil.dayJsAsUtc.utc().format("YYYY-MM-DD HH:mm:ss [Z]");
-        briefEmbed.addField("**Zulu**", `${zuluTime}`);
-        try {
-            const { raw } = await this._avwxManager.getMetar(icao);
-            briefEmbed.addField("**METAR**", raw);
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-        }
-
-        try {
-            const { raw } = await this._avwxManager.getTaf(icao);
-            briefEmbed.addField("**TAF**", raw);
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-        }
-        briefEmbed.setFooter({
-            text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-        });
-
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [briefEmbed]
-        });
-    }
 
     @Slash("nats", {
         description: "Gives you the latest North Atlantic Track information"
