@@ -7,7 +7,6 @@ import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
-import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import { NatsManager } from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
@@ -15,12 +14,12 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 @Discord()
 @Category("Weather")
 @injectable()
-export class Weather {
+export class Nats {
     static {
         dayjs.extend(utc);
     }
 
-    public constructor(private _avwxManager: AvwxManager, private _natsManager: NatsManager) {}
+    public constructor(private _natsManager: NatsManager) {}
 
     @Slash("nats", {
         description: "Gives you the latest North Atlantic Track information"
@@ -56,7 +55,7 @@ export class Weather {
                 nat.route.nodes.forEach((node) => {
                     route += `${node.ident} `;
                 });
-                natsEmbed.addField("Route", `${route}`);
+                natsEmbed.addField("Route", "```" + route + "```");
                 if (nat.route.eastLevels.length > 0) {
                     natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
                 }
@@ -64,7 +63,9 @@ export class Weather {
                     natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
                 }
 
-                natsEmbed.addField("Validity", `${dayjs(nat.validFrom).utc().format("YYYY-MM-DD HH:mm:ss [Z]")} to ${dayjs(nat.validTo).utc().format("YYYY-MM-DD HH:mm:ss [Z]")}`);
+                const validFrom = `${dayjs(nat.validFrom).utc().format("DDHHmm[Z]")} (<t:${dayjs(nat.validFrom).utc().unix()}:R>)`;
+                const validTo = `${dayjs(nat.validTo).utc().format("DDHHmm[Z]")} (<t:${dayjs(nat.validTo).utc().unix()}:R>)`;
+                natsEmbed.addField("Validity", `${validFrom} to ${validTo}`);
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
                 natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
