@@ -20,7 +20,7 @@ export class BotServer extends Server {
 
     private readonly classesToLoad = `${dirname(import.meta.url)}/controllers/**/*.{ts,js}`;
 
-    constructor() {
+    public constructor() {
         super();
         if (this.env === "development") {
             this.app.use(
