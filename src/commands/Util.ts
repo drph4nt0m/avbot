@@ -21,9 +21,7 @@ export class Util {
           ${msg.createdTimestamp - interaction.createdTimestamp}ms.
           ${client.ws.ping ? `The heartbeat ping is ${Math.round(client.ws.ping)}ms.` : ""}
         `;
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            content
-        });
+        msg.edit(content);
     }
 
     @Slash("info", {
