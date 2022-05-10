@@ -32,7 +32,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public async search(interaction: AutocompleteInteraction): Promise<SearchType[]> {
-        const selectedType: string = interaction.options.getString("type");
+        const selectedType: string = interaction.options.getString("type") ?? "pilot";
         const query = interaction.options.getFocused(true).value as string;
         const result = await this.api.get("/search", {
             params: {
