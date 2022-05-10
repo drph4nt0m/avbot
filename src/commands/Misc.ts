@@ -41,7 +41,7 @@ export class Misc {
         private _geonamesManager: GeonamesManager
     ) {}
 
-    @Slash("icao", {
+    @Slash("station", {
         description: "Gives you the station information for the chosen airport"
     })
     @Guard(
@@ -299,65 +299,6 @@ export class Misc {
 
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [liveEmbed]
-        });
-    }
-
-    @Slash("search", {
-        description: "Gives you the nearest airports for a chosen location"
-    })
-    @Guard(
-        RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
-        })
-    )
-    private async search(
-        @SlashOption("location", {
-            description: "What location would you like the bot to search for?",
-            type: "STRING",
-            required: true
-        })
-        location: string,
-        interaction: CommandInteraction,
-        client: Client
-    ): Promise<void> {
-        await interaction.deferReply();
-        const searchEmbed = new MessageEmbed()
-            .setTitle(`Search : ${location.toUpperCase()}`)
-            .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: GeoNames | AVWX`
-            })
-            .setTimestamp();
-        try {
-            const { latitude, longitude } = await this._geonamesManager.getCoordinates(location);
-
-            searchEmbed.setTitle(`Search : ${location.toUpperCase()} [${latitude}, ${longitude}]`);
-
-            const stations = await this._avwxManager.getStationsByCoords(latitude, longitude, location);
-
-            for (const { station } of stations) {
-                let title = "";
-                if (station.icao) {
-                    title += `${station.icao}`;
-                }
-                if (station.iata) {
-                    if (title !== "") {
-                        title += " / ";
-                    }
-                    title += `${station.iata}`;
-                }
-                const desc = `${station.name}\n`;
-                if (ObjectUtil.validString(desc, title)) {
-                    searchEmbed.addField(title, accents.remove(desc));
-                }
-            }
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-            searchEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-        }
-
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [searchEmbed]
         });
     }
 
