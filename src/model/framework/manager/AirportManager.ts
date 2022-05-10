@@ -21,7 +21,8 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         const query = interaction.options.getFocused(true).value as string;
         const searchResult = await axios.get<IcaoCode[]>(`${autoCompleteBaseUrl}/airport/search`, {
             params: {
-                query
+                query,
+                maxLength: 97
             }
         });
         return searchResult.data;

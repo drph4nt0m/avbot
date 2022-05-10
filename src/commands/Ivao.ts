@@ -128,7 +128,7 @@ export class Ivao {
                         },
                         {
                             name: "Departure Time",
-                            value: this.parseTime(ivaoClient.flightPlan.departureTime) + "z",
+                            value: this.parseTime(ivaoClient.flightPlan.departureTime) + "Z",
                             inline: true
                         },
                         {
@@ -144,6 +144,11 @@ export class Ivao {
                         {
                             name: "Route",
                             value: "```" + ivaoClient.flightPlan.route + "```",
+                            inline: false
+                        },
+                        {
+                            name: "Remarks",
+                            value: "```" + ivaoClient.flightPlan.remarks + "```",
                             inline: false
                         }
                     );
@@ -189,52 +194,7 @@ export class Ivao {
         });
     }
 
-    @Slash("ivao-online", {
-        description: "Gives you the information for all ATCs which match the given partial callsign on the IVAO network"
-    })
-    @Guard(
-        NotBot,
-        RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
-        }),
-        GuildOnly
-    )
-    private async ivaoOnline(
-        @SlashOption("partial-callsign", {
-            description: "What partial callsign would you like the bot to give information for?",
-            type: "STRING",
-            required: true
-        })
-        partialCallSign: string,
-        interaction: CommandInteraction,
-        client: Client
-    ): Promise<void> {
-        const ivaoEmbed = new MessageEmbed()
-            .setTitle(`${partialCallSign.toUpperCase()}`)
-            .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: IVAO API`
-            })
-            .setTimestamp();
-
-        try {
-            const atcList = (await this._ivaoManager.getPartialAtcClientInfo(partialCallSign)) as IvaoAtc[];
-
-            ivaoEmbed.setTitle(`IVAO : ${partialCallSign}`);
-
-            for (const atc of atcList) {
-                ivaoEmbed.addField(`${atc.callsign}`, `VID: ${atc.userId}, Frequency: ${atc.atcSession.frequency}`);
-            }
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-            ivaoEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-        }
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [ivaoEmbed]
-        });
-    }
-
     private parseTime(time: number): string {
-        return ObjectUtil.dayJsAsUtc.utc().startOf("day").add(time, "seconds").format("HH:mm");
+        return ObjectUtil.dayJsAsUtc.utc().startOf("day").add(time, "seconds").format("HHmm");
     }
 }

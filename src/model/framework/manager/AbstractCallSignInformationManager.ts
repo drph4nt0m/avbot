@@ -1,8 +1,7 @@
 import type { AutocompleteInteraction } from "discord.js";
 
 import logger from "../../../utils/LoggerFactory.js";
-import { ObjectUtil } from "../../../utils/Utils.js";
-import type { IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimAtis, VatsimInfo, VatsimPilot } from "../../Typeings.js";
+import type { IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimInfo, VatsimPilot } from "../../Typeings.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 import type { ISearchBase, SearchBase } from "../ISearchBase.js";
 
@@ -10,19 +9,6 @@ type SearchType = SearchBase & { type: "pilot" | "atc" };
 type Merged = VatsimInfo | IvaoInfo;
 
 export abstract class AbstractCallSignInformationManager<T extends Merged> extends AbstractRequestEngine implements ISearchBase<SearchType> {
-    public async getPartialAtcClientInfo(partialCallSign: string): Promise<(IvaoAtc | VatsimAtis)[]> {
-        const result = await this.api.get<(IvaoAtc | VatsimAtis)[]>("/getPartialAtcClientInfo", {
-            params: {
-                partialCallSign
-            }
-        });
-        const data = result.data;
-        if (!ObjectUtil.isValidArray(data)) {
-            throw new Error(`no client available at the moment matching call sign ${partialCallSign}`);
-        }
-        return data;
-    }
-
     public async getInfo(): Promise<T> {
         const result = await this.api.get(`/`);
         if (result.status !== 200) {
@@ -46,7 +32,7 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public async search(interaction: AutocompleteInteraction): Promise<SearchType[]> {
-        const selectedType: string = interaction.options.getString("type");
+        const selectedType: string = interaction.options.getString("type") ?? "pilot";
         const query = interaction.options.getFocused(true).value as string;
         const result = await this.api.get("/search", {
             params: {
