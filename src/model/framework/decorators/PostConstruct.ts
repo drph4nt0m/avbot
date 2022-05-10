@@ -1,3 +1,4 @@
+import { Client } from "discordx";
 import { container } from "tsyringe";
 
 /**
@@ -11,7 +12,11 @@ export function PostConstruct(target: unknown, propertyKey: string, descriptor: 
     container.afterResolution(
         target.constructor as never,
         (_t, result) => {
-            descriptor.value.call(result);
+            let client: Client;
+            if (container.isRegistered(Client)) {
+                client = container.resolve(Client);
+            }
+            descriptor.value.call(result, client);
         },
         {
             frequency: "Once"

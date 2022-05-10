@@ -15,12 +15,12 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather")
 @SlashGroup({
     name: "atis",
     description: "Gives you the latest ATIS for the chosen airport"
 })
 @SlashGroup("atis")
+@Category("Weather")
 @injectable()
 export class Atis {
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
