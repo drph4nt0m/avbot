@@ -63,8 +63,8 @@ export class Nats {
                     natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
                 }
 
-                const validFrom = `${dayjs(nat.validFrom).utc().format("DDHHmm[Z]")} (<t:${dayjs(nat.validFrom).utc().unix()}:R>)`;
-                const validTo = `${dayjs(nat.validTo).utc().format("DDHHmm[Z]")} (<t:${dayjs(nat.validTo).utc().unix()}:R>)`;
+                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (<t:${dayjs(nat.validFrom).utc().unix()}:R>)`;
+                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (<t:${dayjs(nat.validTo).utc().unix()}:R>)`;
                 natsEmbed.addField("Validity", `${validFrom} to ${validTo}`);
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
