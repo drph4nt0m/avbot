@@ -1,5 +1,5 @@
 import type { Document } from "bson";
-import type { Collection, Db } from "mongodb";
+import type { Collection, Db, WithId } from "mongodb";
 import { MongoClient } from "mongodb";
 import { singleton } from "tsyringe";
 
@@ -34,7 +34,7 @@ export class Mongo {
         return this.update("stats", command);
     }
 
-    public async getAutoUpdateDocument(guildId: string): Promise<AutoUpdateDocument | null> {
+    public async getAutoUpdateDocument(guildId: string): Promise<WithId<AutoUpdateDocument> | null> {
         try {
             const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
             return await autoUpdateCollection.findOne({ guildId });
@@ -47,7 +47,7 @@ export class Mongo {
         try {
             const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
             const { guildId } = document;
-            const result = await autoUpdateCollection.updateOne({ guildId }, { $set: { document } }, { upsert: true });
+            const result = await autoUpdateCollection.updateOne({ guildId }, { $set: { ...document } }, { upsert: true });
             return result.acknowledged;
         } catch (error) {
             return false;
