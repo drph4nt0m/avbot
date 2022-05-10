@@ -15,6 +15,8 @@ export abstract class AbstractRequestEngine {
 
     private readonly mongo: Mongo;
 
+    public readonly baseUrl: string;
+
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
         this.api = this.axiosInterceptor(
             axios.create({
@@ -23,6 +25,7 @@ export abstract class AbstractRequestEngine {
                 ...opts
             })
         );
+        this.baseUrl = baseURL;
         this.mongo = container.resolve(Mongo);
     }
 

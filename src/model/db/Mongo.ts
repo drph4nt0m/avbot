@@ -7,7 +7,7 @@ import logger from "../../utils/LoggerFactory.js";
 import { Utils } from "../../utils/Utils.js";
 import { PostConstruct } from "../framework/decorators/PostConstruct.js";
 import { Property } from "../framework/decorators/Property.js";
-import type { CommandCount } from "../Typeings.js";
+import type { AutoUpdateDocument, CommandCount, Settings, Stats } from "../Typeings.js";
 
 @singleton()
 export class Mongo {
@@ -22,9 +22,9 @@ export class Mongo {
 
     public async isPremiumGuild(guildId: string): Promise<boolean> {
         try {
-            const settings = await this.getCollection("settings");
+            const settings = await this.getCollection<Settings>("settings");
             const guildSettings = await settings.findOne({ guild: guildId });
-            return !!guildSettings.isPremium;
+            return Boolean(guildSettings.isPremium);
         } catch (error) {
             return false;
         }
@@ -34,9 +34,29 @@ export class Mongo {
         return this.update("stats", command);
     }
 
+    public async getAutoUpdateDocument(guildId: string): Promise<AutoUpdateDocument | null> {
+        try {
+            const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
+            return await autoUpdateCollection.findOne({ guildId });
+        } catch (error) {
+            return null;
+        }
+    }
+
+    public async addAutoUpdateDocument(document: AutoUpdateDocument): Promise<boolean> {
+        try {
+            const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
+            const { guildId } = document;
+            const result = await autoUpdateCollection.updateOne({ guildId }, { $set: { document } }, { upsert: true });
+            return result.acknowledged;
+        } catch (error) {
+            return false;
+        }
+    }
+
     public async getCommandCounts(): Promise<CommandCount> {
         try {
-            const stats = await this.getCollection("stats");
+            const stats = await this.getCollection<Stats>("stats");
             const counts = await stats.find().toArray();
             let total = 0;
             for (const c of counts) {
@@ -71,7 +91,7 @@ export class Mongo {
     }
 
     private async update(collectionName: string, value: string): Promise<boolean> {
-        const collection = await this.getCollection(collectionName);
+        const collection = await this.getCollection<Stats>(collectionName);
         try {
             const result = await collection.updateOne({ value }, { $inc: { count: 1 } }, { upsert: true });
             return result.acknowledged;
@@ -81,13 +101,13 @@ export class Mongo {
         }
     }
 
-    private async getCollection(collectionToUse: string): Promise<Collection> {
+    private async getCollection<T>(collectionToUse: string): Promise<Collection<T>> {
         try {
             while (!this._db) {
                 // eslint-disable-next-line no-await-in-loop
                 await Utils.sleep(10000);
             }
-            return this._db.collection(collectionToUse);
+            return this._db.collection<T>(collectionToUse);
         } catch (error) {
             logger.error(`[x] ${error}`);
             throw error;
