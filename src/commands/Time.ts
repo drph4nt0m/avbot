@@ -17,7 +17,7 @@ import { InteractionUtils } from "../utils/Utils.js";
 @Discord()
 @Category("Miscellaneous")
 @injectable()
-export class Misc {
+export class Time {
     static {
         dayjs.extend(utc);
         dayjs.extend(timezone);
@@ -25,8 +25,32 @@ export class Misc {
 
     public constructor(private _avwxManager: AvwxManager, private _geonamesManager: GeonamesManager) {}
 
+    @Slash("zulu", {
+        description: "Get the current zulu time"
+    })
+    @Guard(
+        RequiredBotPerms({
+            textChannel: ["EMBED_LINKS"]
+        })
+    )
+    private async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
+        await interaction.deferReply();
+        const localEmbed = new MessageEmbed()
+            .setTitle(`Current zulu time`)
+            .setColor("#1a8fe3")
+            .setDescription(dayjs().utc().format("HHmm[Z]"))
+            .setFooter({
+                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
+            })
+            .setTimestamp();
+
+        return InteractionUtils.replyOrFollowUp(interaction, {
+            embeds: [localEmbed]
+        });
+    }
+
     @Slash("time", {
-        description: "Get the current zulu time or specific zulu or local time for the given local or zulu Time and ICAO"
+        description: "Get the zulu to local or local to zulu time conversions for an airport"
     })
     @Guard(
         RequiredBotPerms({
@@ -34,22 +58,23 @@ export class Misc {
         })
     )
     private async time(
-        @SlashOption("icao", {
-            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
-            description: "Enter ICAO code",
-            type: "STRING",
-            required: true
-        })
-        icao: string,
-        @SlashChoice("Zulu", "Local")
+        @SlashChoice({ name: "Local to Zulu", value: "Zulu" })
+        @SlashChoice({ name: "Zulu to Local", value: "Local" })
         @SlashOption("type", {
-            description: "Do you want to get the local time from zulu or zulu from local?",
+            description: "Convert time from what to what?",
             type: "STRING",
             required: true
         })
         type: "Zulu" | "Local",
-        @SlashOption("time-value", {
-            description: "Enter local or zulu time as defined by your previous choice",
+        @SlashOption("icao", {
+            autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
+            description: "Convert time for which ICAO?",
+            type: "STRING",
+            required: true
+        })
+        icao: string,
+        @SlashOption("time", {
+            description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
             type: "STRING",
             required: true
         })
@@ -80,12 +105,14 @@ export class Misc {
             const data = await this._geonamesManager.getTimezone(stationInfo.latitude.toString(), stationInfo.longitude.toString());
             const [HH, MM] = [time.slice(0, 2), time.slice(2)];
             if (type === "Local") {
-                timeString = dayjs().utc().hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).tz(data.timezoneId).format("DD/MM HHmm");
+                timeString = dayjs().utc().hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).tz(data.timezoneId).format("HHmm");
             } else {
-                timeString = dayjs().utcOffset(data.gmtOffset).hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).utc().format("DD/MM HHmm");
+                timeString = dayjs().utcOffset(data.gmtOffset).hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).utc().format("HHmm");
             }
             const opposite = type === "Local" ? "Zulu" : "Local";
-            localEmbed.setTitle(`${type} Time at ${icao} when ${opposite} time is ${time}hrs`).setDescription(`${timeString}hrs`);
+            const fromSuffix = type === "Local" ? "Z" : "hrs";
+            const toSuffix = type === "Local" ? "hrs" : "Z";
+            localEmbed.setTitle(`${type} time at ${icao} when ${opposite.toLowerCase()} time is ${time}${fromSuffix}`).setDescription(`${timeString}${toSuffix}`);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
             localEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
@@ -98,18 +125,18 @@ export class Misc {
 
     private validateTime(time: string, type: "Zulu" | "Local"): void {
         if (time.length !== 4) {
-            throw new Error(`${type} time must be in HHMM format`);
+            throw new Error(`${type} time must be in HHmm format`);
         }
         const HH = time.slice(0, 2);
         const MM = time.slice(2);
-        if (Number.isNaN(Number.parseInt(HH)) || Number.isNaN(Number.parseInt(HH))) {
+        if (Number.isNaN(Number.parseInt(HH)) || Number.isNaN(Number.parseInt(MM))) {
             throw new Error("Invalid time, value must be a number");
         }
         if (Number.parseInt(HH) > 23 || Number.parseInt(HH) < 0) {
-            throw new Error("Invalid HH");
+            throw new Error("Invalid hours");
         }
         if (Number.parseInt(MM) > 59 || Number.parseInt(MM) < 0) {
-            throw new Error("Invalid MM");
+            throw new Error("Invalid minutes");
         }
     }
 }
