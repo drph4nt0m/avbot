@@ -7,9 +7,9 @@ import { GuildOnly } from "../guards/GuildOnly.js";
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { VatsimManager } from "../model/framework/manager/VatsimManager.js";
-import type { VatsimAtc, VatsimAtis, VatsimPilot } from "../model/Typeings.js";
+import type { VatsimAtc, VatsimPilot } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("VATSIM")
@@ -55,7 +55,7 @@ export class Vatsim {
 
         try {
             let vatsimClient = (await this._vatsimManager.getClientInfo(callSign, type)) as VatsimPilot | VatsimAtc;
-            vatsimEmbed.setTitle(`Vatsim : ${callSign}`);
+            vatsimEmbed.setTitle(`VATSIM : ${callSign}`);
             vatsimEmbed.addFields(
                 {
                     name: "Call Sign",
@@ -123,18 +123,17 @@ export class Vatsim {
                             name: "Cruising Level",
                             value: vatsimClient.flight_plan.alternate,
                             inline: true
-                        }
-                    );
-                    const depTime = vatsimClient.flight_plan.departure;
-                    if (ObjectUtil.validString(depTime)) {
-                        vatsimEmbed.addField("Departure Time", this.parseDepartureTime(vatsimClient), true);
-                    }
-
-                    const eet = vatsimClient.flight_plan.enroute_time;
-                    if (ObjectUtil.validString(eet)) {
-                        vatsimEmbed.addField("EET", this.parseEet(vatsimClient), true);
-                    }
-                    vatsimEmbed.addFields(
+                        },
+                        {
+                            name: "Departure Time",
+                            value: vatsimClient.flight_plan.deptime.toString().padStart(4, "0") + "Z",
+                            inline: true
+                        },
+                        {
+                            name: "EET",
+                            value: vatsimClient.flight_plan.enroute_time.toString().padStart(4, "0"),
+                            inline: true
+                        },
                         {
                             name: "Aircraft",
                             value: vatsimClient.flight_plan.aircraft_faa,
@@ -143,6 +142,11 @@ export class Vatsim {
                         {
                             name: "Route",
                             value: "```" + vatsimClient.flight_plan.route + "```",
+                            inline: false
+                        },
+                        {
+                            name: "Remakes",
+                            value: "```" + vatsimClient.flight_plan.remarks + "```",
                             inline: false
                         }
                     );
@@ -163,7 +167,7 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: "```" + vatsimClient.text_atis.join("\n") + "```",
+                            value: "```" + (vatsimClient.text_atis?.join("\n") || "-") + "```",
                             inline: false
                         }
                     );
@@ -177,70 +181,5 @@ export class Vatsim {
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [vatsimEmbed]
         });
-    }
-
-    @Slash("vatsim-online", {
-        description: "Gives you the information for all ATCs which match the given partial callsign on the VATSIM network"
-    })
-    @Guard(
-        NotBot,
-        RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
-        }),
-        GuildOnly
-    )
-    private async vatsimOnline(
-        @SlashOption("partial-callsign", {
-            description: "What partial call sign would you like the bot to give information for?",
-            type: "STRING",
-            required: true
-        })
-        partialCallSign: string,
-        interaction: CommandInteraction,
-        client: Client
-    ): Promise<void> {
-        const vatsimEmbed = new MessageEmbed()
-            .setTitle(`${partialCallSign.toUpperCase()}`)
-            .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: VATSIM API`
-            })
-            .setTimestamp();
-
-        try {
-            const atcList = (await this._vatsimManager.getPartialAtcClientInfo(partialCallSign)) as VatsimAtis[];
-
-            vatsimEmbed.setTitle(`VATSIM : ${partialCallSign}`);
-            for (const atc of atcList) {
-                vatsimEmbed.addField(`${atc.callsign}`, `CID: ${atc.cid}, Frequency: ${atc.frequency}`);
-            }
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] ${error}`);
-            vatsimEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
-        }
-
-        return InteractionUtils.replyOrFollowUp(interaction, {
-            embeds: [vatsimEmbed]
-        });
-    }
-
-    private parseDepartureTime(c: VatsimPilot): string | null {
-        return c.flight_plan
-            ? c.flight_plan.deptime.length === 2
-                ? `00:${c.flight_plan.deptime.substring(0, 2)}z`
-                : c.flight_plan.deptime.length === 3
-                ? `0${c.flight_plan.deptime.substring(0, 1)}:${c.flight_plan.deptime.substring(1, 3)}z`
-                : `${c.flight_plan.deptime.substring(0, 2)}:${c.flight_plan.deptime.substring(2, 4)}z`
-            : null;
-    }
-
-    private parseEet(c: VatsimPilot): string | null {
-        return c.flight_plan
-            ? c.flight_plan.enroute_time.length === 2
-                ? `00:${c.flight_plan.enroute_time.substring(0, 2)}`
-                : c.flight_plan.enroute_time.length === 3
-                ? `0${c.flight_plan.enroute_time.substring(0, 1)}:${c.flight_plan.enroute_time.substring(1, 3)}`
-                : `${c.flight_plan.enroute_time.substring(0, 2)}:${c.flight_plan.enroute_time.substring(2, 4)}`
-            : null;
     }
 }
