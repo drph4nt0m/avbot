@@ -1,6 +1,6 @@
 import type { AutoUpdateDocument } from "../../Typeings.js";
 
-export type AsyncType = keyof Omit<AutoUpdateDocument, "guildId">;
+export type AsyncType = keyof Omit<AutoUpdateDocument, "guildId" | "proxyData" | "bindData">;
 export type ResolverInfo<R> = {
     method: {
         proxy: (...params: any[]) => Promise<void> | void;
