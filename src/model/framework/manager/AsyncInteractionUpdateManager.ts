@@ -101,7 +101,6 @@ export class AsyncInteractionUpdateManager<T, R> {
                                 force: true,
                                 cache: true
                             });
-                            console.log(`metar Message found: ${message}`);
                             didFind = true;
                             messageResolvedObject[key] = message;
                         } catch {}
