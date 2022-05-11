@@ -574,3 +574,27 @@ export type ShardInfo = {
     uptime: string;
     servers: DiscordServerInfo[];
 };
+
+
+export type AutoUpdateDocument = {
+    guildId: string;
+    metarMessageId?: string;
+    tafMessageId?: string;
+    proxyData?: {
+        [key: string]: any[]
+    };
+    bindData?: {
+        [key: string]: any[]
+    }
+};
+
+export type Settings = {
+    guild: string;
+    isPremium: boolean;
+    settings: { [key: string]: any };
+};
+
+export type Stats = {
+    command: string;
+    count: number;
+};

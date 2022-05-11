@@ -56,6 +56,15 @@ export class ObjectUtil {
         return Array.isArray(array) && array.length > 0;
     }
 
+    /**
+     * Assert argument is an object, and it has more than one key
+     * @param obj
+     * @returns {obj is Record<string, any>}
+     */
+    public static isValidObject(obj: unknown): obj is Record<string, any> {
+        return typeof obj === "object" && obj !== null && obj !== undefined && Object.keys(obj).length > 0;
+    }
+
     public static convertToMilli(value: number, unit: TIME_UNIT): number {
         switch (unit) {
             case TIME_UNIT.seconds:
