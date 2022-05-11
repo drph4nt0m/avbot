@@ -1,12 +1,11 @@
 import type winston from "winston";
-import {createLogger, format, transports} from "winston";
+import { createLogger, format, transports } from "winston";
 import type * as Transport from "winston-transport";
 
-import {Property} from "../model/framework/decorators/Property.js";
-import type {NODE_ENV} from "../model/Typeings.js";
+import { Property } from "../model/framework/decorators/Property.js";
+import type { NODE_ENV } from "../model/Typeings.js";
 
 class LoggerFactory {
-
     @Property("DATADOG_API_KEY", false)
     private _apiKey: string = null;
 
@@ -16,7 +15,7 @@ class LoggerFactory {
     private readonly _logger: winston.Logger;
 
     public constructor() {
-        const {combine, splat, timestamp, printf} = format;
+        const { combine, splat, timestamp, printf } = format;
         const transportsArray: Transport[] = [
             new transports.Console(),
             new transports.File({
@@ -51,5 +50,5 @@ class LoggerFactory {
     }
 }
 
-const logger = new LoggerFactory();
-export default logger.logger;
+const logger = new LoggerFactory().logger;
+export default logger;
