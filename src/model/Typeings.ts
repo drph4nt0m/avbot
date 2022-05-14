@@ -575,19 +575,6 @@ export type ShardInfo = {
     servers: DiscordServerInfo[];
 };
 
-
-export type AutoUpdateDocument = {
-    guildId: string;
-    metarMessageId?: string;
-    tafMessageId?: string;
-    proxyData?: {
-        [key: string]: any[]
-    };
-    bindData?: {
-        [key: string]: any[]
-    }
-};
-
 export type Settings = {
     guild: string;
     isPremium: boolean;

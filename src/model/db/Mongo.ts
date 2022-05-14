@@ -1,5 +1,5 @@
 import type { Document } from "bson";
-import type { Collection, Db, WithId } from "mongodb";
+import type { Collection, Db } from "mongodb";
 import { MongoClient } from "mongodb";
 import { singleton } from "tsyringe";
 
@@ -7,7 +7,7 @@ import logger from "../../utils/LoggerFactory.js";
 import { Utils } from "../../utils/Utils.js";
 import { PostConstruct } from "../framework/decorators/PostConstruct.js";
 import { Property } from "../framework/decorators/Property.js";
-import type { AutoUpdateDocument, CommandCount, Settings, Stats } from "../Typeings.js";
+import type { CommandCount, Settings, Stats } from "../Typeings.js";
 
 @singleton()
 export class Mongo {
@@ -32,26 +32,6 @@ export class Mongo {
 
     public increaseCommandCount(command: string): Promise<boolean> {
         return this.update("stats", command);
-    }
-
-    public async getAutoUpdateDocument(guildId: string): Promise<WithId<AutoUpdateDocument> | null> {
-        try {
-            const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
-            return await autoUpdateCollection.findOne({ guildId });
-        } catch (error) {
-            return null;
-        }
-    }
-
-    public async addAutoUpdateDocument(document: AutoUpdateDocument): Promise<boolean> {
-        try {
-            const autoUpdateCollection = await this.getCollection<AutoUpdateDocument>("autoUpdate");
-            const { guildId } = document;
-            const result = await autoUpdateCollection.updateOne({ guildId }, { $set: { ...document } }, { upsert: true });
-            return result.acknowledged;
-        } catch (error) {
-            return false;
-        }
     }
 
     public async getCommandCounts(): Promise<CommandCount> {
