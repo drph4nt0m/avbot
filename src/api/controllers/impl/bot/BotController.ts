@@ -3,9 +3,9 @@ import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { singleton } from "tsyringe";
 
-import { BotInfoService } from "../../service/BotInfoService.js";
-import { BaseController } from "../BaseController.js";
-import { ShardController } from "./ShardController.js";
+import { BotInfoService } from "../../../service/BotInfoService.js";
+import { BaseController } from "../../BaseController.js";
+import { ShardController } from "./shard/ShardController.js";
 
 @singleton()
 @Controller("api/bot")

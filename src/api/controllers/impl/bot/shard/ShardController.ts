@@ -4,9 +4,9 @@ import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { container } from "tsyringe";
 
-import { AuthMiddleware } from "../../middlewares/AuthMiddleware.js";
-import { ShardInfoService } from "../../service/ShardInfoService.js";
-import { BaseController } from "../BaseController.js";
+import { AuthMiddleware } from "../../../../middlewares/AuthMiddleware.js";
+import { ShardInfoService } from "../../../../service/ShardInfoService.js";
+import { BaseController } from "../../../BaseController.js";
 
 @Controller("shard")
 @ClassMiddleware(AuthMiddleware.isAdmin)
