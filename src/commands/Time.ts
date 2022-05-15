@@ -4,7 +4,7 @@ import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
 import { AutocompleteInteraction, Formatters, MessageEmbed } from "discord.js";
-import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
+import { Client, Discord, Guard, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
@@ -16,6 +16,8 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Time")
+@SlashGroup({ name: "time" })
+@SlashGroup("time")
 @injectable()
 export class Time {
     static {
@@ -49,7 +51,7 @@ export class Time {
         });
     }
 
-    @Slash("time", {
+    @Slash("convert", {
         description: "Get the zulu to local or local to zulu time conversions for any chosen airport"
     })
     @Guard(

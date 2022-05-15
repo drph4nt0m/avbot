@@ -2,7 +2,7 @@ import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource,
 import { Category, NotBot } from "@discordx/utilities";
 import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
 import { ButtonInteraction, Formatters, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
-import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
+import { Client, Discord, Guard, Slash, SlashGroup, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
 import tmp from "tmp";
 import { injectable } from "tsyringe";
@@ -16,6 +16,8 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Advisory")
+@SlashGroup({ name: "atis" })
+@SlashGroup("atis")
 @injectable()
 export class Atis {
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
@@ -24,7 +26,7 @@ export class Atis {
 
     public constructor(private _avwxManager: AvwxManager) {}
 
-    @Slash("atis", {
+    @Slash("text", {
         description: "Gives you the live ATIS as text for the chosen airport"
     })
     @Guard(
@@ -67,7 +69,7 @@ export class Atis {
         });
     }
 
-    @Slash("atis-voice", {
+    @Slash("voice", {
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
     @Guard(
