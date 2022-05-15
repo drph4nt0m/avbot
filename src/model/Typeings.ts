@@ -1,4 +1,5 @@
 import type { Document } from "bson";
+import type { Dayjs } from "dayjs";
 
 export type propTypes = envTypes;
 export type envTypes = {
@@ -6,6 +7,7 @@ export type envTypes = {
     AVBRIEF3_TOKEN: string;
     AVIATION_STACK_TOKEN: string;
     AVWX_TOKEN: string;
+    AV8_TOKEN: string;
     BOT_OWNERS: string;
     BOT_RESTART_CHANNEL: string;
     DATADOG_API_KEY: string;
@@ -584,4 +586,23 @@ export type Settings = {
 export type Stats = {
     command: string;
     count: number;
+};
+
+export type Notam = {
+    id: string;
+    from: Dayjs | "PERMANENT";
+    to: Dayjs | "PERMANENT";
+    raw: string;
+    validity: NotamValidity;
+    type: NotamType;
+};
+
+export enum NotamType {
+    ACTIVE = "Active",
+    UPCOMING = "Upcoming"
+}
+
+export type NotamValidity = {
+    isValid: boolean;
+    phrase: string;
 };
