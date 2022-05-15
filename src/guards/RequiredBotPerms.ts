@@ -1,6 +1,6 @@
 import type { PermissionsType } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { GuildChannel, GuildMember, MessageEmbed } from "discord.js";
+import { Formatters, GuildChannel, GuildMember, MessageEmbed } from "discord.js";
 import type { Client, GuardFunction, Next } from "discordx";
 
 import { InteractionUtils } from "../utils/Utils.js";
@@ -46,6 +46,7 @@ export function RequiredBotPerms(permissions: {
                     }
                     if (!voiceChannel.joinable) {
                         const embed = new MessageEmbed()
+                            .setTitle(Formatters.inlineCode(arg.commandName))
                             .setColor("#ff0000")
                             .setDescription(`${member}, AvBot is unable to join the voice channel as it is already full.`)
                             .setFooter({
@@ -57,7 +58,17 @@ export function RequiredBotPerms(permissions: {
                         });
                     }
                 } else {
-                    return InteractionUtils.replyOrFollowUp(arg, "You need to join a voice channel first!");
+                    const embed = new MessageEmbed()
+                        .setTitle(Formatters.inlineCode(arg.commandName))
+                        .setColor("#ff0000")
+                        .setDescription(`${member}, you need to join a voice channel first.`)
+                        .setFooter({
+                            text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
+                        })
+                        .setTimestamp();
+                    return InteractionUtils.replyOrFollowUp(arg, {
+                        embeds: [embed]
+                    });
                 }
             }
         }

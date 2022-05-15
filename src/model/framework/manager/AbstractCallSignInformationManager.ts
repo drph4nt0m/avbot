@@ -19,16 +19,18 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
     }
 
     public async getClientInfo(callSign: string, type: "pilot" | "atc"): Promise<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc> {
-        const result = await this.api.get<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc>("/getClientInfo", {
-            params: {
-                type,
-                callSign
-            }
-        });
-        if (result.status !== 200) {
-            throw new Error(`no client available at the moment with call sign ${callSign}`);
+        try {
+            const result = await this.api.get<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc>("/getClientInfo", {
+                params: {
+                    type,
+                    callSign
+                }
+            });
+            return result.data;
+        } catch (error) {
+            logger.error(`[x] ${error}`);
+            return Promise.reject(new Error(error.response ? error.response.data.message : `no client available at the moment with call sign ${callSign}`));
         }
-        return result.data;
     }
 
     public async search(interaction: AutocompleteInteraction): Promise<SearchType[]> {

@@ -1,6 +1,6 @@
 import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { MessageEmbed } from "discord.js";
+import { Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -26,7 +26,7 @@ export class Flight {
     ) {}
 
     @Slash("flight", {
-        description: "[premium] Gives you the information for the chosen call sign of the real life flight"
+        description: "[PREMIUM] Gives you the information for the chosen call sign of the real life flight"
     })
     @Guard(
         GuildOnly,
@@ -47,8 +47,9 @@ export class Flight {
     ): Promise<void> {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
+
         const liveEmbed = new MessageEmbed()
-            .setTitle(`${callSign}`)
+            .setTitle(`Flight: ${Formatters.inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
@@ -59,7 +60,7 @@ export class Flight {
             const flightInfo = await this._openSkyManager.getFlightInfo(callSign);
             icao24 = flightInfo.icao24;
             liveEmbed
-                .setTitle(`${callSign} (Track on OpenSky Network)`)
+                .setTitle(`Flight: ${Formatters.inlineCode(callSign)} (Track on OpenSky Network)`)
                 .setURL(`https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`)
                 .addFields([
                     {

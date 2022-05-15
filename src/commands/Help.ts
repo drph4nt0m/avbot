@@ -1,5 +1,5 @@
 import { ICategory, NotBot } from "@discordx/utilities";
-import { CommandInteraction, MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction } from "discord.js";
+import { CommandInteraction, Formatters, MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction } from "discord.js";
 import { Client, DApplicationCommand, Discord, Guard, MetadataStorage, SelectMenuComponent, Slash } from "discordx";
 
 import { GuildOnly } from "../guards/GuildOnly.js";
@@ -34,21 +34,19 @@ export class Help {
         const embed = this.displayCategory(client);
         const selectMenu = this.getSelectDropdown();
         return InteractionUtils.replyOrFollowUp(interaction, {
-            content: "Select a category",
             embeds: [embed],
             components: [selectMenu]
         });
     }
 
     private displayCategory(client: Client, category = "categories", pageNumber = 0): MessageEmbed {
-        const botImage = client.user.displayAvatarURL({ dynamic: true });
         if (category === "categories") {
             const embed = new MessageEmbed()
                 .setTitle(`${client.user.username} commands`)
+                .setColor("#0099ff")
                 .setDescription(`The items shown below are all the commands supported by this bot`)
-                .setAuthor({
-                    name: `${client.user.username}`,
-                    iconURL: botImage
+                .setFooter({
+                    text: `${client.user.username}`
                 })
                 .setTimestamp();
             for (const [cat] of this._catMap) {
@@ -62,11 +60,13 @@ export class Help {
         const chunks = this.chunk(commands, 24);
         const maxPage = chunks.length;
         const resultOfPage = chunks[pageNumber];
-        const embed = new MessageEmbed();
-        embed.setFooter({
-            text: `Page ${pageNumber + 1} of ${maxPage}`
-        });
-        embed.addField("Commands:", "\u200b");
+        const embed = new MessageEmbed()
+            .setTitle(`${category} Commands:`)
+            .setColor("#0099ff")
+            .setFooter({
+                text: `${client.user.username} • Page ${pageNumber + 1} of ${maxPage}`
+            })
+            .setTimestamp();
         if (!resultOfPage) {
             return embed;
         }
@@ -76,7 +76,7 @@ export class Help {
             if (ObjectUtil.validString(description)) {
                 fieldValue = description;
             }
-            const nameToDisplay = `/${item.name}`;
+            const nameToDisplay = Formatters.inlineCode(`/${item.name}`);
             embed.addField(nameToDisplay, fieldValue, resultOfPage.length > 5);
         }
         return embed;

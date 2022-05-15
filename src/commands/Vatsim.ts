@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -45,8 +45,11 @@ export class Vatsim {
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
+        await interaction.deferReply();
+        callSign = callSign.toUpperCase();
+
         const vatsimEmbed = new MessageEmbed()
-            .setTitle(`${callSign.toUpperCase()}`)
+            .setTitle(`VATSIM: ${Formatters.inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: VATSIM API`
@@ -55,7 +58,6 @@ export class Vatsim {
 
         try {
             let vatsimClient = (await this._vatsimManager.getClientInfo(callSign, type)) as VatsimPilot | VatsimAtc;
-            vatsimEmbed.setTitle(`VATSIM : ${callSign}`);
             vatsimEmbed.addFields(
                 {
                     name: "Call Sign",
@@ -141,12 +143,12 @@ export class Vatsim {
                         },
                         {
                             name: "Route",
-                            value: "```" + vatsimClient.flight_plan.route + "```",
+                            value: Formatters.codeBlock(vatsimClient.flight_plan.route),
                             inline: false
                         },
                         {
                             name: "Remakes",
-                            value: "```" + vatsimClient.flight_plan.remarks + "```",
+                            value: Formatters.codeBlock(vatsimClient.flight_plan.remarks),
                             inline: false
                         }
                     );
@@ -167,7 +169,7 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: "```" + (vatsimClient.text_atis?.join("\n") || "-") + "```",
+                            value: Formatters.codeBlock(vatsimClient.text_atis?.join("\n") || "NA"),
                             inline: false
                         }
                     );

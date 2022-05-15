@@ -2,7 +2,7 @@ import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { MessageEmbed } from "discord.js";
+import { Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -22,7 +22,7 @@ export class Nats {
     public constructor(private _natsManager: NatsManager) {}
 
     @Slash("nats", {
-        description: "Gives you the latest North Atlantic Track information"
+        description: "Gives you the latest North Atlantic Tracks information"
     })
     @Guard(
         NotBot,
@@ -40,9 +40,12 @@ export class Nats {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
+
         if (ObjectUtil.validString(ident)) {
+            ident = ident.toUpperCase();
+
             const natsEmbed = new MessageEmbed()
-                .setTitle(`NAT | Track ${ident}`)
+                .setTitle(`NAT: ${Formatters.inlineCode(`Track ${ident}`)}`)
                 .setColor("#0099ff")
                 .setFooter({
                     text: client.user.username
@@ -55,7 +58,7 @@ export class Nats {
                 nat.route.nodes.forEach((node) => {
                     route += `${node.ident} `;
                 });
-                natsEmbed.addField("Route", "```" + route + "```");
+                natsEmbed.addField("Route", Formatters.codeBlock(route));
                 if (nat.route.eastLevels.length > 0) {
                     natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
                 }
@@ -63,8 +66,8 @@ export class Nats {
                     natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
                 }
 
-                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (<t:${dayjs(nat.validFrom).utc().unix()}:R>)`;
-                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (<t:${dayjs(nat.validTo).utc().unix()}:R>)`;
+                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validFrom).unix(), "R")})`;
+                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validTo).unix(), "R")})`;
                 natsEmbed.addField("Validity", `${validFrom} to ${validTo}`);
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
@@ -75,7 +78,7 @@ export class Nats {
             });
         }
         const natsEmbed = new MessageEmbed()
-            .setTitle("NATS")
+            .setTitle("NATs")
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
@@ -85,7 +88,7 @@ export class Nats {
             const nats = await this._natsManager.getAllTracks();
 
             nats.forEach((track) => {
-                natsEmbed.addField(`${track.ident}`, `${track.route.nodes[0].ident}-${track.route.nodes[track.route.nodes.length - 1].ident}`);
+                natsEmbed.addField(`Track ${track.ident}`, `${track.route.nodes[0].ident} - ${track.route.nodes[track.route.nodes.length - 1].ident}`);
             });
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);

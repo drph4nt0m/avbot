@@ -1,6 +1,6 @@
 import { Category } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
 import { injectable } from "tsyringe";
@@ -38,8 +38,10 @@ export class IcaoStation {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
+        icao = icao.toUpperCase();
+
         const stationEmbed = new MessageEmbed()
-            .setTitle(`Station info for ${icao.toUpperCase()}`)
+            .setTitle(`Station: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -49,13 +51,13 @@ export class IcaoStation {
             const station = await this._avwxManager.getStation(icao);
             stationEmbed.addFields(
                 {
-                    name: "ICAO",
-                    value: station.icao || "Unknown",
+                    name: "IATA",
+                    value: station.iata || "Unknown",
                     inline: true
                 },
                 {
-                    name: "IATA",
-                    value: station.iata || "Unknown",
+                    name: "GPS",
+                    value: station.gps || "Unknown",
                     inline: true
                 },
                 {

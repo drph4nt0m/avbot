@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -42,8 +42,10 @@ export class Taf {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
+        icao = icao.toUpperCase();
+
         const tafEmbed = new MessageEmbed()
-            .setTitle(`TAF for ${icao.toUpperCase()}`)
+            .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -53,16 +55,9 @@ export class Taf {
             const { raw, readable } = await this._avwxManager.getTaf(icao);
 
             if (rawOnlyData) {
-                const rawTafEmbed = new MessageEmbed()
-                    .setTitle(`Raw TAF for ${icao.toUpperCase()}`)
-                    .setColor("#0099ff")
-                    .setFooter({
-                        text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-                    })
-                    .setDescription("```" + raw + "```")
-                    .setTimestamp();
+                tafEmbed.setDescription(Formatters.codeBlock(raw));
                 return InteractionUtils.replyOrFollowUp(interaction, {
-                    embeds: [rawTafEmbed]
+                    embeds: [tafEmbed]
                 });
             }
 
@@ -85,7 +80,7 @@ export class Taf {
 
             const tafEmbeds: MessageEmbed[] = [];
             let tempEmbed = new MessageEmbed()
-                .setTitle(`TAF for ${icao.toUpperCase()}`)
+                .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
                 .setColor("#0099ff")
                 .addField("Raw Report", "```" + raw + "```")
                 .setFooter({
@@ -103,7 +98,7 @@ export class Taf {
                 buffer += currentLine;
                 if (buffer.length > 600) {
                     tempEmbed = new MessageEmbed()
-                        .setTitle(`TAF for ${icao.toUpperCase()}`)
+                        .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
                         .setColor("#0099ff")
                         .addField(`Readable Report`, buffer)
                         .setFooter({
@@ -138,6 +133,7 @@ export class Taf {
             return;
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
+            tafEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
         }
 
         await InteractionUtils.replyOrFollowUp(interaction, {

@@ -1,4 +1,4 @@
-import { TextChannel } from "discord.js";
+import { Formatters, TextChannel } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, DIService, On } from "discordx";
 import { container, injectable } from "tsyringe";
@@ -64,7 +64,10 @@ export class OnReady {
         } catch (e) {
             if (interaction.isApplicationCommand() || interaction.isMessageComponent()) {
                 logger.error(`[${client.shard.ids}] ${e}`, interaction);
-                return InteractionUtils.replyOrFollowUp(interaction, "Oops, something went wrong. The best way to report this problem is to join our support server at <https://go.av8.dev/support>.");
+                return InteractionUtils.replyOrFollowUp(
+                    interaction,
+                    `Oops, something went wrong. The best way to report this problem is to join our support server at ${Formatters.hideLinkEmbed("https://go.av8.dev/support")}.`
+                );
             }
         }
     }

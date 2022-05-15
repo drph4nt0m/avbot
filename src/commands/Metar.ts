@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -41,17 +41,21 @@ export class Metar {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
-        const title = rawOnlyData ? `Raw METAR for ${icao.toUpperCase()}` : `METAR for ${icao.toUpperCase()}`;
-        const metarEmbed = new MessageEmbed().setTitle(title).setColor("#0099ff").setTimestamp();
+        icao = icao.toUpperCase();
+
+        const metarEmbed = new MessageEmbed()
+            .setTitle(`METAR: ${Formatters.inlineCode(icao)}`)
+            .setColor("#0099ff")
+            .setTimestamp();
         try {
             const { raw, readable } = await this._avwxManager.getMetar(icao);
             if (rawOnlyData) {
-                metarEmbed.setDescription("```" + raw + "```");
+                metarEmbed.setDescription(Formatters.codeBlock(raw));
             } else {
                 metarEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: "```" + raw + "```"
+                        value: Formatters.codeBlock(raw)
                     },
                     {
                         name: "Readable Report",

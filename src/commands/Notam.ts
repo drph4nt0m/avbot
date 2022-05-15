@@ -44,12 +44,13 @@ export class Notams {
     ): Promise<void> {
         await interaction.deferReply();
         icao = icao.toUpperCase();
+
         try {
             const notams = await this._av8Manager.getNotams(icao, upcoming);
             const notamEmbeds: MessageEmbed[] = [];
             for (const notam of notams) {
                 const notamEmbed = new MessageEmbed()
-                    .setTitle(`NOTAM ${Formatters.inlineCode(notam.id)} for ${icao}`)
+                    .setTitle(`NOTAM: ${Formatters.inlineCode(notam.id)}`)
                     .setColor("#0099ff")
                     .setFooter({
                         text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
@@ -69,13 +70,14 @@ export class Notams {
                     type: PaginationType.SelectMenu,
                     placeholder: "Select NOTAM",
                     pageText: notams.map((notam) => this.getLabel(notam)),
-                    showStartEnd: false
+                    showStartEnd: false,
+                    dispose: true
                 }
             ).send();
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
             const notamEmbed = new MessageEmbed()
-                .setTitle(`NOTAM for ${icao}`)
+                .setTitle(`NOTAM: ${Formatters.inlineCode(icao)}`)
                 .setColor("#ff0000")
                 .setFooter({
                     text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`

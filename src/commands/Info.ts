@@ -21,8 +21,8 @@ export class Info {
     )
     public info(interaction: CommandInteraction, client: Client): Promise<void> {
         const infoEmbed = new MessageEmbed()
-            .setTitle("AvBot")
-            .setColor("#1a8fe3")
+            .setTitle(client.user.username)
+            .setColor("#0099ff")
             // TODO: Change the thumbnail url after new site is deployed
             .setThumbnail("https://bot.av8.dev/assets/logo.png")
             .setFooter({

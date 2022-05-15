@@ -1,7 +1,7 @@
 import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
 import { Category, NotBot } from "@discordx/utilities";
 import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
-import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
+import { ButtonInteraction, Formatters, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
 import tmp from "tmp";
@@ -45,15 +45,18 @@ export class Atis {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
+        icao = icao.toUpperCase();
+
         const atisEmbed = new MessageEmbed()
-            .setTitle(`ATIS for ${icao.toUpperCase()}`)
+            .setTitle(`ATIS: ${Formatters.inlineCode(icao)}`)
+            .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
             })
             .setTimestamp();
         try {
             const { speech } = await this._avwxManager.getMetar(icao);
-            atisEmbed.setDescription(speech);
+            atisEmbed.setDescription(Formatters.codeBlock(speech));
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
             atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
@@ -87,9 +90,10 @@ export class Atis {
         client: Client
     ): Promise<void> {
         await interaction.deferReply();
+        icao = icao.toUpperCase();
 
         const atisEmbed = new MessageEmbed()
-            .setTitle(`ATIS for ${icao.toUpperCase()}`)
+            .setTitle(`ATIS: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -104,7 +108,7 @@ export class Atis {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
         if (!atisFound) {
-            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, no ATIS available at the moment for ${icao.toUpperCase()}`);
+            atisEmbed.setColor("#ff0000").setDescription(`${interaction.member}, no ATIS available at the moment for ${icao}`);
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [atisEmbed]
             });
@@ -145,7 +149,9 @@ export class Atis {
         });
 
         connection.on(VoiceConnectionStatus.Destroyed, async () => {
-            await interaction.deleteReply();
+            await interaction.editReply({
+                components: []
+            });
             this._audioPlayers.delete(guildId);
         });
 
@@ -182,7 +188,7 @@ export class Atis {
 
     private async saveSpeechToFile(icao: string, embed: MessageEmbed): Promise<Record<string, any>> {
         const { speech } = await this._avwxManager.getMetar(icao);
-        embed.setDescription(speech);
+        embed.setDescription(Formatters.codeBlock(speech));
         if (this._atisMap.has(icao)) {
             const storedSpeech = this._atisMap.get(icao);
             if (storedSpeech.has(speech)) {
