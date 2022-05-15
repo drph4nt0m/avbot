@@ -12,7 +12,7 @@ export class Help {
     private readonly _catMap: Map<string, CatCommand[]> = new Map();
 
     public constructor() {
-        const commands: CatCommand[] = MetadataStorage.instance.applicationCommands as CatCommand[];
+        const commands: CatCommand[] = MetadataStorage.instance.applicationCommandSlashesFlat as CatCommand[];
         for (const command of commands) {
             const { category } = command;
             if (!ObjectUtil.validString(category)) {
