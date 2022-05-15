@@ -15,7 +15,13 @@
     "lint": "eslint . --ext .ts --max-warnings 0",
     "lint-fix": "eslint . --ext .ts --fix",
     "prettier": "prettier . -w",
-    "start_js": "npm run build & node build/main.js"
+    "start_js": "npm run build & node build/main.js",
+    "restart_p2": "pm2 restart ../ecosystem/ecosystem.config.js --only avbot",
+    "restart_p2_debug": "pm2 restart ../ecosystem/ecosystem.config.js --only avbot -- -debug",
+    "start_p2": "pm2 start ../ecosystem/ecosystem.config.js --only avbot",
+    "start_p2_debug": "pm2 start ../ecosystem/ecosystem.config.js --only avbot -- -debug",
+    "build_and_start": "npm run build & npm run restart_p2",
+    "build_and_start_debug": "npm run build & npm run restart_p2_debug"
   },
   "repository": {
     "type": "git",
