@@ -25,7 +25,7 @@ export class Taf {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async taf(
+    public async taf(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give TAF for?",

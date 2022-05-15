@@ -30,7 +30,7 @@ export class Nats {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async nats(
+    public async nats(
         @SlashOption("ident", {
             description: "Which track would you like to get information about?",
             required: false

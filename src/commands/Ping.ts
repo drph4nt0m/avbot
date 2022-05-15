@@ -9,7 +9,7 @@ export class Ping {
     @Slash("ping", {
         description: "Checks the AvBot's ping to the Discord server"
     })
-    private async ping(interaction: CommandInteraction, client: Client): Promise<void> {
+    public async ping(interaction: CommandInteraction, client: Client): Promise<void> {
         const msg = (await interaction.reply({ content: "Pinging...", fetchReply: true })) as Message;
         const content = oneLine`
           ${msg.inGuild() ? `${interaction.member},` : ""}

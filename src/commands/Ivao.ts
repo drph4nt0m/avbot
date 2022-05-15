@@ -28,7 +28,7 @@ export class Ivao {
         }),
         GuildOnly
     )
-    private async ivao(
+    public async ivao(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",

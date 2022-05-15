@@ -26,7 +26,7 @@ export class Notams {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async notam(
+    public async notam(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give NOTAMs for?",

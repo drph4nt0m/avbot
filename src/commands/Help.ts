@@ -30,7 +30,7 @@ export class Help {
         description: "Get the description of all commands"
     })
     @Guard(NotBot, GuildOnly)
-    private help(interaction: CommandInteraction, client: Client): Promise<void> {
+    public help(interaction: CommandInteraction, client: Client): Promise<void> {
         const embed = this.displayCategory(client);
         const selectMenu = this.getSelectDropdown();
         return InteractionUtils.replyOrFollowUp(interaction, {

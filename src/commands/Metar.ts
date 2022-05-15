@@ -24,7 +24,7 @@ export class Metar {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async metar(
+    public async metar(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give METAR for?",

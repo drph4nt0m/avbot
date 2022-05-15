@@ -33,7 +33,7 @@ export class Atis {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async atisText(
+    public async atisText(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
@@ -75,7 +75,7 @@ export class Atis {
         }),
         GuildOnly
     )
-    private async atisVoice(
+    public async atisVoice(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",

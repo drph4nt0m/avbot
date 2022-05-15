@@ -27,7 +27,7 @@ export class Vatsim {
         }),
         GuildOnly
     )
-    private async vatsim(
+    public async vatsim(
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",

@@ -19,7 +19,7 @@ export class Info {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private info(interaction: CommandInteraction, client: Client): Promise<void> {
+    public info(interaction: CommandInteraction, client: Client): Promise<void> {
         const infoEmbed = new MessageEmbed()
             .setTitle("AvBot")
             .setColor("#1a8fe3")

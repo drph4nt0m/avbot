@@ -36,12 +36,12 @@ export class Flight {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async flight(
+    public async flight(
         @SlashOption("call-sign", {
             description: "What call sign would you like the bot to give information for?",
             required: true
         })
-        callSign: string,
+            callSign: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {

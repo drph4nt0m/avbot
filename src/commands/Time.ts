@@ -33,7 +33,7 @@ export class Time {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
+    public async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
         await interaction.deferReply();
         const localEmbed = new MessageEmbed()
             .setTitle(`Current zulu time`)
@@ -57,7 +57,7 @@ export class Time {
             textChannel: ["EMBED_LINKS"]
         })
     )
-    private async time(
+    public async time(
         @SlashChoice({ name: "Local to Zulu", value: "Zulu" })
         @SlashChoice({ name: "Zulu to Local", value: "Local" })
         @SlashOption("type", {
