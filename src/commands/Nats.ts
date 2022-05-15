@@ -12,7 +12,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather")
+@Category("Advisory")
 @injectable()
 export class Nats {
     static {

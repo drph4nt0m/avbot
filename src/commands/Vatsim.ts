@@ -12,7 +12,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("VATSIM")
+@Category("Flight Sim Network")
 @injectable()
 export class Vatsim {
     public constructor(private _vatsimManager: VatsimManager, private _airportManager: AirportManager) {}

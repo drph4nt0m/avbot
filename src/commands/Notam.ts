@@ -12,7 +12,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather")
+@Category("Advisory")
 @injectable()
 export class Notams {
     public constructor(private _av8Manager: Av8Manager) {}

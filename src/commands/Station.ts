@@ -13,7 +13,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@Category("Miscellaneous")
+@Category("IRL Aviation")
 @injectable()
 export class IcaoStation {
     public constructor(private _avwxManager: AvwxManager) {}

@@ -15,7 +15,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Miscellaneous")
+@Category("Time")
 @injectable()
 export class Time {
     static {

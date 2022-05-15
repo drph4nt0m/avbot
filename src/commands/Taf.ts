@@ -11,7 +11,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather")
+@Category("Advisory")
 @injectable()
 export class Taf {
     public constructor(private _avwxManager: AvwxManager) {}

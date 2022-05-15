@@ -13,7 +13,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@Category("IVAO")
+@Category("Flight Sim Network")
 @injectable()
 export class Ivao {
     public constructor(private _ivaoManager: IvaoManager, private _airportManager: AirportManager) {}

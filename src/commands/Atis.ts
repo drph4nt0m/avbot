@@ -15,7 +15,7 @@ import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
-@Category("Weather")
+@Category("Advisory")
 @injectable()
 export class Atis {
     private readonly _audioPlayers: Map<string, AudioPlayer> = new Map();
