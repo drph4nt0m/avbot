@@ -11,7 +11,7 @@ export class AviationStackManager extends AbstractRequestEngine {
     private static readonly token: string;
 
     public constructor() {
-        super("http://api.aviationstack.com/v1/flights", {
+        super("https://api.aviationstack.com/v1/flights", {
             params: {
                 access_key: AviationStackManager.token
             }

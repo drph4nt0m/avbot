@@ -50,7 +50,7 @@ export class Time {
     }
 
     @Slash("time", {
-        description: "Get the zulu to local or local to zulu time conversions for an airport"
+        description: "Get the zulu to local or local to zulu time conversions for any chosen airport"
     })
     @Guard(
         RequiredBotPerms({

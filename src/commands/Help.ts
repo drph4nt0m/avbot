@@ -108,7 +108,7 @@ export class Help {
         const catToShow = interaction.values[0];
         const categoryEmbed = await this.displayCategory(client, catToShow);
         const selectMenu = await this.getSelectDropdown(catToShow);
-        interaction.update({
+        return interaction.update({
             embeds: [categoryEmbed],
             components: [selectMenu]
         });

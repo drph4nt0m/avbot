@@ -140,7 +140,7 @@ export class Taf {
             logger.error(`[${client.shard.ids}] ${error}`);
         }
 
-        InteractionUtils.replyOrFollowUp(interaction, {
+        await InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [tafEmbed]
         });
     }

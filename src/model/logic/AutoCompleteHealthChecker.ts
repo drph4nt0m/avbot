@@ -16,7 +16,7 @@ export class AutoCompleteHealthChecker {
         let result: AxiosResponse<StatusCheckResult> = null;
         try {
             result = await axios.get<StatusCheckResult>(`${autoCompleteAppUrl}/app/health`, {
-                timeout: 10
+                timeout: 1000
             });
         } catch (e) {
             this.throwError(e);
@@ -33,7 +33,7 @@ export class AutoCompleteHealthChecker {
     }
 
     private throwError(result?: AxiosResponse<StatusCheckResult>): never {
-        let errorMessage = "";
+        let errorMessage: string;
         if (result) {
             errorMessage = `Unable to communicate to data endpoint: ${axios.isAxiosError(result) ? result.code : result.status} - ${axios.isAxiosError(result) ? result.message : result.statusText}`;
         } else {

@@ -28,7 +28,7 @@ export class AirportDataManager extends AbstractRequestEngine {
             return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         } catch (error) {
             logger.error(`[x] ${error}`);
-            Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
+            return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         }
     }
 }
