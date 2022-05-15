@@ -5,7 +5,7 @@ import { singleton } from "tsyringe";
 
 import logger from "../../../utils/LoggerFactory.js";
 import { ObjectUtil } from "../../../utils/Utils.js";
-import type { MetarInfo, Station, StationInfo, TafInfo } from "../../Typeings.js";
+import type { MetarInfo, Station, TafInfo } from "../../Typeings.js";
 import { Property } from "../decorators/Property.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 
@@ -36,20 +36,6 @@ export class AvwxManager extends AbstractRequestEngine {
         } catch (error) {
             logger.error(`[x] ${error}`);
             return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
-        }
-    }
-
-    public async getStationsByCoords(latitude: string, longitude: string, location: string): Promise<StationInfo[]> {
-        try {
-            const response = await this.api.get<StationInfo[]>(`/station/near/${latitude},${longitude}?n=10`);
-
-            if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${location}`));
-            }
-            return response.data;
-        } catch (error) {
-            logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${location}`));
         }
     }
 

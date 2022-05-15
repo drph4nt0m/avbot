@@ -19,13 +19,13 @@ export class ShardController extends BaseController {
     }
 
     @Get("shardIds")
-    private shardIds(req: Request, res: Response): Response {
+    private shardIds(_req: Request, res: Response): Response {
         const shardIds = this._shardInfoService.shardIds;
         return super.ok(res, shardIds);
     }
 
     @Get("allShardInfo")
-    private async allShardInfo(req: Request, res: Response): Promise<Response> {
+    private async allShardInfo(_req: Request, res: Response): Promise<Response> {
         try {
             const allShardInfo = await this._shardInfoService.getAllShardInfo();
             return super.ok(res, allShardInfo);
