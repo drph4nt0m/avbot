@@ -76,7 +76,9 @@ export class Help {
             if (ObjectUtil.validString(description)) {
                 fieldValue = description;
             }
-            const nameToDisplay = Formatters.inlineCode(`/${item.name}`);
+
+            const name = ObjectUtil.validString(item.group) ? `/${item.group} ${item.name}` : `/${item.name}`;
+            const nameToDisplay = Formatters.inlineCode(name);
             embed.addField(nameToDisplay, fieldValue, resultOfPage.length > 5);
         }
         return embed;
