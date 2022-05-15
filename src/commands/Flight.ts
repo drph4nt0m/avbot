@@ -41,7 +41,7 @@ export class Flight {
             description: "What call sign would you like the bot to give information for?",
             required: true
         })
-            callSign: string,
+        callSign: string,
         interaction: CommandInteraction,
         client: Client
     ): Promise<void> {
