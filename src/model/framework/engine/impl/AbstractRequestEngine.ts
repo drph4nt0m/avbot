@@ -11,11 +11,9 @@ export type InterceptorOptions = {
 };
 
 export abstract class AbstractRequestEngine {
-    protected readonly api: AxiosInstance;
-
-    private readonly mongo: Mongo;
-
     public readonly baseUrl: string;
+    protected readonly api: AxiosInstance;
+    private readonly mongo: Mongo;
 
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
         this.api = this.axiosInterceptor(
