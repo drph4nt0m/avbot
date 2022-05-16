@@ -21,8 +21,8 @@
 </p>
 
 <p align="center">
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge}"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge}"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
   <a href="https://snyk.io/test/github/drph4nt0m/avbot"><img src="https://img.shields.io/snyk/vulnerabilities/github/drph4nt0m/avbot?style=flat-square" alt="Vulnerabilities"></a>
 </p>
 
