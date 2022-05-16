@@ -18,7 +18,7 @@ export function RequiredBotPerms(permissions: {
      */
     voice?: PermissionsType;
 }): GuardFunction<CommandInteraction> {
-    return async function (arg: CommandInteraction, client: Client, next: Next) {
+    return async function (arg: CommandInteraction, client: Client, next: Next): Promise<unknown> {
         const channel = arg.channel;
         if (!(channel instanceof GuildChannel) || !arg.inGuild()) {
             return next();

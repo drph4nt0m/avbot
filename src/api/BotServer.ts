@@ -39,7 +39,7 @@ export class BotServer extends Server {
 
     public start(port: number): http.Server {
         return this.app.listen(port, () => {
-            logger.info("Server listening on port: " + port);
+            logger.info(`Server listening on port: ${port}`);
         });
     }
 
