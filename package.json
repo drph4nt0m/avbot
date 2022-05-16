@@ -8,7 +8,6 @@
   "main": "build/main.js",
   "scripts": {
     "build": "tsc",
-    "build:changelog": "npx @discordx/changelog --root=src",
     "dev": "node --loader ts-node/esm/transpile-only src/main.ts",
     "serve": "node build/main.js",
     "lint": "eslint . --ext .ts --max-warnings 0",
@@ -74,11 +73,6 @@
     "prettier": "2.6.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   },
   "engines": {
     "node": ">=16.0.0",
