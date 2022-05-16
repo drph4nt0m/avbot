@@ -19,15 +19,7 @@ class Bot {
     public static async start(): Promise<void> {
         DIService.container = container;
         const clientOps = {
-            intents: [
-                Intents.FLAGS.GUILDS,
-                Intents.FLAGS.GUILD_MEMBERS,
-                Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-                Intents.FLAGS.GUILD_PRESENCES,
-                Intents.FLAGS.DIRECT_MESSAGES,
-                Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-                Intents.FLAGS.GUILD_VOICE_STATES
-            ],
+            intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES],
             silent: false
         };
         if (this.environment === "development") {
