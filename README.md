@@ -30,27 +30,25 @@
   <a href="https://discord.gg/fjNqtz6"><img src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3" alt="Discord"></a>
  </p>
 
-
-
 ## Commands
 
-| Slash         | Description                                                                                         |
-|---------------|-----------------------------------------------------------------------------------------------------|
-| `/metar` | Get the latest METAR (Meteorological Terminal Aviation Routine Weather Report) for any airport |
-| `/taf` | Get the latest TAF (Terminal Aerodrome Forecast) for any airport |
-| `/notam` | Get the active and upcoming NOTAMs (Notice to Air Missions) for any airport |
-| `/station` | Get the station information for any airport |
-| `/atis text` | Get the live ATIS (Automatic Terminal Information Service) for any airport as text |
-| `/atis voice` | Get the live ATIS (Automatic Terminal Information Service) for any airport as voice |
-| `/flight` | Get the flight information for a real life flight |
-| `/ivao` | Get the information for a call sign on the IVAO network |
-| `/vatsim` | Get the information for a call sign on the VATSIM network |
-| `/nats` | Get the information for the latest active North Atlantic Tracks |
-| `/time zulu` | Get the current zulu time |
-| `/time convert` | Get the zulu to local or local to zulu time conversions for any airport |
-| `/help` | Get the description of all commands |
-| `/info` | Provides information about AvBot, and links for adding the bot and joining the support server |
-| `/ping` | Checks the AvBot's ping to the Discord server |
+| Slash           | Description                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| `/metar`        | Get the latest METAR (Meteorological Terminal Aviation Routine Weather Report) for any airport |
+| `/taf`          | Get the latest TAF (Terminal Aerodrome Forecast) for any airport                               |
+| `/notam`        | Get the active and upcoming NOTAMs (Notice to Air Missions) for any airport                    |
+| `/station`      | Get the station information for any airport                                                    |
+| `/atis text`    | Get the live ATIS (Automatic Terminal Information Service) for any airport as text             |
+| `/atis voice`   | Get the live ATIS (Automatic Terminal Information Service) for any airport as voice            |
+| `/flight`       | Get the flight information for a real life flight                                              |
+| `/ivao`         | Get the information for a call sign on the IVAO network                                        |
+| `/vatsim`       | Get the information for a call sign on the VATSIM network                                      |
+| `/nats`         | Get the information for the latest active North Atlantic Tracks                                |
+| `/time zulu`    | Get the current zulu time                                                                      |
+| `/time convert` | Get the zulu to local or local to zulu time conversions for any airport                        |
+| `/help`         | Get the description of all commands                                                            |
+| `/info`         | Provides information about AvBot, and links for adding the bot and joining the support server  |
+| `/ping`         | Checks the AvBot's ping to the Discord server                                                  |
 
 ## Contributing
 
