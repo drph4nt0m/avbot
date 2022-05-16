@@ -42,10 +42,21 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "VictoriqueMoe",
+      "name": "Victorique",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27996712?v=4",
+      "profile": "https://victorique.moe",
+      "contributions": [
+        "infra",
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "avbot-v3",
+  "projectName": "avbot",
   "projectOwner": "drph4nt0m",
   "repoType": "github",
   "repoHost": "https://github.com",
