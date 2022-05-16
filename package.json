@@ -11,7 +11,6 @@
     "build:changelog": "npx @discordx/changelog --root=src",
     "dev": "node --loader ts-node/esm/transpile-only src/main.ts",
     "serve": "node build/main.js",
-    "start": "nodemon --exec node --loader ts-node/esm/transpile-only src/main.ts",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "lint-fix": "eslint . --ext .ts --fix",
     "prettier": "prettier . -w",
