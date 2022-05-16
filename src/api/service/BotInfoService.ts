@@ -33,7 +33,7 @@ export class BotInfoService {
                 if (parsed < 1) {
                     throw new Error(`top server query param must be more than 0`);
                 }
-                retObj["top"] = this._shardInfoService.getDiscordServerInfo(guildShards);
+                retObj["top"] = this._shardInfoService.getDiscordServerInfo(guildShards, parsed);
             }
         }
         return retObj;
