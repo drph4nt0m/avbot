@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type { AutocompleteInteraction, BaseCommandInteraction, MessageComponentInteraction, MessageOptions } from "discord.js";
+import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction } from "discord.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
@@ -118,7 +118,7 @@ export class ObjectUtil {
 }
 
 export class InteractionUtils {
-    public static async replyOrFollowUp(interaction: BaseCommandInteraction | MessageComponentInteraction, replyOptions: (MessageOptions & { ephemeral?: boolean }) | string): Promise<void> {
+    public static async replyOrFollowUp(interaction: BaseCommandInteraction | MessageComponentInteraction, replyOptions: (InteractionReplyOptions & { ephemeral?: boolean }) | string): Promise<void> {
         // if interaction is already replied
         if (interaction.replied) {
             await interaction.followUp(replyOptions);
