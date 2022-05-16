@@ -8,17 +8,11 @@ export type envTypes = {
     AVIATION_STACK_TOKEN: string;
     AVWX_TOKEN: string;
     AV8_TOKEN: string;
-    BOT_OWNERS: string;
     BOT_RESTART_CHANNEL: string;
     DATADOG_API_KEY: string;
-    DBL_TOKEN: string;
-    DISCORD_APPLICATION_ID: string;
-    DISCORD_PUBLIC_KEY: string;
     DISCORD_TOKEN: string;
     GEONAMES_USERNAME: string;
-    LOG_WEBHOOK: string;
     MONGODB_URI: string;
-    NEW_GUILDS_CHANNEL: string;
     NODE_ENV: string;
     API_SERVER_PORT: number;
     API_ADMIN_TOKEN: string;
