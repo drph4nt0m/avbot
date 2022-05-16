@@ -78,14 +78,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://dr.ph4nt0m.me"><img src="https://avatars0.githubusercontent.com/u/22918499?v=4" width="100px;" alt=""/><br /><sub><b>Rahul Singh</b></sub></a><br /><a href="#infra-drph4nt0m" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/drph4nt0m/avbot-v3/commits?author=drph4nt0m" title="Code">💻</a> <a href="https://github.com/drph4nt0m/avbot-v3/commits?author=drph4nt0m" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://xkcd.com/1597/"><img src="https://avatars2.githubusercontent.com/u/44368997?v=4" width="100px;" alt=""/><br /><sub><b>Joshua T.</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot-v3/commits?author=radiantly" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/Fedelaus"><img src="https://avatars2.githubusercontent.com/u/43784056?v=4" width="100px;" alt=""/><br /><sub><b>Nathan Dawson</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot-v3/commits?author=Fedelaus" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ransbachm"><img src="https://avatars0.githubusercontent.com/u/25692733?v=4" width="100px;" alt=""/><br /><sub><b>ransbachm</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot-v3/commits?author=ransbachm" title="Code">💻</a></td>
+    <td align="center"><a href="http://dr.ph4nt0m.me"><img src="https://avatars0.githubusercontent.com/u/22918499?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rahul Singh</b></sub></a><br /><a href="#infra-drph4nt0m" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/drph4nt0m/avbot/commits?author=drph4nt0m" title="Code">💻</a> <a href="https://github.com/drph4nt0m/avbot/commits?author=drph4nt0m" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://xkcd.com/1597/"><img src="https://avatars2.githubusercontent.com/u/44368997?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua T.</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=radiantly" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Fedelaus"><img src="https://avatars2.githubusercontent.com/u/43784056?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nathan Dawson</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=Fedelaus" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ransbachm"><img src="https://avatars0.githubusercontent.com/u/25692733?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ransbachm</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=ransbachm" title="Code">💻</a></td>
+    <td align="center"><a href="https://victorique.moe"><img src="https://avatars.githubusercontent.com/u/27996712?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Victorique</b></sub></a><br /><a href="#infra-VictoriqueMoe" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/drph4nt0m/avbot/commits?author=VictoriqueMoe" title="Code">💻</a> <a href="#maintenance-VictoriqueMoe" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
