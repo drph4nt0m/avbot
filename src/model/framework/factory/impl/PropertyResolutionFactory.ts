@@ -1,5 +1,4 @@
-import Immutable from "immutable";
-import { container, registry, singleton } from "tsyringe";
+import { injectAll, registry, singleton } from "tsyringe";
 
 import { Beans } from "../../DI/Beans.js";
 import { EnvPropertyResolutionEngine } from "../../engine/impl/EnvPropertyResolutionEngine.js";
@@ -14,7 +13,7 @@ import { AbstractFactory } from "../AbstractFactory.js";
 ])
 @singleton()
 export class PropertyResolutionFactory extends AbstractFactory<IPropertyResolutionEngine> {
-    protected populateEngines(): Immutable.Set<IPropertyResolutionEngine> {
-        return Immutable.Set(container.resolveAll(Beans.IPropertyResolutionEngine));
+    public constructor(@injectAll(Beans.IPropertyResolutionEngine) beans: IPropertyResolutionEngine[]) {
+        super(beans);
     }
 }
