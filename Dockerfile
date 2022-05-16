@@ -1,22 +1,36 @@
-FROM node:15.13.0
+## build runner
+FROM node:lts-alpine as build-runner
 
-# Create a directory where our app will be placed
-RUN mkdir -p /avbot
+# Set temp directory
+WORKDIR /tmp/app
 
-# Change directory so that our commands run inside this new directory
-WORKDIR /avbot
+# Move package.json
+COPY package.json .
 
-# Copy package(-lock).json
-COPY package*.json /avbot/
+# Install dependencies
+RUN npm install
 
-# Install npm dependencies
-RUN npm install --quiet
+# Move source files
+COPY src ./src
+COPY tsconfig.json   .
 
-# Copy over AvBot code
-COPY . /avbot/
+# Build project
+RUN npm run build
 
-# Expose PORT 80 for the express server
-EXPOSE 80
+## producation runner
+FROM node:lts-alpine as prod-runner
 
-# Start
-ENTRYPOINT npm run start
+# Set work directory
+WORKDIR /app
+
+# Copy package.json from build-runner
+COPY --from=build-runner /tmp/app/package.json /app/package.json
+
+# Install dependencies
+RUN npm install --only=production
+
+# Move build files
+COPY --from=build-runner /tmp/app/build /app/build
+
+# Start bot
+CMD [ "node", "build/main.js" ]
