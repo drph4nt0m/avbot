@@ -1,4 +1,4 @@
-import Immutable from "immutable";
+import type Immutable from "immutable";
 
 import type { IDiFactory } from "./IDiFactory.js";
 
@@ -12,7 +12,7 @@ export abstract class AbstractFactory<T> implements IDiFactory<T> {
     }
 
     public get engines(): Immutable.Set<T> {
-        return Immutable.Set(this._engines);
+        return this._engines;
     }
 
     protected abstract populateEngines(): Immutable.Set<T>;

@@ -4,10 +4,12 @@ import type { Client, Next } from "discordx";
 import { container } from "tsyringe";
 
 import { Mongo } from "../model/db/Mongo.js";
+import { PropertyResolutionManager } from "../model/framework/manager/PropertyResolutionManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 const mongo = container.resolve(Mongo);
+const propertyResolutionManager = container.resolve(PropertyResolutionManager);
 
 /**
  * Guard that will only pass when the guild is a premium guild
@@ -23,11 +25,12 @@ export async function PremiumGuild(arg: CommandInteraction, client: Client, next
     if (!isPremium) {
         logger.error(`[${client.shard.ids}] ${guildId} tried using ${arg.commandName} command`);
         try {
+            const inviteUrl = propertyResolutionManager.getProperty("SUPPORT_SERVER_INVITE");
             const premiumEmbed = new MessageEmbed()
                 .setTimestamp()
                 .setColor("#00ff00")
                 .setDescription(
-                    `${member}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${process.env.SUPPORT_SERVER_INVITE}) and contact the developer.`
+                    `${member}, this command is only available for premium servers. If you want to join the premium program, join [AvBot Support Server](${inviteUrl}) and contact the developer.`
                 )
                 .setFooter({
                     text: `${client.user.username} • @dr_ph4nt0m#8402`
