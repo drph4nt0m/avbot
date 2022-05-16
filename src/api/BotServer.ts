@@ -22,13 +22,11 @@ export class BotServer extends Server {
 
     public constructor() {
         super();
-        if (this.env === "development") {
-            this.app.use(
-                cors({
-                    origin: "*"
-                })
-            );
-        }
+        this.app.use(
+            cors({
+                origin: this.env === "development" ? "*" : /\.av8\.dev$/
+            })
+        );
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     }
