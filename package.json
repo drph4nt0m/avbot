@@ -1,7 +1,7 @@
 {
     "name": "avbot",
     "version": "4.0.0",
-    "description": "AvBot v4",
+    "description": "AvBot",
     "author": "Rahul Singh <hey.singh@protonmail.com>",
     "private": true,
     "type": "module",
@@ -23,12 +23,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/drph4nt0m/avbot-v3.git"
+        "url": "git+https://github.com/drph4nt0m/avbot.git"
     },
     "bugs": {
-        "url": "https://github.com/drph4nt0m/avbot-v3/issues"
+        "url": "https://github.com/drph4nt0m/avbot/issues"
     },
-    "homepage": "https://github.com/drph4nt0m/avbot-v3#readme",
+    "homepage": "https://github.com/drph4nt0m/avbot#readme",
     "dependencies": {
         "@discordjs/opus": "^0.7.0",
         "@discordjs/voice": "^0.9.0",
