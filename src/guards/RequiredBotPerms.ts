@@ -24,6 +24,11 @@ export function RequiredBotPerms(permissions: {
             return next();
         }
         const guild = arg.guild;
+        if (channel.isText()) {
+            if (!channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                return;
+            }
+        }
         const perms = typeof permissions.textChannel === "function" ? await permissions.textChannel(arg) : permissions.textChannel;
         if (!channel.permissionsFor(guild.me).has(perms)) {
             return InteractionUtils.replyOrFollowUp(

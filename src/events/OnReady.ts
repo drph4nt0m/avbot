@@ -64,6 +64,10 @@ export class OnReady {
         } catch (e) {
             if (interaction.isApplicationCommand() || interaction.isMessageComponent()) {
                 logger.error(`[${client.shard.ids}] ${e}`, interaction);
+                const channel = interaction.channel;
+                if (!channel.isText() || !channel.permissionsFor(interaction.guild.me).has("SEND_MESSAGES")) {
+                    return;
+                }
                 return InteractionUtils.replyOrFollowUp(
                     interaction,
                     `Oops, something went wrong. The best way to report this problem is to join our support server at ${Formatters.hideLinkEmbed("https://go.av8.dev/support")}.`
