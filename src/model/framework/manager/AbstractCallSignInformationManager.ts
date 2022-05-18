@@ -26,6 +26,9 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
                     callSign
                 }
             });
+            if (result.status !== 200) {
+                throw new Error(`call to /getClientInfo failed with ${result.status}`);
+            }
             return result.data;
         } catch (error) {
             logger.error(`[x] ${error}`);
@@ -42,6 +45,9 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
                 query
             }
         });
+        if (result.status !== 200) {
+            return [];
+        }
         return result.data;
     }
 }

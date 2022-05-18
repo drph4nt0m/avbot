@@ -12,7 +12,11 @@ export class OpenSkyManager extends AbstractRequestEngine {
 
     public async getFlightInfo(callsign: string): Promise<FlightInfo> {
         try {
-            const { data } = await this.api.get(null);
+            const result = await this.api.get(null);
+            if (result.status !== 200) {
+                throw new Error(`call to /api/states/all failed with ${result.status}`);
+            }
+            const data = result.data;
             const allAircraft = [].concat(data.states);
             for (const aircraft of allAircraft) {
                 if (aircraft[1] && aircraft[1].trim() === callsign) {

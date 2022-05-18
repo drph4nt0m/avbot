@@ -18,6 +18,8 @@ export abstract class AbstractRequestEngine {
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
         this.api = this.axiosInterceptor(
             axios.create({
+                // only treat 5xx as errors
+                validateStatus: (status) => !(status >= 500 && status < 600),
                 baseURL,
                 timeout: 10000,
                 ...opts
