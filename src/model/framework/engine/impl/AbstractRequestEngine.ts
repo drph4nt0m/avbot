@@ -17,11 +17,11 @@ export abstract class AbstractRequestEngine {
 
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
         this.api = this.axiosInterceptor(
-          axios.create({
-              ...AbstractRequestEngine.baseOptions,
-              baseURL,
-              ...opts
-          })
+            axios.create({
+                ...AbstractRequestEngine.baseOptions,
+                baseURL,
+                ...opts
+            })
         );
         this.baseUrl = baseURL;
         this.mongo = container.resolve(Mongo);
@@ -31,7 +31,7 @@ export abstract class AbstractRequestEngine {
         return {
             timeout: 10000,
             // only treat 5xx as errors
-            validateStatus: (status) => !(status >= 500 && status < 600)
+            validateStatus: (status): boolean => !(status >= 500 && status < 600)
         };
     }
 
