@@ -9,7 +9,6 @@ export type envTypes = {
     AVWX_TOKEN: string;
     AV8_TOKEN: string;
     BOT_RESTART_CHANNEL: string;
-    DATADOG_API_KEY: string;
     DISCORD_TOKEN: string;
     GEONAMES_USERNAME: string;
     MONGODB_URI: string;
