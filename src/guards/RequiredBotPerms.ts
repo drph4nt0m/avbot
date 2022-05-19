@@ -3,6 +3,7 @@ import type { CommandInteraction } from "discord.js";
 import { Formatters, GuildChannel, GuildMember, MessageEmbed } from "discord.js";
 import type { Client, GuardFunction, Next } from "discordx";
 
+import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
 
 /**
@@ -26,6 +27,7 @@ export function RequiredBotPerms(permissions: {
         const guild = arg.guild;
         if (channel.isText()) {
             if (!channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                logger.error(`[${client.shard.ids}] cannot send guard warning message to this channel`, arg);
                 return;
             }
         }
