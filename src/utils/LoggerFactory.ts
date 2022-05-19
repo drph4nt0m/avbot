@@ -6,9 +6,6 @@ import { Property } from "../model/framework/decorators/Property.js";
 import type { NODE_ENV } from "../model/Typeings.js";
 
 class LoggerFactory {
-    @Property("DATADOG_API_KEY", false)
-    private _apiKey: string = null;
-
     @Property("NODE_ENV")
     private _environment: NODE_ENV;
 
@@ -16,20 +13,6 @@ class LoggerFactory {
 
     public constructor() {
         const { combine, splat, timestamp, printf } = format;
-        const transportsArray: Transport[] = [
-            new transports.Console(),
-            new transports.File({
-                filename: `${process.cwd()}/combined.log`
-            })
-        ];
-        if (this._apiKey) {
-            const httpTransportOptions = {
-                host: "http-intake.logs.datadoghq.com",
-                path: `/v1/input/${this._apiKey}?ddsource=nodejs&service=avbot_${this._environment}`,
-                ssl: true
-            };
-            transportsArray.push(new transports.Http(httpTransportOptions));
-        }
 
         const myFormat = printf(({ level: l, message: m, timestamp: t, ...metadata }) => {
             let msg = `⚡ ${t} [${l}] : ${m} `;
@@ -38,8 +21,20 @@ class LoggerFactory {
             }
             return msg;
         });
+
+        const transportsArray: Transport[] = [
+            new transports.Console({
+                level: "debug",
+                format: combine(format.colorize(), splat(), timestamp(), myFormat)
+            }),
+            new transports.File({
+                level: "info",
+                format: format.combine(format.timestamp(), format.json()),
+                filename: `${process.cwd()}/combined.log`
+            })
+        ];
+
         this._logger = createLogger({
-            format: combine(format.colorize(), splat(), timestamp(), myFormat),
             level: "debug",
             transports: transportsArray
         });
