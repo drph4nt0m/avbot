@@ -31,7 +31,7 @@ export class Flight {
     @Guard(
         GuildOnly,
         PremiumGuild,
-        RateLimit(TIME_UNIT.seconds, 120, `Your command is being rate limited! Try again after 2 minutes.`),
+        RateLimit(TIME_UNIT.seconds, 90, `Your command is being rate limited! Try again after {until}.`),
         RequiredBotPerms({
             textChannel: ["EMBED_LINKS"]
         })
