@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosRequestHeaders } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import axios from "axios";
 import { container } from "tsyringe";
 
@@ -18,13 +18,21 @@ export abstract class AbstractRequestEngine {
     protected constructor(baseURL: string, opts?: InterceptorOptions) {
         this.api = this.axiosInterceptor(
             axios.create({
+                ...AbstractRequestEngine.baseOptions,
                 baseURL,
-                timeout: 10000,
                 ...opts
             })
         );
         this.baseUrl = baseURL;
         this.mongo = container.resolve(Mongo);
+    }
+
+    public static get baseOptions(): AxiosRequestConfig {
+        return {
+            timeout: 10000,
+            // only treat 5xx as errors
+            validateStatus: (status): boolean => !(status >= 500 && status < 600)
+        };
     }
 
     private axiosInterceptor(axiosInstance: AxiosInstance): AxiosInstance {

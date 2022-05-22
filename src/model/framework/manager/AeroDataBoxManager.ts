@@ -24,7 +24,11 @@ export class AeroDataBoxManager extends AbstractRequestEngine {
             return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));
         }
         try {
-            return (await this.api.get(`/icao24/${icao24}`)).data;
+            const result = await this.api.get(`/icao24/${icao24}`);
+            if (result.status !== 200) {
+                throw new Error(`call to /icao24 failed with ${result.status}`);
+            }
+            return result.data;
         } catch (error) {
             logger.error(`[x] ${error}`);
             return Promise.reject(new Error(`no aircraft available at the moment with icao24 ${icao24}`));

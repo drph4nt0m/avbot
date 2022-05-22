@@ -42,7 +42,6 @@ export class Metar {
     ): Promise<void> {
         await interaction.deferReply();
         icao = icao.toUpperCase();
-
         const metarEmbed = new MessageEmbed()
             .setTitle(`METAR: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")

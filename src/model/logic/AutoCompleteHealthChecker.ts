@@ -5,6 +5,7 @@ import { singleton } from "tsyringe";
 import METHOD_EXECUTOR_TIME_UNIT from "../../enums/METHOD_EXECUTOR_TIME_UNIT.js";
 import logger from "../../utils/LoggerFactory.js";
 import { RunEvery } from "../framework/decorators/RunEvery.js";
+import { AbstractRequestEngine } from "../framework/engine/impl/AbstractRequestEngine.js";
 import { autoCompleteAppUrl } from "../framework/ISearchBase.js";
 
 export type StatusCheckResult = { status: string };
@@ -16,6 +17,7 @@ export class AutoCompleteHealthChecker {
         let result: AxiosResponse<StatusCheckResult> = null;
         try {
             result = await axios.get<StatusCheckResult>(`${autoCompleteAppUrl}/app/health`, {
+                ...AbstractRequestEngine.baseOptions,
                 timeout: 1000
             });
         } catch (e) {

@@ -3,6 +3,7 @@ import type { AutocompleteInteraction } from "discord.js";
 import { singleton } from "tsyringe";
 
 import type { IcaoCode } from "../../Typeings.js";
+import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 import type { ISearchBase } from "../ISearchBase.js";
 import { autoCompleteBaseUrl } from "../ISearchBase.js";
 
@@ -12,7 +13,8 @@ export class AirportManager implements ISearchBase<IcaoCode> {
         const searchResult = await axios.get<IcaoCode>(`${autoCompleteBaseUrl}/airport/getAirport`, {
             params: {
                 icao
-            }
+            },
+            ...AbstractRequestEngine.baseOptions
         });
         return searchResult.data;
     }
@@ -23,7 +25,8 @@ export class AirportManager implements ISearchBase<IcaoCode> {
             params: {
                 query,
                 maxLength: 97
-            }
+            },
+            ...AbstractRequestEngine.baseOptions
         });
         return searchResult.data;
     }
