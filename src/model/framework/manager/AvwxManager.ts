@@ -1,3 +1,4 @@
+import type { AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import { Formatters } from "discord.js";
@@ -86,9 +87,8 @@ export class AvwxManager extends AbstractRequestEngine {
         try {
             const response = await this.api.get(`/metar/${icao}?options=info,translate,speech`);
 
-            if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
-            }
+            await this.validateResponse(response, `no station available at the moment near ${icao}`);
+
             const metar = response.data;
             let readable = "";
             readable += `${Formatters.bold("Station : ")} `;
@@ -149,7 +149,7 @@ export class AvwxManager extends AbstractRequestEngine {
             };
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(error);
         }
     }
 
@@ -179,5 +179,11 @@ export class AvwxManager extends AbstractRequestEngine {
             }
         }
         return station;
+    }
+
+    private validateResponse(response: AxiosResponse, defaultError: string): Promise<Error> {
+        if (response.status !== 200) {
+            return Promise.reject(new Error(response?.data?.error ?? defaultError));
+        }
     }
 }
