@@ -31,13 +31,13 @@ export class AvwxManager extends AbstractRequestEngine {
     public async getStation(icao: string): Promise<Station> {
         try {
             const response = await this.api.get<Station>(`/station/${icao}`);
-            if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
-            }
+
+            await this.validateResponse(response, `no station available at the moment near ${icao}`);
+
             return response.data;
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(error);
         }
     }
 
@@ -45,9 +45,8 @@ export class AvwxManager extends AbstractRequestEngine {
         try {
             const response = await this.api.get(`/taf/${icao}?options=info,translate,speech`);
 
-            if (response.status !== 200) {
-                return Promise.reject(new Error(`no station available at the moment near ${icao}`));
-            }
+            await this.validateResponse(response, `no station available at the moment near ${icao}`);
+
             const taf: Record<string, any> = response.data;
 
             let readable = "";
@@ -79,7 +78,7 @@ export class AvwxManager extends AbstractRequestEngine {
             };
         } catch (error) {
             logger.error(`[x] ${error}`);
-            return Promise.reject(new Error(error.response ? error.response.data.error : `no station available at the moment near ${icao}`));
+            return Promise.reject(error);
         }
     }
 
