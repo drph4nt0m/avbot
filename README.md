@@ -1,33 +1,38 @@
 <p align="center">
-  <img src="https://bot.av8.dev/img/logo.svg" alt="AvBot" width="200" height="200" />
+  <img src="https://bot.av8.dev/img/logo.svg" alt="AvBot logo" width="200" height="200" />
 </p>
 
 <h1 align="center">AvBot</h1>
 <h3 align="center"3>Aviation enthusiast's friendly neighborhood bot</h3>
 
 <p align="center">
-  <a href="https://status.av8.dev"><img src="https://betteruptime.com/status-badges/v1/monitor/ekgl.svg" alt="Bot Status"></a>
+  <a href="https://status.av8.dev"><img alt="Bot Status" title="Bot Status" src="https://betteruptime.com/status-badges/v1/monitor/ekgl.svg"></a>
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/github/package-json/v/drph4nt0m/avbot-v3/main?style=for-the-badge" alt="Version"></a>
-  <a href="https://github.com/drph4nt0m/avbot-v3/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--only-orange?style=for-the-badge" alt="License"></a>
-  <a href="./CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4?style=for-the-badge" alt="Contributor Covenant"></a>
+  <a href="#"><img alt="Version" title="Version" src="https://img.shields.io/github/package-json/v/drph4nt0m/avbot-v3/main?style=for-the-badge"></a>
+  <a href="https://github.com/drph4nt0m/avbot-v3/blob/main/LICENSE"><img alt="License" title="License" src="https://img.shields.io/badge/license-GPL--3.0--only-orange?style=for-the-badge"></a>
+  <a href="./CODE_OF_CONDUCT.md"><img alt="Contributor Covenant" title="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/drph4nt0m/avbot/issues"><img src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge" alt="Issues"></a>
-  <a href="https://github.com/drph4nt0m/avbot/pulls"><img src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge" alt="Issues"></a>
+  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img alt="CircleCI Build Status" title="CircleCI Build Status" src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge" alt="Issues"></a>
+  <a href="https://github.com/drph4nt0m/avbot/issues"><img alt="GitHub Issues" title="GitHub Issues" src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge"></a>
+  <a href="https://github.com/drph4nt0m/avbot/pulls"><img alt="GitHub Pull Requests" title="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
-  <a href="https://snyk.io/test/github/drph4nt0m/avbot"><img src="https://img.shields.io/snyk/vulnerabilities/github/drph4nt0m/avbot?style=flat-square" alt="Vulnerabilities"></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Active Issues" title="DeepSource Active Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Resolved Issues" title="DeepSource Resolved Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://snyk.io/test/github/drph4nt0m/avbot"><img alt="Snyk Vulnerabilities" title="Snyk Vulnerabilities" src="https://img.shields.io/snyk/vulnerabilities/github/drph4nt0m/avbot?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/fjNqtz6"><img src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3" alt="Discord"></a>
+  <a href="https://app.circleci.com/insights/github/drph4nt0m/avbot/workflows/build-workflow/overview?branch=main&reporting-window=last-30-days&insights-snapshot=true"><img alt="CircleCI Build Status Insights" title="CircleCI Build Status Insights" src="https://dl.circleci.com/insights-snapshot/gh/drph4nt0m/avbot/main/build-workflow/badge.svg?window=30d"></a>
+ </p>
+
+<p align="center">
+  <a href="https://discord.gg/fjNqtz6"><img alt="Discord Support Server" title="Discord Support Server" src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3"></a>
  </p>
 
 ## Commands
