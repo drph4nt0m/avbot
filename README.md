@@ -16,6 +16,7 @@
 </p>
 
 <p align="center">
+  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge" alt="Issues"></a>
   <a href="https://github.com/drph4nt0m/avbot/issues"><img src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge" alt="Issues"></a>
   <a href="https://github.com/drph4nt0m/avbot/pulls"><img src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge" alt="Issues"></a>
 </p>
