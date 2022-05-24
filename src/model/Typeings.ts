@@ -599,3 +599,17 @@ export type NotamValidity = {
     isValid: boolean;
     phrase: string;
 };
+
+export type AirportFrequency = {
+    id: string;
+    airport_ref: string;
+    airport_ident: string;
+    type: string;
+    description: string;
+    frequency_mhz: string;
+};
+
+export type AirportFrequencyResponse = {
+    length: number;
+    frequencies: AirportFrequency[];
+};

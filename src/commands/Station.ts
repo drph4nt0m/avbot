@@ -8,7 +8,7 @@ import { injectable } from "tsyringe";
 import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
-import type { Runway, Station } from "../model/Typeings.js";
+import type { AirportFrequency, Runway, Station } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
@@ -16,7 +16,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 @Category("IRL Aviation")
 @injectable()
 export class IcaoStation {
-    public constructor(private _avwxManager: AvwxManager) {}
+    public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
 
     @Slash("station", {
         description: "Gives you the station information for the chosen airport"
@@ -49,6 +49,7 @@ export class IcaoStation {
             .setTimestamp();
         try {
             const station = await this._avwxManager.getStation(icao);
+            const frequenciesData = await this._airportManager.getAirportFrequencies(icao);
             stationEmbed.addFields(
                 {
                     name: "IATA",
@@ -97,7 +98,12 @@ export class IcaoStation {
                 },
                 {
                     name: "Runways",
-                    value: station.runways ? this.getRunwaysStr(station.runways) : "Unknown",
+                    value: station.runways ? Formatters.codeBlock(this.getRunwaysStr(station.runways)) : "Unknown",
+                    inline: false
+                },
+                {
+                    name: "Frequencies",
+                    value: frequenciesData.length > 0 ? Formatters.codeBlock(this.getFrequenciesStr(frequenciesData.frequencies)) : "Unknown",
                     inline: false
                 },
                 {
@@ -120,12 +126,16 @@ export class IcaoStation {
         const stre = runways
             .map((rw) => {
                 if (rw.length_ft !== 0 && rw.width_ft !== 0) {
-                    return `${rw.ident1}-${rw.ident2} : Length - ${rw.length_ft} ft, Width - ${rw.width_ft} ft`;
+                    return `${rw.ident1}-${rw.ident2}: Length - ${rw.length_ft} ft, Width - ${rw.width_ft} ft`;
                 }
-                return `${rw.ident1}-${rw.ident2} : Length - NA, Width - NA`;
+                return `${rw.ident1}-${rw.ident2}: Length - NA, Width - NA`;
             })
             .join("\n");
         return ObjectUtil.validString(stre) ? stre : "Unknown";
+    }
+
+    private getFrequenciesStr(frequencies: AirportFrequency[]): string {
+        return frequencies.map((freq) => `${freq.description}: ${Number(freq.frequency_mhz).toFixed(3).toString()}`).join("\n");
     }
 
     private getLinks(station: Station): string {
