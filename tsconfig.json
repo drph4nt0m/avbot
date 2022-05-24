@@ -12,7 +12,7 @@
         "emitDecoratorMetadata": true,
         "noImplicitOverride": true,
         "importsNotUsedAsValues": "error",
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
     },
     "include": ["src/**/*"],
