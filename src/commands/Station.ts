@@ -137,7 +137,7 @@ export class IcaoStation {
     private getFrequenciesStr(frequencies: AirportFrequency[]): string {
         return frequencies
             .map((freq) => {
-                const description = freq.type + freq.description ? ` (${freq.description})` : "";
+                const description = freq.type + (freq.description ? ` (${freq.description})` : "");
                 return `${description}: ${Number(freq.frequency_mhz).toFixed(3).toString()}`;
             })
             .join("\n");
