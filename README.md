@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <a href="https://app.circleci.com/insights/github/drph4nt0m/avbot/workflows/build-workflow/overview?branch=main&reporting-window=last-30-days&insights-snapshot=true"><img alt="CircleCI Build Status Insights" title="CircleCI Build Status Insights" src="https://dl.circleci.com/insights-snapshot/gh/drph4nt0m/avbot/main/build-workflow/badge.svg?window=30d"></a>
+  <a href="https://app.circleci.com/insights/github/drph4nt0m/avbot/workflows/deploy/overview?branch=main&reporting-window=last-30-days&insights-snapshot=true"><img alt="CircleCI Build Status Insights" title="CircleCI Build Status Insights" src="https://dl.circleci.com/insights-snapshot/gh/drph4nt0m/avbot/main/deploy/badge.svg?window=30d"></a>
  </p>
 
 <p align="center">
