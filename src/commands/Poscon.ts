@@ -35,7 +35,7 @@ export class Poscon {
             required: true
         })
         type: "atc" | "pilot",
-        @SlashOption("call-sign-or-sector-id", {
+        @SlashOption("ident", {
             description: "What call sign or sector ID would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, PosconManager),
             type: "STRING",
