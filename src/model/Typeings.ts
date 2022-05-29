@@ -613,3 +613,150 @@ export type AirportFrequencyResponse = {
     length: number;
     frequencies: AirportFrequency[];
 };
+
+export type PosconInfo = {
+    totalPilots: number;
+    totalAtc: number;
+    lastUpdated: string;
+    flights: PosconFlight[];
+    atc: PosconAtc[];
+    upcomingAtc: PosconUpcomingAtc[];
+    upcomingFlights: PosconUpcomingFlight[];
+};
+
+export type PosconFlight = {
+    _id: string;
+    userId: string;
+    squawk: string;
+    callsign: string;
+    wows?: PosconWow[];
+    userName: string;
+    ac_type: string;
+    airline?: string;
+    position: PosconAircraftPosition;
+    freq?: PosconAircraftFrequency;
+    login: string;
+    flightplan?: PosconFlightPlan;
+};
+
+export type PosconAtc = {
+    userId: string;
+    position: string;
+    userName: string;
+    login?: string;
+    telephony?: string;
+    fir?: string;
+    type?: PosconPositionType;
+    vhfFreq?: string;
+    centerPoint?: number[];
+};
+
+export type PosconUpcomingAtc = {
+    start: string;
+    end: string;
+    forumEventUrl: string;
+} & PosconAtc;
+
+export type PosconUpcomingFlight = {
+    created: string;
+    std: string;
+    sta: string;
+    ac_type: string;
+    altnt: string;
+    altnt2?: string;
+    callsign: string;
+    cruise_spd: string;
+    dof: string;
+    dep: string;
+    dep_time: string;
+    dest: string;
+    eet: string;
+    endurance: string;
+    equip_code: string;
+    rules: string;
+    type: string;
+    cruise: string;
+    other?: string;
+    pbn?: string;
+    perf_cat?: string;
+    persons?: number;
+    remarks?: string;
+    route?: string;
+    ssr?: string;
+    wake_turb: string;
+    operator?: string;
+    user_id: string;
+    squawk?: string;
+    userName: string;
+};
+
+export type PosconAircraftPosition = {
+    lat: number;
+    long: number;
+    true_hdg: number;
+    gs_kt: number;
+    pressure_alt: number;
+    alt_amsl: number;
+    pitch: number;
+    roll: number;
+    ghosted: number;
+    vertFtPerSec: number;
+};
+
+export type PosconAircraftFrequency = {
+    vhf1: number;
+    vhf2: number;
+};
+
+export type PosconWow = {
+    wow: boolean;
+    time: string;
+    airport?: string;
+    location: PosconLocation;
+};
+
+export type PosconLocation = {
+    type: string;
+    coordinates: number[];
+};
+
+export type PosconFlightPlan = {
+    created?: string;
+    updated?: string;
+    std?: string;
+    sta?: string;
+    atd?: string;
+    ac_type: string;
+    altnt?: string;
+    altnt2?: string;
+    callsign: string;
+    cruise_spd: string;
+    dof: string;
+    dep: string;
+    dep_time: string;
+    dest: string;
+    eet?: string;
+    endurance?: string;
+    equip_code?: string;
+    rules?: string;
+    type: string;
+    cruise: string;
+    other?: string;
+    pbn?: string;
+    perf_cat?: string;
+    persons?: number;
+    remarks?: string;
+    route?: string;
+    ssr?: string;
+    wake_turb: string;
+    operator?: string;
+    user_id: string;
+};
+
+export enum PosconPositionType {
+    ATCT = "ATCT",
+    APP_MIN = "APP_MIN",
+    APP_MAJ = "APP_MAJ",
+    CTR = "CTR",
+    MIL = "MIL"
+}
