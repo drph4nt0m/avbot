@@ -1,12 +1,12 @@
 import type { AutocompleteInteraction } from "discord.js";
 
 import logger from "../../../utils/LoggerFactory.js";
-import type { IvaoAtc, IvaoInfo, IvaoPilot, VatsimAtc, VatsimInfo, VatsimPilot } from "../../Typeings.js";
+import type { IvaoAtc, IvaoInfo, IvaoPilot, PosconAtc, PosconFlight, PosconInfo, VatsimAtc, VatsimInfo, VatsimPilot } from "../../Typeings.js";
 import { AbstractRequestEngine } from "../engine/impl/AbstractRequestEngine.js";
 import type { ISearchBase, SearchBase } from "../ISearchBase.js";
 
 type SearchType = SearchBase & { type: "pilot" | "atc" };
-type Merged = VatsimInfo | IvaoInfo;
+type Merged = VatsimInfo | IvaoInfo | PosconInfo;
 
 export abstract class AbstractCallSignInformationManager<T extends Merged> extends AbstractRequestEngine implements ISearchBase<SearchType> {
     public async getInfo(): Promise<T> {
@@ -18,9 +18,9 @@ export abstract class AbstractCallSignInformationManager<T extends Merged> exten
         return result.data;
     }
 
-    public async getClientInfo(callSign: string, type: "pilot" | "atc"): Promise<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc> {
+    public async getClientInfo(callSign: string, type: "pilot" | "atc"): Promise<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc | PosconFlight | PosconAtc> {
         try {
-            const result = await this.api.get<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc>("/getClientInfo", {
+            const result = await this.api.get<IvaoPilot | IvaoAtc | VatsimPilot | VatsimAtc | PosconFlight | PosconAtc>("/getClientInfo", {
                 params: {
                     type,
                     callSign
