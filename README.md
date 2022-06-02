@@ -46,8 +46,9 @@
 | `/atis text`    | Get the live ATIS (Automatic Terminal Information Service) for any airport as text             |
 | `/atis voice`   | Get the live ATIS (Automatic Terminal Information Service) for any airport as voice            |
 | `/flight`       | Get the flight information for a real life flight                                              |
-| `/ivao`         | Get the information for a call sign on the IVAO network                                        |
-| `/vatsim`       | Get the information for a call sign on the VATSIM network                                      |
+| `/ivao`         | Get the information for a flight or an ATC on the IVAO network                                 |
+| `/vatsim`       | Get the information for a flight or an ATC on the VATSIM network                               |
+| `/poscon`       | Get the information for a flight or an ATC on the POSCON network                               |
 | `/nats`         | Get the information for the latest active North Atlantic Tracks                                |
 | `/time zulu`    | Get the current zulu time                                                                      |
 | `/time convert` | Get the zulu to local or local to zulu time conversions for any airport                        |
