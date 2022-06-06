@@ -23,7 +23,7 @@ export class Info {
         const infoEmbed = new MessageEmbed()
             .setTitle(client.user.username)
             .setColor("#0099ff")
-            .setThumbnail("https://bot.av8.dev/img/logo.svg")
+            .setThumbnail("https://bot.av8.dev/img/logo.png")
             .setFooter({
                 text: `${client.user.username} • @dr_ph4nt0m#8402`
             })
