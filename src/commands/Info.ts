@@ -23,8 +23,7 @@ export class Info {
         const infoEmbed = new MessageEmbed()
             .setTitle(client.user.username)
             .setColor("#0099ff")
-            // TODO: Change the thumbnail url after new site is deployed
-            .setThumbnail("https://bot.av8.dev/assets/logo.png")
+            .setThumbnail("https://bot.av8.dev/img/logo.svg")
             .setFooter({
                 text: `${client.user.username} • @dr_ph4nt0m#8402`
             })
