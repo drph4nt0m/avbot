@@ -42,7 +42,7 @@
         "cors": "^2.8.5",
         "csvtojson": "^2.0.10",
         "dayjs": "^1.11.3",
-        "discord-api-types": "^0.33.2",
+        "discord-api-types": "^0.33.5",
         "discord.js": "^13.7.0",
         "discordx": "^9.7.1",
         "dotenv": "^16.0.0",
