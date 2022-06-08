@@ -8,7 +8,7 @@ export type envTypes = {
     AVIATION_STACK_TOKEN: string;
     AVWX_TOKEN: string;
     AV8_TOKEN: string;
-    BOT_RESTART_CHANNEL: string;
+    RESTART_NOTIFICATION_WEBHOOK: string;
     DISCORD_TOKEN: string;
     GEONAMES_USERNAME: string;
     MONGODB_URI: string;

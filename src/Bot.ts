@@ -20,7 +20,7 @@ class Bot {
         DIService.container = container;
         const clientOps = {
             intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES],
-            silent: false
+            silent: this.environment !== "development"
         };
         if (this.environment === "development") {
             clientOps["botGuilds"] = [(client: Client): string[] => client.guilds.cache.map((guild) => guild.id)];
