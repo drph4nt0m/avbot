@@ -1,5 +1,5 @@
 import { WebhookClient } from "discord.js";
-import { Client, Discord, On } from "discordx";
+import { Discord, On } from "discordx";
 import { injectable } from "tsyringe";
 
 import { EMBED_COLORS } from "../enums/EMBED_COLORS.js";
@@ -25,33 +25,32 @@ export class OnShard {
     }
 
     @On("shardReady")
-    private async shardReady([shardId]: [number], client: Client): Promise<void> {
+    private async shardReady([shardId]: [number]): Promise<void> {
         logger.info(`Shard ${shardId} ready!`);
-        console.log(client.user.avatarURL({ dynamic: false }));
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, client, { title: `Shard ${shardId} ready!`, color: EMBED_COLORS.INFO });
+        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} ready!`, color: EMBED_COLORS.INFO });
     }
 
     @On("shardResume")
-    private async shardResume([shardId]: [number], client: Client): Promise<void> {
+    private async shardResume([shardId]: [number]): Promise<void> {
         logger.info(`Shard ${shardId} resumed!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, client, { title: `Shard ${shardId} resumed!`, color: EMBED_COLORS.INFO });
+        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} resumed!`, color: EMBED_COLORS.INFO });
     }
 
     @On("shardDisconnect")
-    private async shardDisconnect([shardId]: [number], client: Client): Promise<void> {
+    private async shardDisconnect([shardId]: [number]): Promise<void> {
         logger.info(`Shard ${shardId} disconnected!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, client, { title: `Shard ${shardId} disconnected!`, color: EMBED_COLORS.ERROR });
+        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} disconnected!`, color: EMBED_COLORS.ERROR });
     }
 
     @On("shardReconnecting")
-    private async shardReconnecting([shardId]: [number], client: Client): Promise<void> {
+    private async shardReconnecting([shardId]: [number]): Promise<void> {
         logger.info(`Shard ${shardId} reconnecting...`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, client, { title: `Shard ${shardId} reconnecting...`, color: EMBED_COLORS.DEBUG });
+        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} reconnecting...`, color: EMBED_COLORS.DEBUG });
     }
 
     @On("shardError")
-    private async shardError([shardId]: [number], client: Client): Promise<void> {
+    private async shardError([shardId]: [number]): Promise<void> {
         logger.info(`Shard ${shardId} encountered a connection error!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, client, { title: `Shard ${shardId} encountered a connection error!`, color: EMBED_COLORS.ERROR });
+        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} encountered a connection error!`, color: EMBED_COLORS.ERROR });
     }
 }

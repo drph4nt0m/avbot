@@ -39,7 +39,7 @@ export class Main {
             container.registerInstance(ShardingManager, manager);
             container.resolve(BotServer);
             const webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
-            await InteractionUtils.sendWebhookMessage(webhookClient, undefined, { title: `AvBot restarted!`, color: EMBED_COLORS.INFO, footer: { text: `Shards: ${manager.shards.size}` } });
+            await InteractionUtils.sendWebhookMessage(webhookClient, { title: `AvBot restarted!`, color: EMBED_COLORS.INFO, footer: { text: `Shards: ${manager.shards.size}` } });
         }, 10000);
     }
 
