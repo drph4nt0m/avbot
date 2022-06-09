@@ -155,8 +155,8 @@ export class InteractionUtils {
 
     public static async sendWebhookMessage(webhookClient: WebhookClient, client: Client, embedOptions: MessageEmbedOptions): Promise<void> {
         try {
-            const embed = new MessageEmbed(embedOptions);
-            await webhookClient.send({ embeds: [embed], username: client.user?.username, avatarURL: client.user?.avatarURL() });
+            const embed = new MessageEmbed({ timestamp: new Date(), ...embedOptions });
+            await webhookClient.send({ embeds: [embed], username: client?.user?.username, avatarURL: client?.user?.avatarURL() });
         } catch (error) {
             logger.error(`Failed to send webhook message: "${JSON.stringify(embedOptions)}"`, error);
         }

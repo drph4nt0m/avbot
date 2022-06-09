@@ -12,8 +12,8 @@ import { InteractionUtils } from "../utils/Utils.js";
 @Discord()
 @injectable()
 export class OnShard {
-    @Property("RESTART_NOTIFICATION_WEBHOOK")
-    private readonly restartNotificationWebhook: string;
+    @Property("SHARD_NOTIFICATION_WEBHOOK")
+    private readonly shardNotificationWebhook: string;
 
     @Property("NODE_ENV")
     private readonly environment: NODE_ENV;
@@ -21,7 +21,7 @@ export class OnShard {
     private webhookClient: WebhookClient;
 
     public constructor(private _mongo: Mongo) {
-        this.webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
+        this.webhookClient = new WebhookClient({ url: this.shardNotificationWebhook });
     }
 
     @On("shardReady")

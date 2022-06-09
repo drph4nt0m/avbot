@@ -8,6 +8,7 @@ export type envTypes = {
     AVIATION_STACK_TOKEN: string;
     AVWX_TOKEN: string;
     AV8_TOKEN: string;
+    SHARD_NOTIFICATION_WEBHOOK: string;
     RESTART_NOTIFICATION_WEBHOOK: string;
     DISCORD_TOKEN: string;
     GEONAMES_USERNAME: string;
