@@ -1,11 +1,14 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction } from "discord.js";
+import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction, MessageEmbedOptions } from "discord.js";
+import { MessageEmbed, WebhookClient } from "discord.js";
+import type { Client } from "discordx";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
 import TIME_UNIT from "../enums/TIME_UNIT.js";
 import type { ISearchBase, SearchBase } from "../model/framework/ISearchBase.js";
+import logger from "./LoggerFactory.js";
 
 export class Utils {
     public static sleep(ms: number): Promise<void> {
@@ -148,5 +151,14 @@ export class InteractionUtils {
             return interaction.respond(responseMap);
         }
         return interaction.respond([]);
+    }
+
+    public static async sendWebhookMessage(webhookClient: WebhookClient, client: Client, embedOptions: MessageEmbedOptions): Promise<void> {
+        try {
+            const embed = new MessageEmbed(embedOptions);
+            await webhookClient.send({ embeds: [embed], username: client.user?.username, avatarURL: client.user?.avatarURL() });
+        } catch (error) {
+            logger.error(`Failed to send webhook message: "${JSON.stringify(embedOptions)}"`, error);
+        }
     }
 }
