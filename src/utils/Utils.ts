@@ -162,7 +162,7 @@ export class InteractionUtils {
             const embed = new MessageEmbed({ timestamp: new Date(), ...embedOptions });
             await webhookClient.send({
                 embeds: [embed],
-                username: ["AvBot", this.environment === "development" ? "[ALPHA]" : ""].join(),
+                username: ["AvBot", this.environment === "development" ? "[ALPHA]" : ""].join(" "),
                 avatarURL: `https://bot.av8.dev/img/logo_${this.environment}.png`
             });
         } catch (error) {
