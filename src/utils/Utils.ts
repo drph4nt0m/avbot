@@ -1,11 +1,15 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction } from "discord.js";
+import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction, MessageEmbedOptions } from "discord.js";
+import { MessageEmbed, WebhookClient } from "discord.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
 import TIME_UNIT from "../enums/TIME_UNIT.js";
+import { Property } from "../model/framework/decorators/Property.js";
 import type { ISearchBase, SearchBase } from "../model/framework/ISearchBase.js";
+import type { NODE_ENV } from "../model/Typeings.js";
+import logger from "./LoggerFactory.js";
 
 export class Utils {
     public static sleep(ms: number): Promise<void> {
@@ -118,6 +122,9 @@ export class ObjectUtil {
 }
 
 export class InteractionUtils {
+    @Property("NODE_ENV")
+    private static readonly environment: NODE_ENV;
+
     public static async replyOrFollowUp(interaction: BaseCommandInteraction | MessageComponentInteraction, replyOptions: (InteractionReplyOptions & { ephemeral?: boolean }) | string): Promise<void> {
         // if interaction is already replied
         if (interaction.replied) {
@@ -148,5 +155,18 @@ export class InteractionUtils {
             return interaction.respond(responseMap);
         }
         return interaction.respond([]);
+    }
+
+    public static async sendWebhookMessage(webhookClient: WebhookClient, embedOptions: MessageEmbedOptions): Promise<void> {
+        try {
+            const embed = new MessageEmbed({ timestamp: new Date(), ...embedOptions });
+            await webhookClient.send({
+                embeds: [embed],
+                username: ["AvBot", this.environment === "development" ? "[ALPHA]" : ""].join(),
+                avatarURL: `https://bot.av8.dev/img/logo_${this.environment}.png`
+            });
+        } catch (error) {
+            logger.error(`Failed to send webhook message: "${JSON.stringify(embedOptions)}"`, error);
+        }
     }
 }

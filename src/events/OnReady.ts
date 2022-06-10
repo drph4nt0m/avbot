@@ -1,4 +1,4 @@
-import { Formatters, TextChannel } from "discord.js";
+import { Formatters } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, DIService, On } from "discordx";
 import { container, injectable } from "tsyringe";
@@ -17,9 +17,6 @@ const { minutes } = METHOD_EXECUTOR_TIME_UNIT;
 @Discord()
 @injectable()
 export class OnReady {
-    @Property("BOT_RESTART_CHANNEL")
-    private readonly botRestartChannel: string;
-
     @Property("NODE_ENV")
     private readonly environment: NODE_ENV;
 
@@ -37,14 +34,6 @@ export class OnReady {
     @On("ready")
     private async initialise([client]: [Client]): Promise<void> {
         this.initDi();
-        try {
-            const restartChannel = await client.channels.fetch(this.botRestartChannel);
-            if (restartChannel instanceof TextChannel) {
-                await restartChannel.send(`${client.user.username} (${client.shard.ids}) restarted!`);
-            }
-        } catch (error) {
-            logger.error(`[${client.shard.ids}] Failed to send restart message: ${error}`);
-        }
         await this.initAppCommands(client);
         await this.setStatus(client);
         logger.info(`[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`);

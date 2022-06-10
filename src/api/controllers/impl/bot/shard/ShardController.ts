@@ -77,7 +77,20 @@ export class ShardController extends BaseController {
         try {
             const result = await this._shardInfoService.spawn(body);
             return super.ok(res, {
-                success: `spawned ${result.length} new shards`,
+                success: `spawned ${result.length} shards`,
+                info: result
+            });
+        } catch (e) {
+            return super.doError(res, e.message, StatusCodes.BAD_REQUEST);
+        }
+    }
+
+    @Post("respawnAll")
+    private async respawnAll(req: Request, res: Response): Promise<Response> {
+        try {
+            const result = await this._shardInfoService.respawnAll();
+            return super.ok(res, {
+                success: `respawned ${result.length} shards`,
                 info: result
             });
         } catch (e) {

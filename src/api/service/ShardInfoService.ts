@@ -46,6 +46,23 @@ export class ShardInfoService {
         return retArr;
     }
 
+    public async respawnAll(): Promise<(ShardInfo & { id: number })[]> {
+        const spawnedShards = await this._shardingManager.respawnAll({
+            respawnDelay: 1000,
+            shardDelay: 1000,
+            timeout: -1
+        });
+        const retArr: (ShardInfo & { id: number })[] = [];
+        for (const [id] of spawnedShards) {
+            const shardInfo = await this.getShardInfo(id);
+            retArr.push({
+                id,
+                ...shardInfo
+            });
+        }
+        return retArr;
+    }
+
     public respawn(shardId: number): Promise<ChildProcess> {
         const shard = this.getShard(shardId);
         if (!shard.process) {
