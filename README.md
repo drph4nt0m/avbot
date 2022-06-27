@@ -16,7 +16,8 @@
 </p>
 
 <p align="center">
-  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img alt="CircleCI Build Status" title="CircleCI Build Status" src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge" alt="Issues"></a>
+  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img alt="CircleCI Build Status" title="CircleCI Build Status" src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge"></a>
+  <a href="https://depfu.com/github/drph4nt0m/avbot?project_id=15573"><img alt="Depfu - Summary of all dependencies" title="Depfu - Summary of all dependencies" src="https://img.shields.io/depfu/dependencies/github/drph4nt0m/avbot?style=for-the-badge"></a>
   <a href="https://github.com/drph4nt0m/avbot/issues"><img alt="GitHub Issues" title="GitHub Issues" src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge"></a>
   <a href="https://github.com/drph4nt0m/avbot/pulls"><img alt="GitHub Pull Requests" title="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge"></a>
 </p>
