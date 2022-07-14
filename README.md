@@ -75,6 +75,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Fedelaus"><img src="https://avatars2.githubusercontent.com/u/43784056?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nathan Dawson</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=Fedelaus" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ransbachm"><img src="https://avatars0.githubusercontent.com/u/25692733?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ransbachm</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=ransbachm" title="Code">💻</a></td>
     <td align="center"><a href="https://victorique.moe"><img src="https://avatars.githubusercontent.com/u/27996712?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Victorique</b></sub></a><br /><a href="#infra-VictoriqueMoe" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/drph4nt0m/avbot/commits?author=VictoriqueMoe" title="Code">💻</a> <a href="#maintenance-VictoriqueMoe" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/abaza738"><img src="https://avatars.githubusercontent.com/u/50132270?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maher Abaza</b></sub></a><br /><a href="https://github.com/drph4nt0m/avbot/commits?author=abaza738" title="Code">💻</a></td>
   </tr>
 </table>
 
