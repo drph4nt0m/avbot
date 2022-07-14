@@ -103,7 +103,7 @@ export class Poscon {
                         },
                         {
                             name: "Longitude",
-                            value: posconClient.position.?long.?toString() ?? "N/A",
+                            value: posconClient.position?.long?.toString() ?? "N/A",
                             inline: true
                         },
                         {
