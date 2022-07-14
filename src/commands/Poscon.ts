@@ -98,22 +98,22 @@ export class Poscon {
                         },
                         {
                             name: "Latitude",
-                            value: posconClient.position.lat.toString(),
+                            value: posconClient.position?.lat.toString() ?? "-",
                             inline: true
                         },
                         {
                             name: "Longitude",
-                            value: posconClient.position.long.toString(),
+                            value: posconClient.position.?long.toString() ?? "-",
                             inline: true
                         },
                         {
                             name: "Altitude",
-                            value: `${posconClient.position.alt_amsl.toString()} ft`,
+                            value: `${posconClient.position?.alt_amsl?.toString() ?? "-"} ft`,
                             inline: true
                         },
                         {
                             name: "Ground Speed",
-                            value: `${posconClient.position.gs_kt.toString()} knots`,
+                            value: `${posconClient.position?.gs_kt?.toString() ?? 0} knots`,
                             inline: true
                         },
                         {
