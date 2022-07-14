@@ -53,6 +53,15 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "abaza738",
+      "name": "Maher Abaza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50132270?v=4",
+      "profile": "https://github.com/abaza738",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
