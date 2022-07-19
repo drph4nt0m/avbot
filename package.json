@@ -31,7 +31,7 @@
     "homepage": "https://github.com/drph4nt0m/avbot#readme",
     "dependencies": {
         "@discordjs/opus": "^0.8.0",
-        "@discordjs/voice": "^0.10.0",
+        "@discordjs/voice": "^0.11.0",
         "@discordx/importer": "^1.1.10",
         "@discordx/pagination": "^2.2.1",
         "@discordx/utilities": "^4.3.3",
