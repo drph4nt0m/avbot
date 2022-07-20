@@ -1,11 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type {
-    AutocompleteInteraction,
-    EmbedData,
-    InteractionReplyOptions,
-    MessageComponentInteraction
-} from "discord.js";
+import type { AutocompleteInteraction, EmbedData, InteractionReplyOptions, MessageComponentInteraction } from "discord.js";
 import { CommandInteraction, EmbedBuilder, WebhookClient } from "discord.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";

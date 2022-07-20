@@ -1,14 +1,5 @@
 import { ICategory, NotBot } from "@discordx/utilities";
-import {
-    ActionRowBuilder,
-    CommandInteraction,
-    EmbedBuilder,
-    Formatters,
-    InteractionResponse,
-    SelectMenuBuilder,
-    SelectMenuComponentOptionData,
-    SelectMenuInteraction
-} from "discord.js";
+import { ActionRowBuilder, CommandInteraction, EmbedBuilder, Formatters, InteractionResponse, SelectMenuBuilder, SelectMenuComponentOptionData, SelectMenuInteraction } from "discord.js";
 import { Client, DApplicationCommand, Discord, Guard, MetadataStorage, SelectMenuComponent, Slash } from "discordx";
 
 import { GuildOnly } from "../guards/GuildOnly.js";
