@@ -1,6 +1,6 @@
 import { Category } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
 import { injectable } from "tsyringe";
@@ -23,7 +23,7 @@ export class IcaoStation {
     })
     @Guard(
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async icaoStation(
@@ -40,7 +40,7 @@ export class IcaoStation {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const stationEmbed = new MessageEmbed()
+        const stationEmbed = new EmbedBuilder()
             .setTitle(`Station: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({

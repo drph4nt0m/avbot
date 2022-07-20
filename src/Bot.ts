@@ -1,13 +1,13 @@
 import "reflect-metadata";
 
 import { dirname, importx } from "@discordx/importer";
-import { Intents } from "discord.js";
-import { Client, DIService } from "discordx";
+import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { container } from "tsyringe";
 
 import { Property } from "./model/framework/decorators/Property.js";
 import { AutoCompleteHealthChecker } from "./model/logic/AutoCompleteHealthChecker.js";
 import type { NODE_ENV } from "./model/Typeings.js";
+import { IntentsBitField } from "discord.js";
 
 class Bot {
     @Property("DISCORD_TOKEN")
@@ -17,9 +17,9 @@ class Bot {
     private static readonly environment: NODE_ENV;
 
     public static async start(): Promise<void> {
-        DIService.container = container;
+        DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
         const clientOps = {
-            intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES],
+            intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.DirectMessages, IntentsBitField.Flags.GuildVoiceStates],
             silent: this.environment !== "development"
         };
         if (this.environment === "development") {

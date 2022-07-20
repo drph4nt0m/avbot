@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -21,7 +21,7 @@ export class Metar {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async metar(
@@ -42,7 +42,7 @@ export class Metar {
     ): Promise<void> {
         await interaction.deferReply();
         icao = icao.toUpperCase();
-        const metarEmbed = new MessageEmbed()
+        const metarEmbed = new EmbedBuilder()
             .setTitle(`METAR: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setTimestamp();

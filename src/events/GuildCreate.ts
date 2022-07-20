@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { Formatters, MessageEmbed } from "discord.js";
+import { EmbedBuilder, Formatters } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, On } from "discordx";
 import { injectable } from "tsyringe";
@@ -20,7 +20,7 @@ export class GuildCreate {
     @On("guildCreate")
     private async botJoins([guild]: ArgsOf<"guildCreate">, client: Client): Promise<void> {
         try {
-            const welcomeEmbed = new MessageEmbed()
+            const welcomeEmbed = new EmbedBuilder()
                 .setTitle(`Hello ${guild.name} and thank you for choosing AvBot`)
                 .setColor("#1a8fe3")
                 .setDescription(

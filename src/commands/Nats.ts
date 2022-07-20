@@ -2,7 +2,7 @@ import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { Formatters, MessageEmbed } from "discord.js";
+import { EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -27,7 +27,7 @@ export class Nats {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async nats(
@@ -44,7 +44,7 @@ export class Nats {
         if (ObjectUtil.validString(ident)) {
             ident = ident.toUpperCase();
 
-            const natsEmbed = new MessageEmbed()
+            const natsEmbed = new EmbedBuilder()
                 .setTitle(`NAT: ${Formatters.inlineCode(`Track ${ident}`)}`)
                 .setColor("#0099ff")
                 .setFooter({
@@ -77,7 +77,7 @@ export class Nats {
                 embeds: [natsEmbed]
             });
         }
-        const natsEmbed = new MessageEmbed()
+        const natsEmbed = new EmbedBuilder()
             .setTitle("NATs")
             .setColor("#0099ff")
             .setFooter({

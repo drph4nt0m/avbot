@@ -1,5 +1,5 @@
 import type { CommandInteraction } from "discord.js";
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import type { Client, Next } from "discordx";
 import { container } from "tsyringe";
 
@@ -26,7 +26,7 @@ export async function PremiumGuild(arg: CommandInteraction, client: Client, next
         logger.error(`[${client.shard.ids}] ${guildId} tried using ${arg.commandName} command`);
         try {
             const inviteUrl = propertyResolutionManager.getProperty("SUPPORT_SERVER_INVITE");
-            const premiumEmbed = new MessageEmbed()
+            const premiumEmbed = new EmbedBuilder()
                 .setTimestamp()
                 .setColor("#00ff00")
                 .setDescription(

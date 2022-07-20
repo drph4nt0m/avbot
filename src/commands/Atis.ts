@@ -1,7 +1,25 @@
-import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
+import {
+    AudioPlayer,
+    AudioPlayerStatus,
+    createAudioPlayer,
+    createAudioResource,
+    DiscordGatewayAdapterCreator,
+    joinVoiceChannel,
+    VoiceConnectionStatus
+} from "@discordjs/voice";
 import { Category, NotBot } from "@discordx/utilities";
-import type { AutocompleteInteraction, CommandInteraction } from "discord.js";
-import { ButtonInteraction, Formatters, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, VoiceBasedChannel } from "discord.js";
+import type { AutocompleteInteraction, CommandInteraction, MessageActionRowComponentBuilder } from "discord.js";
+import {
+    ActionRowBuilder,
+    ApplicationCommandOptionType,
+    ButtonBuilder,
+    ButtonInteraction,
+    EmbedBuilder,
+    Formatters,
+    GuildMember,
+    VoiceBasedChannel
+} from "discord.js";
+import { ButtonStyle } from "discord-api-types/payloads/v10/channel.js";
 import { Client, Discord, Guard, Slash, SlashGroup, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
 import tmp from "tmp";
@@ -32,14 +50,14 @@ export class Atis {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async atisText(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -49,7 +67,7 @@ export class Atis {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const atisEmbed = new MessageEmbed()
+        const atisEmbed = new EmbedBuilder()
             .setTitle(`ATIS: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
@@ -75,8 +93,8 @@ export class Atis {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"],
-            voice: ["CONNECT", "SPEAK"]
+            textChannel: ["EmbedLinks"],
+            voice: ["Connect", "Speak"]
         }),
         GuildOnly
     )
@@ -84,7 +102,7 @@ export class Atis {
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -94,7 +112,7 @@ export class Atis {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const atisEmbed = new MessageEmbed()
+        const atisEmbed = new EmbedBuilder()
             .setTitle(`ATIS: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
@@ -126,7 +144,7 @@ export class Atis {
         return audioPlayer;
     }
 
-    private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: MessageEmbed, icao: string): Promise<void> {
+    private async play(voiceChannel: VoiceBasedChannel, interaction: CommandInteraction, client: Client, embed: EmbedBuilder, icao: string): Promise<void> {
         const { guildId } = voiceChannel;
         const file = await this.saveSpeechToFile(icao, embed);
         const resource = createAudioResource(file.name);
@@ -158,18 +176,18 @@ export class Atis {
         });
 
         const state = audioPlayer.state.status;
-        const stopButton = new MessageButton()
+        const stopButton = new ButtonBuilder()
             .setLabel("Stop")
-            .setStyle("DANGER")
+            .setStyle(ButtonStyle.Danger)
             .setDisabled(state === AudioPlayerStatus.Playing)
             .setCustomId("btn-stop");
-        const row = new MessageActionRow().addComponents(stopButton);
+        const buttonRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(stopButton);
 
-        const message: Message = (await interaction.followUp({
+        const message = await interaction.followUp({
             embeds: [embed],
             fetchReply: true,
-            components: [row]
-        })) as Message;
+            components: [buttonRow]
+        });
 
         const collector = message.createMessageComponentCollector();
 
@@ -188,7 +206,7 @@ export class Atis {
         });
     }
 
-    private async saveSpeechToFile(icao: string, embed: MessageEmbed): Promise<Record<string, any>> {
+    private async saveSpeechToFile(icao: string, embed: EmbedBuilder): Promise<Record<string, any>> {
         const { speech } = await this._avwxManager.getMetar(icao);
         embed.setDescription(Formatters.codeBlock(speech));
         if (this._atisMap.has(icao)) {

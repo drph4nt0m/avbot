@@ -1,6 +1,6 @@
 import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { Formatters, MessageEmbed } from "discord.js";
+import { EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -33,7 +33,7 @@ export class Flight {
         PremiumGuild,
         RateLimit(TIME_UNIT.seconds, 90, { message: `Your command is being rate limited! Try again after {until}.`, ephemeral: true }),
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async flight(
@@ -48,7 +48,7 @@ export class Flight {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const liveEmbed = new MessageEmbed()
+        const liveEmbed = new EmbedBuilder()
             .setTitle(`Flight: ${Formatters.inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
@@ -157,7 +157,12 @@ export class Flight {
         try {
             const aircraftImage = await this._airportDataManager.getAircraftImage(icao24);
 
-            liveEmbed.setImage(aircraftImage.image).addField("Image Credits", `[${aircraftImage.photographer}](${aircraftImage.link})`);
+            liveEmbed.setImage(aircraftImage.image).addFields([
+                {
+                    name: "Image Credits",
+                    value: `[${aircraftImage.photographer}](${aircraftImage.link})`
+                }
+            ]);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }

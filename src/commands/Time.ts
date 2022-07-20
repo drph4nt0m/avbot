@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -32,12 +32,12 @@ export class Time {
     })
     @Guard(
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
         await interaction.deferReply();
-        const localEmbed = new MessageEmbed()
+        const localEmbed = new EmbedBuilder()
             .setTitle(`Zulu time`)
             .setColor("#0099ff")
             .setDescription(dayjs().utc().format("HHmm[Z]"))
@@ -56,7 +56,7 @@ export class Time {
     })
     @Guard(
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async time(
@@ -90,7 +90,7 @@ export class Time {
         const fromSuffix = type === "Local" ? "Z" : "hrs";
         const toSuffix = type === "Local" ? "hrs" : "Z";
 
-        const localEmbed = new MessageEmbed()
+        const localEmbed = new EmbedBuilder()
             .setTitle(`${type} Time`)
             .setColor("#0099ff")
             .setFooter({

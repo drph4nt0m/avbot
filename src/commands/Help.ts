@@ -1,5 +1,14 @@
 import { ICategory, NotBot } from "@discordx/utilities";
-import { CommandInteraction, Formatters, MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction } from "discord.js";
+import {
+    ActionRowBuilder,
+    CommandInteraction,
+    EmbedBuilder,
+    Formatters,
+    InteractionResponse,
+    SelectMenuBuilder,
+    SelectMenuComponentOptionData,
+    SelectMenuInteraction
+} from "discord.js";
 import { Client, DApplicationCommand, Discord, Guard, MetadataStorage, SelectMenuComponent, Slash } from "discordx";
 
 import { GuildOnly } from "../guards/GuildOnly.js";
@@ -39,9 +48,9 @@ export class Help {
         });
     }
 
-    private displayCategory(client: Client, category = "categories", pageNumber = 0): MessageEmbed {
+    private displayCategory(client: Client, category = "categories", pageNumber = 0): EmbedBuilder {
         if (category === "categories") {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`${client.user.username} commands`)
                 .setColor("#0099ff")
                 .setDescription(`The items shown below are all the commands supported by this bot`)
@@ -51,7 +60,12 @@ export class Help {
                 .setTimestamp();
             for (const [cat] of this._catMap) {
                 const description = `${cat} Commands`;
-                embed.addField(cat, description);
+                embed.addFields([
+                    {
+                        name: "cat",
+                        value: description
+                    }
+                ]);
             }
             return embed;
         }
@@ -60,7 +74,7 @@ export class Help {
         const chunks = this.chunk(commands, 24);
         const maxPage = chunks.length;
         const resultOfPage = chunks[pageNumber];
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${category} Commands:`)
             .setColor("#0099ff")
             .setFooter({
@@ -79,13 +93,19 @@ export class Help {
 
             const name = ObjectUtil.validString(item.group) ? `/${item.group} ${item.name}` : `/${item.name}`;
             const nameToDisplay = Formatters.inlineCode(name);
-            embed.addField(nameToDisplay, fieldValue, resultOfPage.length > 5);
+            embed.addFields([
+                {
+                    name: nameToDisplay,
+                    value: fieldValue,
+                    inline: resultOfPage.length > 5
+                }
+            ]);
         }
         return embed;
     }
 
-    private getSelectDropdown(defaultValue = "categories"): MessageActionRow {
-        const optionsForEmbed: MessageSelectOptionData[] = [];
+    private getSelectDropdown(defaultValue = "categories"): ActionRowBuilder<SelectMenuBuilder> {
+        const optionsForEmbed: SelectMenuComponentOptionData[] = [];
         optionsForEmbed.push({
             description: "View all categories",
             label: "Categories",
@@ -101,12 +121,12 @@ export class Help {
                 default: defaultValue === cat
             });
         }
-        const selectMenu = new MessageSelectMenu().addOptions(optionsForEmbed).setCustomId("help-category-selector");
-        return new MessageActionRow().addComponents(selectMenu);
+        const selectMenu = new SelectMenuBuilder().addOptions(optionsForEmbed).setCustomId("help-category-selector");
+        return new ActionRowBuilder<SelectMenuBuilder>().addComponents(selectMenu);
     }
 
     @SelectMenuComponent("help-category-selector")
-    private async selectCategory(interaction: SelectMenuInteraction, client: Client): Promise<void> {
+    private async selectCategory(interaction: SelectMenuInteraction, client: Client): Promise<InteractionResponse> {
         const catToShow = interaction.values[0];
         const categoryEmbed = await this.displayCategory(client, catToShow);
         const selectMenu = await this.getSelectDropdown(catToShow);

@@ -1,7 +1,12 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import type { AutocompleteInteraction, BaseCommandInteraction, InteractionReplyOptions, MessageComponentInteraction, MessageEmbedOptions } from "discord.js";
-import { MessageEmbed, WebhookClient } from "discord.js";
+import type {
+    AutocompleteInteraction,
+    EmbedData,
+    InteractionReplyOptions,
+    MessageComponentInteraction
+} from "discord.js";
+import { CommandInteraction, EmbedBuilder, WebhookClient } from "discord.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
@@ -125,7 +130,7 @@ export class InteractionUtils {
     @Property("NODE_ENV")
     private static readonly environment: NODE_ENV;
 
-    public static async replyOrFollowUp(interaction: BaseCommandInteraction | MessageComponentInteraction, replyOptions: (InteractionReplyOptions & { ephemeral?: boolean }) | string): Promise<void> {
+    public static async replyOrFollowUp(interaction: CommandInteraction | MessageComponentInteraction, replyOptions: (InteractionReplyOptions & { ephemeral?: boolean }) | string): Promise<void> {
         // if interaction is already replied
         if (interaction.replied) {
             await interaction.followUp(replyOptions);
@@ -157,9 +162,9 @@ export class InteractionUtils {
         return interaction.respond([]);
     }
 
-    public static async sendWebhookMessage(webhookClient: WebhookClient, embedOptions: MessageEmbedOptions): Promise<void> {
+    public static async sendWebhookMessage(webhookClient: WebhookClient, embedOptions: EmbedData): Promise<void> {
         try {
-            const embed = new MessageEmbed({ timestamp: new Date(), ...embedOptions });
+            const embed = new EmbedBuilder({ timestamp: new Date(), ...embedOptions });
             await webhookClient.send({
                 embeds: [embed],
                 username: ["AvBot", this.environment === "development" ? "[ALPHA]" : ""].join(" "),

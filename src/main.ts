@@ -1,11 +1,10 @@
 import "reflect-metadata";
 
-import { Shard, ShardingManager, WebhookClient } from "discord.js";
+import { Colors, Shard, ShardingManager, WebhookClient } from "discord.js";
 import dotenv from "dotenv";
 import { container } from "tsyringe";
 
 import { BotServer } from "./api/BotServer.js";
-import { EMBED_COLORS } from "./enums/EMBED_COLORS.js";
 import { Property } from "./model/framework/decorators/Property.js";
 import logger from "./utils/LoggerFactory.js";
 import { InteractionUtils } from "./utils/Utils.js";
@@ -39,7 +38,11 @@ export class Main {
             container.registerInstance(ShardingManager, manager);
             container.resolve(BotServer);
             const webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
-            await InteractionUtils.sendWebhookMessage(webhookClient, { title: `AvBot restarted!`, color: EMBED_COLORS.INFO, footer: { text: `Shards: ${manager.shards.size}` } });
+            await InteractionUtils.sendWebhookMessage(webhookClient, {
+                title: `AvBot restarted!`,
+                color: Colors.Blue,
+                footer: { text: `Shards: ${manager.shards.size}` }
+            });
         }, 10000);
     }
 

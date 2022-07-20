@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -22,7 +22,7 @@ export class Taf {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async taf(
@@ -44,7 +44,7 @@ export class Taf {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const tafEmbed = new MessageEmbed()
+        const tafEmbed = new EmbedBuilder()
             .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
@@ -78,8 +78,8 @@ export class Taf {
                 });
             }
 
-            const tafEmbeds: MessageEmbed[] = [];
-            let tempEmbed = new MessageEmbed()
+            const tafEmbeds: EmbedBuilder[] = [];
+            let tempEmbed = new EmbedBuilder()
                 .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
                 .setColor("#0099ff")
                 .addField("Raw Report", "```" + raw + "```")
@@ -97,7 +97,7 @@ export class Taf {
                 const currentLine = `${readableList[i]}. `;
                 buffer += currentLine;
                 if (buffer.length > 600) {
-                    tempEmbed = new MessageEmbed()
+                    tempEmbed = new EmbedBuilder()
                         .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
                         .setColor("#0099ff")
                         .addField(`Readable Report`, buffer)

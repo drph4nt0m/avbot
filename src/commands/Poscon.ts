@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -23,7 +23,7 @@ export class Poscon {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         }),
         GuildOnly
     )
@@ -48,7 +48,7 @@ export class Poscon {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const posconEmbed = new MessageEmbed()
+        const posconEmbed = new EmbedBuilder()
             .setTitle(`POSCON: ${Formatters.inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({

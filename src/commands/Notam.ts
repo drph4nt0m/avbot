@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -23,7 +23,7 @@ export class Notams {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async notam(
@@ -47,9 +47,9 @@ export class Notams {
 
         try {
             const notams = await this._av8Manager.getNotams(icao, upcoming);
-            const notamEmbeds: MessageEmbed[] = [];
+            const notamEmbeds: EmbedBuilder[] = [];
             for (const notam of notams) {
-                const notamEmbed = new MessageEmbed()
+                const notamEmbed = new EmbedBuilder()
                     .setTitle(`NOTAM: ${Formatters.inlineCode(notam.id)}`)
                     .setColor("#0099ff")
                     .setFooter({
@@ -76,7 +76,7 @@ export class Notams {
             ).send();
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
-            const notamEmbed = new MessageEmbed()
+            const notamEmbed = new EmbedBuilder()
                 .setTitle(`NOTAM: ${Formatters.inlineCode(icao)}`)
                 .setColor("#ff0000")
                 .setFooter({
