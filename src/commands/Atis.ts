@@ -1,24 +1,7 @@
-import {
-    AudioPlayer,
-    AudioPlayerStatus,
-    createAudioPlayer,
-    createAudioResource,
-    DiscordGatewayAdapterCreator,
-    joinVoiceChannel,
-    VoiceConnectionStatus
-} from "@discordjs/voice";
+import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
 import { Category, NotBot } from "@discordx/utilities";
 import type { AutocompleteInteraction, CommandInteraction, MessageActionRowComponentBuilder } from "discord.js";
-import {
-    ActionRowBuilder,
-    ApplicationCommandOptionType,
-    ButtonBuilder,
-    ButtonInteraction,
-    EmbedBuilder,
-    Formatters,
-    GuildMember,
-    VoiceBasedChannel
-} from "discord.js";
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonInteraction, EmbedBuilder, Formatters, GuildMember, VoiceBasedChannel } from "discord.js";
 import { ButtonStyle } from "discord-api-types/payloads/v10/channel.js";
 import { Client, Discord, Guard, Slash, SlashGroup, SlashOption } from "discordx";
 import Text2Speech from "node-gtts";
