@@ -1,5 +1,5 @@
 import { Colors, WebhookClient } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { injectable } from "tsyringe";
 
 import { Mongo } from "../model/db/Mongo.js";
@@ -24,7 +24,7 @@ export class OnShard {
     }
 
     @On("shardReady")
-    private async shardReady([shardId]: [number]): Promise<void> {
+    private async shardReady([shardId]: ArgsOf<"shardReady">): Promise<void> {
         logger.info(`Shard ${shardId} ready!`);
         await InteractionUtils.sendWebhookMessage(this.webhookClient, {
             title: `Shard ${shardId} ready!`,
@@ -33,7 +33,7 @@ export class OnShard {
     }
 
     @On("shardResume")
-    private async shardResume([shardId]: [number]): Promise<void> {
+    private async shardResume([shardId]: ArgsOf<"shardResume">): Promise<void> {
         logger.info(`Shard ${shardId} resumed!`);
         await InteractionUtils.sendWebhookMessage(this.webhookClient, {
             title: `Shard ${shardId} resumed!`,
@@ -42,7 +42,7 @@ export class OnShard {
     }
 
     @On("shardDisconnect")
-    private async shardDisconnect([shardId]: [number]): Promise<void> {
+    private async shardDisconnect([shardId]: ArgsOf<"shardDisconnect">): Promise<void> {
         logger.info(`Shard ${shardId} disconnected!`);
         await InteractionUtils.sendWebhookMessage(this.webhookClient, {
             title: `Shard ${shardId} disconnected!`,
@@ -51,7 +51,7 @@ export class OnShard {
     }
 
     @On("shardReconnecting")
-    private async shardReconnecting([shardId]: [number]): Promise<void> {
+    private async shardReconnecting([shardId]: ArgsOf<"shardReconnecting">): Promise<void> {
         logger.info(`Shard ${shardId} reconnecting...`);
         await InteractionUtils.sendWebhookMessage(this.webhookClient, {
             title: `Shard ${shardId} reconnecting...`,
@@ -60,7 +60,7 @@ export class OnShard {
     }
 
     @On("shardError")
-    private async shardError([shardId]: [number]): Promise<void> {
+    private async shardError([shardId]: ArgsOf<"shardError">): Promise<void> {
         logger.info(`Shard ${shardId} encountered a connection error!`);
         await InteractionUtils.sendWebhookMessage(this.webhookClient, {
             title: `Shard ${shardId} encountered a connection error!`,
