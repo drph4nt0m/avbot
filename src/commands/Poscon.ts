@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -31,14 +31,14 @@ export class Poscon {
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
         @SlashOption("ident", {
             description: "What call sign or sector ID would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, PosconManager),
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         callSign: string,

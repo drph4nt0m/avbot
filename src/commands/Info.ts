@@ -39,12 +39,7 @@ export class Info {
 
         const shardUptime = process.uptime();
         const humanReadableUptime = ObjectUtil.timeToHuman(shardUptime, TIME_UNIT.seconds);
-        infoEmbed.addFields([
-            {
-                name: "Uptime",
-                value: humanReadableUptime
-            }
-        ]);
+        infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Uptime", humanReadableUptime));
 
         let foundInGuild = false;
         if (interaction.inGuild()) {
@@ -52,22 +47,12 @@ export class Info {
             const botOwnerId = "442534266849460224";
             const botOwnerInGuild = guild.members.cache.has(botOwnerId);
             if (botOwnerInGuild) {
-                infoEmbed.addFields([
-                    {
-                        name: "Owner",
-                        value: `<@${botOwnerId}>`
-                    }
-                ]);
+                infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Owner", `<@${botOwnerId}>`));
                 foundInGuild = true;
             }
         }
         if (!foundInGuild) {
-            infoEmbed.addFields([
-                {
-                    name: "Owner",
-                    value: "dr_ph4nt0m#8402"
-                }
-            ]);
+            infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Owner", "dr_ph4nt0m#8402"));
         }
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [infoEmbed],

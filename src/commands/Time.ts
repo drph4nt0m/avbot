@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -64,20 +64,20 @@ export class Time {
         @SlashChoice({ name: "Zulu to Local", value: "Local" })
         @SlashOption("type", {
             description: "Convert time from what to what?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "Zulu" | "Local",
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "Convert time for which ICAO?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
         @SlashOption("time", {
             description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         time: string,

@@ -1,4 +1,4 @@
-import { Formatters } from "discord.js";
+import { ActivityType, ChannelType, Formatters, InteractionType } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, DIService, On } from "discordx";
 import { container, injectable } from "tsyringe";
@@ -43,7 +43,7 @@ export class OnReady {
     private async intersectionInit([interaction]: ArgsOf<"interactionCreate">, client: Client): Promise<void> {
         try {
             await client.executeInteraction(interaction);
-            if (interaction.isApplicationCommand()) {
+            if (interaction.type === InteractionType.ApplicationCommand) {
                 try {
                     await this._mongo.increaseCommandCount(interaction.commandName);
                 } catch (e) {
@@ -51,10 +51,11 @@ export class OnReady {
                 }
             }
         } catch (e) {
-            if (interaction.isApplicationCommand() || interaction.isMessageComponent()) {
+            const me = interaction.guild.members.me;
+            if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.MessageComponent) {
                 logger.error(`[${client.shard.ids}] ${e}`, interaction);
                 const channel = interaction.channel;
-                if (!channel.isText() || !channel.permissionsFor(interaction.guild.me).has("SEND_MESSAGES")) {
+                if (channel.type !== ChannelType.GuildText || !channel.permissionsFor(me).has("SendMessages")) {
                     logger.error(`[${client.shard.ids}] cannot send warning message to this channel`, interaction);
                     return;
                 }
@@ -70,8 +71,8 @@ export class OnReady {
         const guildsCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((acc: number, guildCount: number) => acc + guildCount, 0);
         const commandsCount = (await this._mongo.getCommandCounts()).total;
         await client.user.setActivity({
-            name: `${guildsCount} servers | ${commandsCount}+ commands used`,
-            type: "WATCHING"
+            type: ActivityType.Watching,
+            name: `${guildsCount} servers | ${commandsCount}+ commands used`
         });
     }
 

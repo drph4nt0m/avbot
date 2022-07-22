@@ -51,12 +51,7 @@ export class Help {
                 .setTimestamp();
             for (const [cat] of this._catMap) {
                 const description = `${cat} Commands`;
-                embed.addFields([
-                    {
-                        name: "cat",
-                        value: description
-                    }
-                ]);
+                embed.addFields(ObjectUtil.singleFieldBuilder("cat", description));
             }
             return embed;
         }
@@ -84,13 +79,7 @@ export class Help {
 
             const name = ObjectUtil.validString(item.group) ? `/${item.group} ${item.name}` : `/${item.name}`;
             const nameToDisplay = Formatters.inlineCode(name);
-            embed.addFields([
-                {
-                    name: nameToDisplay,
-                    value: fieldValue,
-                    inline: resultOfPage.length > 5
-                }
-            ]);
+            embed.addFields(ObjectUtil.singleFieldBuilder(nameToDisplay, fieldValue, resultOfPage.length > 5));
         }
         return embed;
     }

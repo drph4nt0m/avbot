@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { AutocompleteInteraction, EmbedData, InteractionReplyOptions, MessageComponentInteraction } from "discord.js";
 import { CommandInteraction, EmbedBuilder, WebhookClient } from "discord.js";
+import type { APIEmbedField } from "discord-api-types/v10.js";
 import { container } from "tsyringe";
 import type constructor from "tsyringe/dist/typings/types/constructor";
 
@@ -118,6 +119,16 @@ export class ObjectUtil {
             returnText += ` ${levels[i][0]} ${levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length - 1) : levels[i][1]}`;
         }
         return returnText.trim();
+    }
+
+    public static singleFieldBuilder(name: string, value: string, inline = false): [APIEmbedField] {
+        return [
+            {
+                name,
+                value,
+                inline
+            }
+        ];
     }
 }
 

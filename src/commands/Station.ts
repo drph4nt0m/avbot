@@ -1,6 +1,6 @@
 import { Category } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
 import { injectable } from "tsyringe";
@@ -30,7 +30,7 @@ export class IcaoStation {
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give station information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,

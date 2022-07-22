@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -9,7 +9,7 @@ import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { Av8Manager } from "../model/framework/manager/Av8Manager.js";
 import type { Notam } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils } from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("Advisory")
@@ -30,7 +30,7 @@ export class Notams {
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give NOTAMs for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -56,7 +56,7 @@ export class Notams {
                         text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
                     })
                     .setDescription(Formatters.codeBlock(notam.raw))
-                    .addFields({ name: "Validity", value: this.getValidity(notam) })
+                    .addFields(ObjectUtil.singleFieldBuilder("Validity", this.getValidity(notam)))
                     .setTimestamp();
 
                 notamEmbeds.push(notamEmbed);

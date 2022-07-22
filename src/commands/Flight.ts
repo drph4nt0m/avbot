@@ -12,7 +12,7 @@ import { AirportDataManager } from "../model/framework/manager/AirportDataManage
 import { AviationStackManager } from "../model/framework/manager/AviationStackManager.js";
 import { OpenSkyManager } from "../model/framework/manager/OpenSkyManager.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils } from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("IRL Aviation")
@@ -157,12 +157,7 @@ export class Flight {
         try {
             const aircraftImage = await this._airportDataManager.getAircraftImage(icao24);
 
-            liveEmbed.setImage(aircraftImage.image).addFields([
-                {
-                    name: "Image Credits",
-                    value: `[${aircraftImage.photographer}](${aircraftImage.link})`
-                }
-            ]);
+            liveEmbed.setImage(aircraftImage.image).addFields(ObjectUtil.singleFieldBuilder("Image Credits", `[${aircraftImage.photographer}](${aircraftImage.link})`));
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
         }

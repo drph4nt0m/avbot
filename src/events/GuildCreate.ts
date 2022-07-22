@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { EmbedBuilder, Formatters } from "discord.js";
+import { ChannelType, EmbedBuilder, Formatters } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, On } from "discordx";
 import { injectable } from "tsyringe";
@@ -33,7 +33,7 @@ export class GuildCreate {
                     text: `${client.user.username} • @dr_ph4nt0m#8402 • Thank you for showing your support by using AvBot`
                 })
                 .setTimestamp();
-            const textChannel = guild.channels.cache.filter((c) => c.type === "GUILD_TEXT").first() as TextChannel;
+            const textChannel = guild.channels.cache.filter((c) => c.type === ChannelType.GuildText).first() as TextChannel;
             await textChannel.send({
                 embeds: [welcomeEmbed]
             });

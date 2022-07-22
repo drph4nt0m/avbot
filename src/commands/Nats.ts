@@ -58,17 +58,17 @@ export class Nats {
                 nat.route.nodes.forEach((node) => {
                     route += `${node.ident} `;
                 });
-                natsEmbed.addField("Route", Formatters.codeBlock(route));
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Route", Formatters.codeBlock(route)));
                 if (nat.route.eastLevels.length > 0) {
-                    natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
+                    natsEmbed.addFields(ObjectUtil.singleFieldBuilder("East levels", `${nat.route.eastLevels.join(", ")}`));
                 }
                 if (nat.route.westLevels.length > 0) {
-                    natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
+                    natsEmbed.addFields(ObjectUtil.singleFieldBuilder("West levels", `${nat.route.westLevels.join(", ")}`));
                 }
 
                 const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validFrom).unix(), "R")})`;
                 const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validTo).unix(), "R")})`;
-                natsEmbed.addField("Validity", `${validFrom} to ${validTo}`);
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Validity", `${validFrom} to ${validTo}`));
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
                 natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
@@ -88,7 +88,7 @@ export class Nats {
             const nats = await this._natsManager.getAllTracks();
 
             nats.forEach((track) => {
-                natsEmbed.addField(`Track ${track.ident}`, `${track.route.nodes[0].ident} - ${track.route.nodes[track.route.nodes.length - 1].ident}`);
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder(`Track ${track.ident}`, `${track.route.nodes[0].ident} - ${track.route.nodes[track.route.nodes.length - 1].ident}`));
             });
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
