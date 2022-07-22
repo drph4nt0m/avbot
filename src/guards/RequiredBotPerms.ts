@@ -25,7 +25,6 @@ export function RequiredBotPerms(permissions: {
             return next();
         }
         const me = channel.guild.members.me;
-        const guild = arg.guild;
         if (channel.type === ChannelType.GuildText) {
             if (!channel.permissionsFor(me).has(PermissionsBitField.Flags.SendMessages)) {
                 logger.error(`[${client.shard.ids}] cannot send guard warning message to this channel`, arg);

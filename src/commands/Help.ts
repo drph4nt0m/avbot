@@ -117,10 +117,10 @@ export class Help {
     }
 
     private chunk<T>(array: T[], chunkSize: number): T[][] {
-        const r: T[][] = [];
+        const chunks: T[][] = [];
         for (let i = 0; i < array.length; i += chunkSize) {
-            r.push(array.slice(i, i + chunkSize));
+            chunks.push(array.slice(i, i + chunkSize));
         }
-        return r;
+        return chunks;
     }
 }
