@@ -78,8 +78,8 @@ export class Vatsim {
             switch (type) {
                 case "pilot":
                     vatsimClient = vatsimClient as VatsimPilot;
-                    const departureAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.departure);
-                    const arrivalAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.arrival);
+                    const departureAirport = vatsimClient.flight_plan ? await this._airportManager.getAirport(vatsimClient.flight_plan?.departure) : { name: "NA" };
+                    const arrivalAirport = vatsimClient.flight_plan ? await this._airportManager.getAirport(vatsimClient.flight_plan?.arrival) : { name: "NA" };
                     vatsimEmbed.addFields(
                         {
                             name: "Departure",
@@ -118,37 +118,37 @@ export class Vatsim {
                         },
                         {
                             name: "Cruising Speed",
-                            value: vatsimClient.flight_plan.cruise_tas,
+                            value: vatsimClient.flight_plan?.cruise_tas ?? "NA",
                             inline: true
                         },
                         {
                             name: "Cruising Level",
-                            value: vatsimClient.flight_plan.alternate,
+                            value: vatsimClient.flight_plan?.alternate ?? "NA",
                             inline: true
                         },
                         {
                             name: "Departure Time",
-                            value: vatsimClient.flight_plan.deptime.toString().padStart(4, "0") + "Z",
+                            value: vatsimClient.flight_plan ? vatsimClient.flight_plan?.deptime?.toString().padStart(4, "0") + "Z" : "NA",
                             inline: true
                         },
                         {
                             name: "EET",
-                            value: vatsimClient.flight_plan.enroute_time.toString().padStart(4, "0"),
+                            value: vatsimClient.flight_plan?.enroute_time?.toString().padStart(4, "0") ?? "NA",
                             inline: true
                         },
                         {
                             name: "Aircraft",
-                            value: vatsimClient.flight_plan.aircraft_faa,
+                            value: vatsimClient.flight_plan?.aircraft_faa ?? "NA",
                             inline: true
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan.route),
+                            value: Formatters.codeBlock(vatsimClient.flight_plan?.route ?? "NA"),
                             inline: false
                         },
                         {
                             name: "Remakes",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan.remarks),
+                            value: Formatters.codeBlock(vatsimClient.flight_plan?.remarks ?? "NA"),
                             inline: false
                         }
                     );
