@@ -1,8 +1,7 @@
 import { ActivityType, ChannelType, Formatters, InteractionType } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, DIService, On } from "discordx";
-import { container, injectable } from "tsyringe";
-import type constructor from "tsyringe/dist/typings/types/constructor";
+import { injectable } from "tsyringe";
 
 import METHOD_EXECUTOR_TIME_UNIT from "../enums/METHOD_EXECUTOR_TIME_UNIT.js";
 import { Mongo } from "../model/db/Mongo.js";
@@ -82,9 +81,6 @@ export class OnReady {
     }
 
     private initDi(): void {
-        const appClasses = DIService.allServices;
-        for (const classRef of appClasses) {
-            container.resolve(classRef as constructor<any>);
-        }
+        DIService.allServices;
     }
 }
