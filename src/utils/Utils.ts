@@ -170,7 +170,7 @@ export class InteractionUtils {
 
     public static async sendWebhookMessage(webhookClient: WebhookClient, embedOptions: EmbedData): Promise<void> {
         try {
-            const embed = new EmbedBuilder({ timestamp: new Date(), ...embedOptions });
+            const embed = new EmbedBuilder({ timestamp: new Date().toISOString(), ...embedOptions });
             await webhookClient.send({
                 embeds: [embed],
                 username: ["AvBot", this.environment === "development" ? "[ALPHA]" : ""].join(" "),
