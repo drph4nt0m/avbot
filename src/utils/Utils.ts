@@ -167,7 +167,10 @@ export class InteractionUtils {
         return interaction.respond([]);
     }
 
-    public static async sendWebhookMessage(webhookClient: WebhookClient, embedOptions: EmbedData): Promise<void> {
+    public static async sendWebhookMessage(embedOptions: EmbedData, webhookClient: WebhookClient): Promise<void> {
+        if (!webhookClient) {
+            return;
+        }
         try {
             const embed = new EmbedBuilder({ timestamp: new Date().toISOString(), ...embedOptions });
             await webhookClient.send({

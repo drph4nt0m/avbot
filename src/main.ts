@@ -39,11 +39,14 @@ export class Main {
             container.resolve(BotServer);
             if (ObjectUtil.validString(this.restartNotificationWebhook)) {
                 const webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
-                await InteractionUtils.sendWebhookMessage(webhookClient, {
-                    title: `AvBot restarted!`,
-                    color: Colors.Blue,
-                    footer: { text: `Shards: ${manager.shards.size}` }
-                });
+                await InteractionUtils.sendWebhookMessage(
+                    {
+                        title: `AvBot restarted!`,
+                        color: Colors.Blue,
+                        footer: { text: `Shards: ${manager.shards.size}` }
+                    },
+                    webhookClient
+                );
             }
         }, 10000);
     }
