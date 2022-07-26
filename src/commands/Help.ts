@@ -51,7 +51,7 @@ export class Help {
                 .setTimestamp();
             for (const [cat] of this._catMap) {
                 const description = `${cat} Commands`;
-                embed.addFields(ObjectUtil.singleFieldBuilder("cat", description));
+                embed.addFields(ObjectUtil.singleFieldBuilder(cat, description));
             }
             return embed;
         }

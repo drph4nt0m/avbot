@@ -22,6 +22,7 @@ export class Info {
     public info(interaction: CommandInteraction, client: Client): Promise<void> {
         const infoEmbed = new EmbedBuilder()
             .setTitle(client.user.username)
+            .setURL("https://bot.av8.dev")
             .setColor("#0099ff")
             .setThumbnail("https://bot.av8.dev/img/logo.png")
             .setFooter({
