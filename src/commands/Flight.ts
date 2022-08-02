@@ -1,6 +1,6 @@
 import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { EmbedBuilder, Formatters } from "discord.js";
+import { EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -52,7 +52,7 @@ export class Flight {
         callSign = callSign.toUpperCase();
 
         const liveEmbed = new EmbedBuilder()
-            .setTitle(`Flight: ${Formatters.inlineCode(callSign)}`)
+            .setTitle(`Flight: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
@@ -63,7 +63,7 @@ export class Flight {
             const flightInfo = await this._openSkyManager.getFlightInfo(callSign);
             icao24 = flightInfo.icao24;
             liveEmbed
-                .setTitle(`Flight: ${Formatters.inlineCode(callSign)} (Track on OpenSky Network)`)
+                .setTitle(`Flight: ${inlineCode(callSign)} (Track on OpenSky Network)`)
                 .setURL(`https://opensky-network.org/network/explorer?icao24=${icao24}&callsign=${callSign}`)
                 .addFields([
                     {

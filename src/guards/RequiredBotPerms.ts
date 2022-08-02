@@ -1,6 +1,6 @@
 import type { PermissionsType } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { ChannelType, EmbedBuilder, Formatters, GuildChannel, GuildMember, PermissionsBitField } from "discord.js";
+import { ChannelType, EmbedBuilder, GuildChannel, GuildMember, inlineCode, PermissionsBitField } from "discord.js";
 import type { Client, GuardFunction, Next } from "discordx";
 
 import logger from "../utils/LoggerFactory.js";
@@ -53,7 +53,7 @@ export function RequiredBotPerms(permissions: {
                     }
                     if (!voiceChannel.joinable) {
                         const embed = new EmbedBuilder()
-                            .setTitle(Formatters.inlineCode(arg.commandName))
+                            .setTitle(inlineCode(arg.commandName))
                             .setColor("#ff0000")
                             .setDescription(`${member}, AvBot is unable to join the voice channel as it is already full.`)
                             .setFooter({
@@ -66,7 +66,7 @@ export function RequiredBotPerms(permissions: {
                     }
                 } else {
                     const embed = new EmbedBuilder()
-                        .setTitle(Formatters.inlineCode(arg.commandName))
+                        .setTitle(inlineCode(arg.commandName))
                         .setColor("#ff0000")
                         .setDescription(`${member}, you need to join a voice channel first.`)
                         .setFooter({

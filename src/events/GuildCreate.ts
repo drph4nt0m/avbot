@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { ChannelType, EmbedBuilder, Formatters } from "discord.js";
+import { ChannelType, EmbedBuilder, hyperlink, inlineCode } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, On } from "discordx";
 import { injectable } from "tsyringe";
@@ -25,9 +25,9 @@ export class GuildCreate {
                 .setColor("#1a8fe3")
                 .setDescription(
                     `If you need any help regarding AvBot or have any suggestions 
-                    join our ${Formatters.hyperlink("AvBot Support Server", "https://go.av8.dev/support")}.
-                    To get started try ${Formatters.inlineCode("\\help")}.
-                    ${Formatters.hyperlink("Support AvBot", "https://go.av8.dev/donate")}`
+                    join our ${hyperlink("AvBot Support Server", "https://go.av8.dev/support")}.
+                    To get started try ${inlineCode("\\help")}.
+                    ${hyperlink("Support AvBot", "https://go.av8.dev/donate")}`
                 )
                 .setFooter({
                     text: `${client.user.username} • @dr_ph4nt0m#8402 • Thank you for showing your support by using AvBot`

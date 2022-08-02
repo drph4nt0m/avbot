@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode, time } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -50,12 +50,12 @@ export class Notams {
             const notamEmbeds: EmbedBuilder[] = [];
             for (const notam of notams) {
                 const notamEmbed = new EmbedBuilder()
-                    .setTitle(`NOTAM: ${Formatters.inlineCode(notam.id)}`)
+                    .setTitle(`NOTAM: ${inlineCode(notam.id)}`)
                     .setColor("#0099ff")
                     .setFooter({
                         text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
                     })
-                    .setDescription(Formatters.codeBlock(notam.raw))
+                    .setDescription(codeBlock(notam.raw))
                     .addFields(ObjectUtil.singleFieldBuilder("Validity", this.getValidity(notam)))
                     .setTimestamp();
 
@@ -77,7 +77,7 @@ export class Notams {
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
             const notamEmbed = new EmbedBuilder()
-                .setTitle(`NOTAM: ${Formatters.inlineCode(icao)}`)
+                .setTitle(`NOTAM: ${inlineCode(icao)}`)
                 .setColor("#ff0000")
                 .setFooter({
                     text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
@@ -94,9 +94,9 @@ export class Notams {
         let validityStr = notam.validity.phrase;
         if (notam.from !== "PERMANENT") {
             if (notam.to === "PERMANENT") {
-                validityStr += ` (Since ${Formatters.time(notam.from.unix())})`;
+                validityStr += ` (Since ${time(notam.from.unix())})`;
             } else {
-                validityStr += ` (${Formatters.time(notam.from.unix())} to ${Formatters.time(notam.to.unix())})`;
+                validityStr += ` (${time(notam.from.unix())} to ${time(notam.to.unix())})`;
             }
         }
 

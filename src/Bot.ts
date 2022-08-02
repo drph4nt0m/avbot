@@ -1,13 +1,18 @@
 import "reflect-metadata";
 
 import { dirname, importx } from "@discordx/importer";
+import { IntentsBitField } from "discord.js";
 import { Client, DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { container } from "tsyringe";
 
 import { Property } from "./model/framework/decorators/Property.js";
 import { AutoCompleteHealthChecker } from "./model/logic/AutoCompleteHealthChecker.js";
 import type { NODE_ENV } from "./model/Typeings.js";
-import { IntentsBitField } from "discord.js";
+
+// polly-fill for bigint serialisation
+(BigInt.prototype as any).toJSON = function (): string {
+    return this.toString();
+};
 
 class Bot {
     @Property("DISCORD_TOKEN")

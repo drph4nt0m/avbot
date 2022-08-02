@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -50,7 +50,7 @@ export class Ivao {
         callSign = callSign.toUpperCase();
 
         const ivaoEmbed = new EmbedBuilder()
-            .setTitle(`IVAO: ${Formatters.inlineCode(callSign)}`)
+            .setTitle(`IVAO: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: IVAO API`
@@ -59,7 +59,7 @@ export class Ivao {
 
         try {
             let ivaoClient = (await this._ivaoManager.getClientInfo(callSign, type)) as IvaoPilot | IvaoAtc;
-            ivaoEmbed.setTitle(`IVAO: ${Formatters.inlineCode(callSign)} (open on Webeye)`);
+            ivaoEmbed.setTitle(`IVAO: ${inlineCode(callSign)} (open on Webeye)`);
             ivaoEmbed.addFields(
                 {
                     name: "Call Sign",
@@ -146,12 +146,12 @@ export class Ivao {
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(ivaoClient.flightPlan.route),
+                            value: codeBlock(ivaoClient.flightPlan.route),
                             inline: false
                         },
                         {
                             name: "Remarks",
-                            value: Formatters.codeBlock(ivaoClient.flightPlan.remarks),
+                            value: codeBlock(ivaoClient.flightPlan.remarks),
                             inline: false
                         }
                     );
@@ -182,7 +182,7 @@ export class Ivao {
                         },
                         {
                             name: "ATIS",
-                            value: Formatters.codeBlock(ivaoClient.atis.lines.map((line) => line.trim()).join("\n")),
+                            value: codeBlock(ivaoClient.atis.lines.map((line) => line.trim()).join("\n")),
                             inline: false
                         }
                     );

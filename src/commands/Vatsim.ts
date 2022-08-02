@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -49,7 +49,7 @@ export class Vatsim {
         callSign = callSign.toUpperCase();
 
         const vatsimEmbed = new EmbedBuilder()
-            .setTitle(`VATSIM: ${Formatters.inlineCode(callSign)}`)
+            .setTitle(`VATSIM: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: VATSIM API`
@@ -143,12 +143,12 @@ export class Vatsim {
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan?.route ?? "NA"),
+                            value: codeBlock(vatsimClient.flight_plan?.route ?? "NA"),
                             inline: false
                         },
                         {
                             name: "Remakes",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan?.remarks ?? "NA"),
+                            value: codeBlock(vatsimClient.flight_plan?.remarks ?? "NA"),
                             inline: false
                         }
                     );
@@ -169,7 +169,7 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: Formatters.codeBlock(vatsimClient.text_atis?.join("\n") || "NA"),
+                            value: codeBlock(vatsimClient.text_atis?.join("\n") || "NA"),
                             inline: false
                         }
                     );

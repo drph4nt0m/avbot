@@ -2,7 +2,7 @@ import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { EmbedBuilder, Formatters } from "discord.js";
+import { codeBlock, EmbedBuilder, inlineCode, time } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -45,7 +45,7 @@ export class Nats {
             ident = ident.toUpperCase();
 
             const natsEmbed = new EmbedBuilder()
-                .setTitle(`NAT: ${Formatters.inlineCode(`Track ${ident}`)}`)
+                .setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
                 .setColor("#0099ff")
                 .setFooter({
                     text: client.user.username
@@ -58,7 +58,7 @@ export class Nats {
                 nat.route.nodes.forEach((node) => {
                     route += `${node.ident} `;
                 });
-                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Route", Formatters.codeBlock(route)));
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Route", codeBlock(route)));
                 if (nat.route.eastLevels.length > 0) {
                     natsEmbed.addFields(ObjectUtil.singleFieldBuilder("East levels", `${nat.route.eastLevels.join(", ")}`));
                 }
@@ -66,8 +66,8 @@ export class Nats {
                     natsEmbed.addFields(ObjectUtil.singleFieldBuilder("West levels", `${nat.route.westLevels.join(", ")}`));
                 }
 
-                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validFrom).unix(), "R")})`;
-                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validTo).unix(), "R")})`;
+                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${time(dayjs(nat.validFrom).unix(), "R")})`;
+                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${time(dayjs(nat.validTo).unix(), "R")})`;
                 natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Validity", `${validFrom} to ${validTo}`));
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);

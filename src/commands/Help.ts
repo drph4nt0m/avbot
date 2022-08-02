@@ -1,5 +1,5 @@
 import { ICategory, NotBot } from "@discordx/utilities";
-import { ActionRowBuilder, CommandInteraction, EmbedBuilder, Formatters, InteractionResponse, SelectMenuBuilder, SelectMenuComponentOptionData, SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, CommandInteraction, EmbedBuilder, inlineCode, InteractionResponse, SelectMenuBuilder, SelectMenuComponentOptionData, SelectMenuInteraction } from "discord.js";
 import { Client, DApplicationCommand, Discord, Guard, MetadataStorage, SelectMenuComponent, Slash } from "discordx";
 
 import { GuildOnly } from "../guards/GuildOnly.js";
@@ -78,7 +78,7 @@ export class Help {
             }
 
             const name = ObjectUtil.validString(item.group) ? `/${item.group} ${item.name}` : `/${item.name}`;
-            const nameToDisplay = Formatters.inlineCode(name);
+            const nameToDisplay = inlineCode(name);
             embed.addFields(ObjectUtil.singleFieldBuilder(nameToDisplay, fieldValue, resultOfPage.length > 5));
         }
         return embed;

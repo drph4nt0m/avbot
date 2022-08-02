@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -116,9 +116,7 @@ export class Time {
             } else {
                 timeString = dayjs().utcOffset(data.gmtOffset).hour(Number.parseInt(HH)).minute(Number.parseInt(MM)).utc().format("HHmm");
             }
-            localEmbed
-                .setTitle(`${type} time at ${Formatters.inlineCode(icao)} when ${opposite.toLowerCase()} time is ${Formatters.inlineCode(`${time}${fromSuffix}`)}`)
-                .setDescription(`${timeString}${toSuffix}`);
+            localEmbed.setTitle(`${type} time at ${inlineCode(icao)} when ${opposite.toLowerCase()} time is ${inlineCode(`${time}${fromSuffix}`)}`).setDescription(`${timeString}${toSuffix}`);
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
             localEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);

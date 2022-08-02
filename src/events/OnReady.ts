@@ -1,4 +1,4 @@
-import { ActivityType, ChannelType, Formatters, InteractionType } from "discord.js";
+import { ActivityType, ChannelType, hideLinkEmbed, InteractionType } from "discord.js";
 import type { ArgsOf, Client } from "discordx";
 import { Discord, DIService, On } from "discordx";
 import { injectable } from "tsyringe";
@@ -60,7 +60,7 @@ export class OnReady {
                 }
                 return InteractionUtils.replyOrFollowUp(
                     interaction,
-                    `Oops, something went wrong. The best way to report this problem is to join our support server at ${Formatters.hideLinkEmbed("https://go.av8.dev/support")}.`
+                    `Oops, something went wrong. The best way to report this problem is to join our support server at ${hideLinkEmbed("https://go.av8.dev/support")}.`
                 );
             }
         }

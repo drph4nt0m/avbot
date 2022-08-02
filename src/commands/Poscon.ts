@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -49,7 +49,7 @@ export class Poscon {
         callSign = callSign.toUpperCase();
 
         const posconEmbed = new EmbedBuilder()
-            .setTitle(`POSCON: ${Formatters.inlineCode(callSign)}`)
+            .setTitle(`POSCON: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: POSCON API`
@@ -58,7 +58,7 @@ export class Poscon {
 
         try {
             let posconClient = (await this._posconManager.getClientInfo(callSign, type)) as PosconFlight | PosconAtc;
-            posconEmbed.setTitle(`POSCON: ${Formatters.inlineCode(callSign)}`);
+            posconEmbed.setTitle(`POSCON: ${inlineCode(callSign)}`);
 
             switch (type) {
                 case "pilot":
@@ -158,12 +158,12 @@ export class Poscon {
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(posconClient.flightplan?.route ?? "N/A"),
+                            value: codeBlock(posconClient.flightplan?.route ?? "N/A"),
                             inline: false
                         },
                         {
                             name: "Other",
-                            value: Formatters.codeBlock(posconClient.flightplan?.other ?? "N/A"),
+                            value: codeBlock(posconClient.flightplan?.other ?? "N/A"),
                             inline: false
                         }
                     );

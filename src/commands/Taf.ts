@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, CommandInteraction, EmbedBuilder, Formatters } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -45,7 +45,7 @@ export class Taf {
         icao = icao.toUpperCase();
 
         const tafEmbed = new EmbedBuilder()
-            .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+            .setTitle(`TAF: ${inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -55,7 +55,7 @@ export class Taf {
             const { raw, readable } = await this._avwxManager.getTaf(icao);
 
             if (rawOnlyData) {
-                tafEmbed.setDescription(Formatters.codeBlock(raw));
+                tafEmbed.setDescription(codeBlock(raw));
                 return InteractionUtils.replyOrFollowUp(interaction, {
                     embeds: [tafEmbed]
                 });
@@ -80,7 +80,7 @@ export class Taf {
 
             const tafEmbeds: EmbedBuilder[] = [];
             let tempEmbed = new EmbedBuilder()
-                .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+                .setTitle(`TAF: ${inlineCode(icao)}`)
                 .setColor("#0099ff")
                 .addFields(ObjectUtil.singleFieldBuilder("Raw Report", "```" + raw + "```"))
                 .setFooter({
@@ -98,7 +98,7 @@ export class Taf {
                 buffer += currentLine;
                 if (buffer.length > 600) {
                     tempEmbed = new EmbedBuilder()
-                        .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+                        .setTitle(`TAF: ${inlineCode(icao)}`)
                         .setColor("#0099ff")
                         .addFields(ObjectUtil.singleFieldBuilder(`Readable Report`, buffer))
                         .setFooter({
