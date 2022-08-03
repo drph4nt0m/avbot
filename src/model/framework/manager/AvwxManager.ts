@@ -1,7 +1,7 @@
 import type { AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-import { Formatters } from "discord.js";
+import { bold, time } from "discord.js";
 import accents from "remove-accents";
 import { singleton } from "tsyringe";
 
@@ -50,7 +50,7 @@ export class AvwxManager extends AbstractRequestEngine {
             const taf: Record<string, any> = response.data;
 
             let readable = "";
-            readable += `${Formatters.bold("Station : ")} `;
+            readable += `${bold("Station : ")} `;
 
             if (taf.info.icao) {
                 readable += `${taf.info.icao}`;
@@ -67,9 +67,9 @@ export class AvwxManager extends AbstractRequestEngine {
             readable += "\n";
 
             const observedTime = dayjs(taf.time.dt).utc();
-            readable += `${Formatters.bold("Observed at : ")} ${observedTime.format("HHmm[Z]")} (${Formatters.time(observedTime.unix(), "R")}) \n`;
+            readable += `${bold("Observed at : ")} ${observedTime.format("HHmm[Z]")} (${time(observedTime.unix(), "R")}) \n`;
 
-            readable += `${Formatters.bold("Report : ")} ${taf.speech}`;
+            readable += `${bold("Report : ")} ${taf.speech}`;
 
             return {
                 raw: taf.raw,
@@ -90,7 +90,7 @@ export class AvwxManager extends AbstractRequestEngine {
 
             const metar = response.data;
             let readable = "";
-            readable += `${Formatters.bold("Station : ")} `;
+            readable += `${bold("Station : ")} `;
 
             if (metar.info.icao) {
                 readable += `${metar.info.icao}`;
@@ -107,38 +107,38 @@ export class AvwxManager extends AbstractRequestEngine {
             readable += "\n";
 
             const observedTime = dayjs(metar.time.dt).utc();
-            readable += `${Formatters.bold("Observed at : ")} ${observedTime.format("HHmm[Z]")} (${Formatters.time(observedTime.unix(), "R")}) \n`;
+            readable += `${bold("Observed at : ")} ${observedTime.format("HHmm[Z]")} (${time(observedTime.unix(), "R")}) \n`;
 
             if (metar.translate.wind) {
-                readable += `${Formatters.bold("Wind : ")} ${metar.translate.wind} \n`;
+                readable += `${bold("Wind : ")} ${metar.translate.wind} \n`;
             }
 
             if (metar.translate.visibility) {
-                readable += `${Formatters.bold("Visibility : ")} ${metar.translate.visibility} \n`;
+                readable += `${bold("Visibility : ")} ${metar.translate.visibility} \n`;
             }
 
             if (metar.translate.temperature) {
-                readable += `${Formatters.bold("Temperature : ")} ${metar.translate.temperature} \n`;
+                readable += `${bold("Temperature : ")} ${metar.translate.temperature} \n`;
             }
 
             if (metar.translate.dewpoint) {
-                readable += `${Formatters.bold("Dew Point : ")} ${metar.translate.dewpoint} \n`;
+                readable += `${bold("Dew Point : ")} ${metar.translate.dewpoint} \n`;
             }
 
             if (metar.translate.altimeter) {
-                readable += `${Formatters.bold("Altimeter : ")} ${metar.translate.altimeter} \n`;
+                readable += `${bold("Altimeter : ")} ${metar.translate.altimeter} \n`;
             }
 
             if (metar.translate.clouds) {
-                readable += `${Formatters.bold("Clouds : ")} ${metar.translate.clouds} \n`;
+                readable += `${bold("Clouds : ")} ${metar.translate.clouds} \n`;
             }
 
             if (metar.translate.other) {
-                readable += `${Formatters.bold("Weather Phenomena : ")} ${metar.translate.other}\n`;
+                readable += `${bold("Weather Phenomena : ")} ${metar.translate.other}\n`;
             }
 
             if (metar.flight_rules) {
-                readable += `${Formatters.bold("Flight Rules : ")} ${metar.flight_rules}`;
+                readable += `${bold("Flight Rules : ")} ${metar.flight_rules}`;
             }
 
             return {

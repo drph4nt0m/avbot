@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -21,14 +21,14 @@ export class Metar {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async metar(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give METAR for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -42,19 +42,19 @@ export class Metar {
     ): Promise<void> {
         await interaction.deferReply();
         icao = icao.toUpperCase();
-        const metarEmbed = new MessageEmbed()
-            .setTitle(`METAR: ${Formatters.inlineCode(icao)}`)
+        const metarEmbed = new EmbedBuilder()
+            .setTitle(`METAR: ${inlineCode(icao)}`)
             .setColor("#0099ff")
             .setTimestamp();
         try {
             const { raw, readable } = await this._avwxManager.getMetar(icao);
             if (rawOnlyData) {
-                metarEmbed.setDescription(Formatters.codeBlock(raw));
+                metarEmbed.setDescription(codeBlock(raw));
             } else {
                 metarEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: Formatters.codeBlock(raw)
+                        value: codeBlock(raw)
                     },
                     {
                         name: "Readable Report",

@@ -1,6 +1,7 @@
 import { Category } from "@discordx/utilities";
+import { codeBlock } from "common-tags";
 import type { CommandInteraction } from "discord.js";
-import { AutocompleteInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
 import { injectable } from "tsyringe";
@@ -23,14 +24,14 @@ export class IcaoStation {
     })
     @Guard(
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async icaoStation(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give station information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -40,8 +41,8 @@ export class IcaoStation {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const stationEmbed = new MessageEmbed()
-            .setTitle(`Station: ${Formatters.inlineCode(icao)}`)
+        const stationEmbed = new EmbedBuilder()
+            .setTitle(`Station: ${inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -98,12 +99,12 @@ export class IcaoStation {
                 },
                 {
                     name: "Runways",
-                    value: station.runways ? Formatters.codeBlock(this.getRunwaysStr(station.runways)) : "Unknown",
+                    value: station.runways ? codeBlock(this.getRunwaysStr(station.runways)) : "Unknown",
                     inline: false
                 },
                 {
                     name: "Frequencies",
-                    value: frequenciesData.length > 0 ? Formatters.codeBlock(this.getFrequenciesStr(frequenciesData.frequencies)) : "Unknown",
+                    value: frequenciesData.length > 0 ? codeBlock(this.getFrequenciesStr(frequenciesData.frequencies)) : "Unknown",
                     inline: false
                 },
                 {

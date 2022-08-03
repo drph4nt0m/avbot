@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { CommandInteraction, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder } from "discord.js";
 import { Client, Discord, Guard, Slash } from "discordx";
 import process from "process";
 
@@ -16,12 +16,13 @@ export class Info {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public info(interaction: CommandInteraction, client: Client): Promise<void> {
-        const infoEmbed = new MessageEmbed()
+        const infoEmbed = new EmbedBuilder()
             .setTitle(client.user.username)
+            .setURL("https://bot.av8.dev")
             .setColor("#0099ff")
             .setThumbnail("https://bot.av8.dev/img/logo.png")
             .setFooter({
@@ -29,17 +30,17 @@ export class Info {
             })
             .setTimestamp();
 
-        const inviteButton = new MessageButton()
+        const inviteButton = new ButtonBuilder()
             .setLabel("Add to Discord")
-            .setStyle("LINK")
+            .setStyle(ButtonStyle.Link)
             .setURL("https://discord.com/oauth2/authorize?client_id=494888240617095168&permissions=274885302528&scope=bot%20applications.commands");
-        const supportServerInvite = new MessageButton().setLabel("Join our support server").setStyle("LINK").setURL("https://discord.gg/fjNqtz6");
-        const donateButton = new MessageButton().setLabel("Support Avbot").setStyle("LINK").setURL("https://go.av8.dev/donate");
-        const buttonsRow = new MessageActionRow().addComponents(inviteButton, supportServerInvite, donateButton);
+        const supportServerInvite = new ButtonBuilder().setLabel("Join our support server").setStyle(ButtonStyle.Link).setURL("https://discord.gg/fjNqtz6");
+        const donateButton = new ButtonBuilder().setLabel("Support Avbot").setStyle(ButtonStyle.Link).setURL("https://go.av8.dev/donate");
+        const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(inviteButton, supportServerInvite, donateButton);
 
         const shardUptime = process.uptime();
         const humanReadableUptime = ObjectUtil.timeToHuman(shardUptime, TIME_UNIT.seconds);
-        infoEmbed.addField("Uptime", humanReadableUptime);
+        infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Uptime", humanReadableUptime));
 
         let foundInGuild = false;
         if (interaction.inGuild()) {
@@ -47,12 +48,12 @@ export class Info {
             const botOwnerId = "442534266849460224";
             const botOwnerInGuild = guild.members.cache.has(botOwnerId);
             if (botOwnerInGuild) {
-                infoEmbed.addField("Owner", `<@${botOwnerId}>`);
+                infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Owner", `<@${botOwnerId}>`));
                 foundInGuild = true;
             }
         }
         if (!foundInGuild) {
-            infoEmbed.addField("Owner", "dr_ph4nt0m#8402");
+            infoEmbed.addFields(ObjectUtil.singleFieldBuilder("Owner", "dr_ph4nt0m#8402"));
         }
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [infoEmbed],

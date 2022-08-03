@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -24,7 +24,7 @@ export class Ivao {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         }),
         GuildOnly
     )
@@ -32,14 +32,14 @@ export class Ivao {
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
         @SlashOption("call-sign", {
             description: "What call sign would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, IvaoManager),
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         callSign: string,
@@ -49,8 +49,8 @@ export class Ivao {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const ivaoEmbed = new MessageEmbed()
-            .setTitle(`IVAO: ${Formatters.inlineCode(callSign)}`)
+        const ivaoEmbed = new EmbedBuilder()
+            .setTitle(`IVAO: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: IVAO API`
@@ -59,7 +59,7 @@ export class Ivao {
 
         try {
             let ivaoClient = (await this._ivaoManager.getClientInfo(callSign, type)) as IvaoPilot | IvaoAtc;
-            ivaoEmbed.setTitle(`IVAO: ${Formatters.inlineCode(callSign)} (open on Webeye)`);
+            ivaoEmbed.setTitle(`IVAO: ${inlineCode(callSign)} (open on Webeye)`);
             ivaoEmbed.addFields(
                 {
                     name: "Call Sign",
@@ -146,12 +146,12 @@ export class Ivao {
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(ivaoClient.flightPlan.route),
+                            value: codeBlock(ivaoClient.flightPlan.route),
                             inline: false
                         },
                         {
                             name: "Remarks",
-                            value: Formatters.codeBlock(ivaoClient.flightPlan.remarks),
+                            value: codeBlock(ivaoClient.flightPlan.remarks),
                             inline: false
                         }
                     );
@@ -182,7 +182,7 @@ export class Ivao {
                         },
                         {
                             name: "ATIS",
-                            value: Formatters.codeBlock(ivaoClient.atis.lines.map((line) => line.trim()).join("\n")),
+                            value: codeBlock(ivaoClient.atis.lines.map((line) => line.trim()).join("\n")),
                             inline: false
                         }
                     );

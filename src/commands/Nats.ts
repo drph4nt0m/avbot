@@ -2,7 +2,7 @@ import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { Formatters, MessageEmbed } from "discord.js";
+import { codeBlock, EmbedBuilder, inlineCode, time } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -27,7 +27,7 @@ export class Nats {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async nats(
@@ -44,8 +44,8 @@ export class Nats {
         if (ObjectUtil.validString(ident)) {
             ident = ident.toUpperCase();
 
-            const natsEmbed = new MessageEmbed()
-                .setTitle(`NAT: ${Formatters.inlineCode(`Track ${ident}`)}`)
+            const natsEmbed = new EmbedBuilder()
+                .setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
                 .setColor("#0099ff")
                 .setFooter({
                     text: client.user.username
@@ -58,17 +58,17 @@ export class Nats {
                 nat.route.nodes.forEach((node) => {
                     route += `${node.ident} `;
                 });
-                natsEmbed.addField("Route", Formatters.codeBlock(route));
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Route", codeBlock(route)));
                 if (nat.route.eastLevels.length > 0) {
-                    natsEmbed.addField("East levels", `${nat.route.eastLevels.join(", ")}`);
+                    natsEmbed.addFields(ObjectUtil.singleFieldBuilder("East levels", `${nat.route.eastLevels.join(", ")}`));
                 }
                 if (nat.route.westLevels.length > 0) {
-                    natsEmbed.addField("West levels", `${nat.route.westLevels.join(", ")}`);
+                    natsEmbed.addFields(ObjectUtil.singleFieldBuilder("West levels", `${nat.route.westLevels.join(", ")}`));
                 }
 
-                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validFrom).unix(), "R")})`;
-                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${Formatters.time(dayjs(nat.validTo).unix(), "R")})`;
-                natsEmbed.addField("Validity", `${validFrom} to ${validTo}`);
+                const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${time(dayjs(nat.validFrom).unix(), "R")})`;
+                const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${time(dayjs(nat.validTo).unix(), "R")})`;
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Validity", `${validFrom} to ${validTo}`));
             } catch (error) {
                 logger.error(`[${client.shard.ids}] ${error}`);
                 natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
@@ -77,7 +77,7 @@ export class Nats {
                 embeds: [natsEmbed]
             });
         }
-        const natsEmbed = new MessageEmbed()
+        const natsEmbed = new EmbedBuilder()
             .setTitle("NATs")
             .setColor("#0099ff")
             .setFooter({
@@ -88,7 +88,7 @@ export class Nats {
             const nats = await this._natsManager.getAllTracks();
 
             nats.forEach((track) => {
-                natsEmbed.addField(`Track ${track.ident}`, `${track.route.nodes[0].ident} - ${track.route.nodes[track.route.nodes.length - 1].ident}`);
+                natsEmbed.addFields(ObjectUtil.singleFieldBuilder(`Track ${track.ident}`, `${track.route.nodes[0].ident} - ${track.route.nodes[track.route.nodes.length - 1].ident}`));
             });
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);

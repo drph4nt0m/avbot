@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -23,7 +23,7 @@ export class Poscon {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         }),
         GuildOnly
     )
@@ -31,14 +31,14 @@ export class Poscon {
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
         @SlashOption("ident", {
             description: "What call sign or sector ID would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, PosconManager),
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         callSign: string,
@@ -48,8 +48,8 @@ export class Poscon {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const posconEmbed = new MessageEmbed()
-            .setTitle(`POSCON: ${Formatters.inlineCode(callSign)}`)
+        const posconEmbed = new EmbedBuilder()
+            .setTitle(`POSCON: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: POSCON API`
@@ -58,7 +58,7 @@ export class Poscon {
 
         try {
             let posconClient = (await this._posconManager.getClientInfo(callSign, type)) as PosconFlight | PosconAtc;
-            posconEmbed.setTitle(`POSCON: ${Formatters.inlineCode(callSign)}`);
+            posconEmbed.setTitle(`POSCON: ${inlineCode(callSign)}`);
 
             switch (type) {
                 case "pilot":
@@ -158,12 +158,12 @@ export class Poscon {
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(posconClient.flightplan?.route ?? "N/A"),
+                            value: codeBlock(posconClient.flightplan?.route ?? "N/A"),
                             inline: false
                         },
                         {
                             name: "Other",
-                            value: Formatters.codeBlock(posconClient.flightplan?.other ?? "N/A"),
+                            value: codeBlock(posconClient.flightplan?.other ?? "N/A"),
                             inline: false
                         }
                     );

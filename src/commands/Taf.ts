@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -8,7 +8,7 @@ import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils } from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("Advisory")
@@ -22,14 +22,14 @@ export class Taf {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async taf(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give TAF for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -44,8 +44,8 @@ export class Taf {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const tafEmbed = new MessageEmbed()
-            .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+        const tafEmbed = new EmbedBuilder()
+            .setTitle(`TAF: ${inlineCode(icao)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
@@ -55,7 +55,7 @@ export class Taf {
             const { raw, readable } = await this._avwxManager.getTaf(icao);
 
             if (rawOnlyData) {
-                tafEmbed.setDescription(Formatters.codeBlock(raw));
+                tafEmbed.setDescription(codeBlock(raw));
                 return InteractionUtils.replyOrFollowUp(interaction, {
                     embeds: [tafEmbed]
                 });
@@ -78,11 +78,11 @@ export class Taf {
                 });
             }
 
-            const tafEmbeds: MessageEmbed[] = [];
-            let tempEmbed = new MessageEmbed()
-                .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+            const tafEmbeds: EmbedBuilder[] = [];
+            let tempEmbed = new EmbedBuilder()
+                .setTitle(`TAF: ${inlineCode(icao)}`)
                 .setColor("#0099ff")
-                .addField("Raw Report", "```" + raw + "```")
+                .addFields(ObjectUtil.singleFieldBuilder("Raw Report", "```" + raw + "```"))
                 .setFooter({
                     text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                 })
@@ -97,10 +97,10 @@ export class Taf {
                 const currentLine = `${readableList[i]}. `;
                 buffer += currentLine;
                 if (buffer.length > 600) {
-                    tempEmbed = new MessageEmbed()
-                        .setTitle(`TAF: ${Formatters.inlineCode(icao)}`)
+                    tempEmbed = new EmbedBuilder()
+                        .setTitle(`TAF: ${inlineCode(icao)}`)
                         .setColor("#0099ff")
-                        .addField(`Readable Report`, buffer)
+                        .addFields(ObjectUtil.singleFieldBuilder(`Readable Report`, buffer))
                         .setFooter({
                             text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
                         })
@@ -113,7 +113,7 @@ export class Taf {
 
             tempEmbed = tafEmbed;
             if (buffer.length > 0) {
-                tafEmbeds.push(tempEmbed.addField(`Readable Report`, buffer));
+                tafEmbeds.push(tempEmbed.addFields(ObjectUtil.singleFieldBuilder(`Readable Report`, buffer)));
             }
             for (let i = 0; i < tafEmbeds.length; i += 1) {
                 tafEmbeds[i].setFooter({

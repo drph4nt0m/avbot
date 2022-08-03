@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -23,7 +23,7 @@ export class Vatsim {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         }),
         GuildOnly
     )
@@ -31,14 +31,14 @@ export class Vatsim {
         @SlashChoice("atc", "pilot")
         @SlashOption("type", {
             description: "What type of client would you like the bot to give information for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
         @SlashOption("call-sign", {
             description: "What call sign would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, VatsimManager),
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         callSign: string,
@@ -48,8 +48,8 @@ export class Vatsim {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const vatsimEmbed = new MessageEmbed()
-            .setTitle(`VATSIM: ${Formatters.inlineCode(callSign)}`)
+        const vatsimEmbed = new EmbedBuilder()
+            .setTitle(`VATSIM: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
             .setFooter({
                 text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: VATSIM API`
@@ -78,8 +78,8 @@ export class Vatsim {
             switch (type) {
                 case "pilot":
                     vatsimClient = vatsimClient as VatsimPilot;
-                    const departureAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.departure);
-                    const arrivalAirport = await this._airportManager.getAirport(vatsimClient.flight_plan.arrival);
+                    const departureAirport = vatsimClient.flight_plan ? await this._airportManager.getAirport(vatsimClient.flight_plan?.departure) : { name: "NA" };
+                    const arrivalAirport = vatsimClient.flight_plan ? await this._airportManager.getAirport(vatsimClient.flight_plan?.arrival) : { name: "NA" };
                     vatsimEmbed.addFields(
                         {
                             name: "Departure",
@@ -118,37 +118,37 @@ export class Vatsim {
                         },
                         {
                             name: "Cruising Speed",
-                            value: vatsimClient.flight_plan.cruise_tas,
+                            value: vatsimClient.flight_plan?.cruise_tas ?? "NA",
                             inline: true
                         },
                         {
                             name: "Cruising Level",
-                            value: vatsimClient.flight_plan.alternate,
+                            value: vatsimClient.flight_plan?.alternate ?? "NA",
                             inline: true
                         },
                         {
                             name: "Departure Time",
-                            value: vatsimClient.flight_plan.deptime.toString().padStart(4, "0") + "Z",
+                            value: vatsimClient.flight_plan ? vatsimClient.flight_plan?.deptime?.toString().padStart(4, "0") + "Z" : "NA",
                             inline: true
                         },
                         {
                             name: "EET",
-                            value: vatsimClient.flight_plan.enroute_time.toString().padStart(4, "0"),
+                            value: vatsimClient.flight_plan?.enroute_time?.toString().padStart(4, "0") ?? "NA",
                             inline: true
                         },
                         {
                             name: "Aircraft",
-                            value: vatsimClient.flight_plan.aircraft_faa,
+                            value: vatsimClient.flight_plan?.aircraft_faa ?? "NA",
                             inline: true
                         },
                         {
                             name: "Route",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan.route),
+                            value: codeBlock(vatsimClient.flight_plan?.route ?? "NA"),
                             inline: false
                         },
                         {
                             name: "Remakes",
-                            value: Formatters.codeBlock(vatsimClient.flight_plan.remarks),
+                            value: codeBlock(vatsimClient.flight_plan?.remarks ?? "NA"),
                             inline: false
                         }
                     );
@@ -169,7 +169,7 @@ export class Vatsim {
                         },
                         {
                             name: "ATIS",
-                            value: Formatters.codeBlock(vatsimClient.text_atis?.join("\n") || "NA"),
+                            value: codeBlock(vatsimClient.text_atis?.join("\n") || "NA"),
                             inline: false
                         }
                     );

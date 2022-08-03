@@ -1,56 +1,87 @@
-import { WebhookClient } from "discord.js";
-import { Discord, On } from "discordx";
+import { Colors, WebhookClient } from "discord.js";
+import { ArgsOf, Discord, On } from "discordx";
 import { injectable } from "tsyringe";
 
-import { EMBED_COLORS } from "../enums/EMBED_COLORS.js";
 import { Mongo } from "../model/db/Mongo.js";
 import { Property } from "../model/framework/decorators/Property.js";
 import type { NODE_ENV } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils } from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @injectable()
 export class OnShard {
-    @Property("SHARD_NOTIFICATION_WEBHOOK")
+    @Property("SHARD_NOTIFICATION_WEBHOOK", false)
     private readonly shardNotificationWebhook: string;
 
     @Property("NODE_ENV")
     private readonly environment: NODE_ENV;
 
-    private webhookClient: WebhookClient;
+    private readonly webhookClient: WebhookClient;
 
     public constructor(private _mongo: Mongo) {
-        this.webhookClient = new WebhookClient({ url: this.shardNotificationWebhook });
+        if (ObjectUtil.validString(this.shardNotificationWebhook)) {
+            this.webhookClient = new WebhookClient({ url: this.shardNotificationWebhook });
+        }
     }
 
     @On("shardReady")
-    private async shardReady([shardId]: [number]): Promise<void> {
+    private async shardReady([shardId]: ArgsOf<"shardReady">): Promise<void> {
         logger.info(`Shard ${shardId} ready!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} ready!`, color: EMBED_COLORS.INFO });
+        await InteractionUtils.sendWebhookMessage(
+            {
+                title: `Shard ${shardId} ready!`,
+                color: Colors.Blue
+            },
+            this.webhookClient
+        );
     }
 
     @On("shardResume")
-    private async shardResume([shardId]: [number]): Promise<void> {
+    private async shardResume([shardId]: ArgsOf<"shardResume">): Promise<void> {
         logger.info(`Shard ${shardId} resumed!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} resumed!`, color: EMBED_COLORS.INFO });
+        await InteractionUtils.sendWebhookMessage(
+            {
+                title: `Shard ${shardId} resumed!`,
+                color: Colors.Blue
+            },
+            this.webhookClient
+        );
     }
 
     @On("shardDisconnect")
-    private async shardDisconnect([shardId]: [number]): Promise<void> {
+    private async shardDisconnect([, shardId]: ArgsOf<"shardDisconnect">): Promise<void> {
         logger.info(`Shard ${shardId} disconnected!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} disconnected!`, color: EMBED_COLORS.ERROR });
+        await InteractionUtils.sendWebhookMessage(
+            {
+                title: `Shard ${shardId} disconnected!`,
+                color: Colors.Red
+            },
+            this.webhookClient
+        );
     }
 
     @On("shardReconnecting")
-    private async shardReconnecting([shardId]: [number]): Promise<void> {
+    private async shardReconnecting([shardId]: ArgsOf<"shardReconnecting">): Promise<void> {
         logger.info(`Shard ${shardId} reconnecting...`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} reconnecting...`, color: EMBED_COLORS.DEBUG });
+        await InteractionUtils.sendWebhookMessage(
+            {
+                title: `Shard ${shardId} reconnecting...`,
+                color: Colors.Yellow
+            },
+            this.webhookClient
+        );
     }
 
     @On("shardError")
-    private async shardError([shardId]: [number]): Promise<void> {
+    private async shardError([, shardId]: ArgsOf<"shardError">): Promise<void> {
         logger.info(`Shard ${shardId} encountered a connection error!`);
-        await InteractionUtils.sendWebhookMessage(this.webhookClient, { title: `Shard ${shardId} encountered a connection error!`, color: EMBED_COLORS.ERROR });
+        await InteractionUtils.sendWebhookMessage(
+            {
+                title: `Shard ${shardId} encountered a connection error!`,
+                color: Colors.Red
+            },
+            this.webhookClient
+        );
     }
 }

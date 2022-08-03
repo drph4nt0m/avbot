@@ -1,20 +1,19 @@
 import "reflect-metadata";
 
-import { Shard, ShardingManager, WebhookClient } from "discord.js";
+import { Colors, Shard, ShardingManager, WebhookClient } from "discord.js";
 import dotenv from "dotenv";
 import { container } from "tsyringe";
 
 import { BotServer } from "./api/BotServer.js";
-import { EMBED_COLORS } from "./enums/EMBED_COLORS.js";
 import { Property } from "./model/framework/decorators/Property.js";
 import logger from "./utils/LoggerFactory.js";
-import { InteractionUtils } from "./utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "./utils/Utils.js";
 
 export class Main {
     @Property("DISCORD_TOKEN")
     private static readonly token: string;
 
-    @Property("RESTART_NOTIFICATION_WEBHOOK")
+    @Property("RESTART_NOTIFICATION_WEBHOOK", false)
     private static readonly restartNotificationWebhook: string;
 
     private static readonly shardUptimeMap: Map<Shard, number> = new Map();
@@ -38,8 +37,17 @@ export class Main {
         setTimeout(async () => {
             container.registerInstance(ShardingManager, manager);
             container.resolve(BotServer);
-            const webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
-            await InteractionUtils.sendWebhookMessage(webhookClient, { title: `AvBot restarted!`, color: EMBED_COLORS.INFO, footer: { text: `Shards: ${manager.shards.size}` } });
+            if (ObjectUtil.validString(this.restartNotificationWebhook)) {
+                const webhookClient = new WebhookClient({ url: this.restartNotificationWebhook });
+                await InteractionUtils.sendWebhookMessage(
+                    {
+                        title: `AvBot restarted!`,
+                        color: Colors.Blue,
+                        footer: { text: `Shards: ${manager.shards.size}` }
+                    },
+                    webhookClient
+                );
+            }
         }, 10000);
     }
 

@@ -1,6 +1,6 @@
 import type { PermissionsType } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { Formatters, GuildChannel, GuildMember, MessageEmbed } from "discord.js";
+import { ChannelType, EmbedBuilder, GuildChannel, GuildMember, inlineCode, PermissionsBitField } from "discord.js";
 import type { Client, GuardFunction, Next } from "discordx";
 
 import logger from "../utils/LoggerFactory.js";
@@ -24,15 +24,15 @@ export function RequiredBotPerms(permissions: {
         if (!(channel instanceof GuildChannel) || !arg.inGuild()) {
             return next();
         }
-        const guild = arg.guild;
-        if (channel.isText()) {
-            if (!channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+        const me = channel.guild.members.me;
+        if (channel.type === ChannelType.GuildText) {
+            if (!channel.permissionsFor(me).has(PermissionsBitField.Flags.SendMessages)) {
                 logger.error(`[${client.shard.ids}] cannot send guard warning message to this channel`, arg);
                 return;
             }
         }
         const perms = typeof permissions.textChannel === "function" ? await permissions.textChannel(arg) : permissions.textChannel;
-        if (!channel.permissionsFor(guild.me).has(perms)) {
+        if (!channel.permissionsFor(me).has(perms)) {
             return InteractionUtils.replyOrFollowUp(
                 arg,
                 `AvBot doesn't have the required permissions to perform the action in this channel. Please enable "${perms.join(", ")}" under channel permissions for AvBot`
@@ -45,15 +45,15 @@ export function RequiredBotPerms(permissions: {
             if (member instanceof GuildMember) {
                 const voiceChannel = member?.voice?.channel;
                 if (voiceChannel) {
-                    if (!voiceChannel.permissionsFor(guild.me).has(voicePerms)) {
+                    if (!voiceChannel.permissionsFor(me).has(voicePerms)) {
                         return InteractionUtils.replyOrFollowUp(
                             arg,
                             `AvBot doesn't have permissions to connect and/or to speak in your voice channel. Please enable "${voicePerms.join(", ")}" under channel permissions for AvBot.`
                         );
                     }
                     if (!voiceChannel.joinable) {
-                        const embed = new MessageEmbed()
-                            .setTitle(Formatters.inlineCode(arg.commandName))
+                        const embed = new EmbedBuilder()
+                            .setTitle(inlineCode(arg.commandName))
                             .setColor("#ff0000")
                             .setDescription(`${member}, AvBot is unable to join the voice channel as it is already full.`)
                             .setFooter({
@@ -65,8 +65,8 @@ export function RequiredBotPerms(permissions: {
                         });
                     }
                 } else {
-                    const embed = new MessageEmbed()
-                        .setTitle(Formatters.inlineCode(arg.commandName))
+                    const embed = new EmbedBuilder()
+                        .setTitle(inlineCode(arg.commandName))
                         .setColor("#ff0000")
                         .setDescription(`${member}, you need to join a voice channel first.`)
                         .setFooter({

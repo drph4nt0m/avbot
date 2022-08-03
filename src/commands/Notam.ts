@@ -1,6 +1,6 @@
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { Category, NotBot } from "@discordx/utilities";
-import { AutocompleteInteraction, CommandInteraction, Formatters, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode, time } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -9,7 +9,7 @@ import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { Av8Manager } from "../model/framework/manager/Av8Manager.js";
 import type { Notam } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
-import { InteractionUtils } from "../utils/Utils.js";
+import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
 @Category("Advisory")
@@ -23,14 +23,14 @@ export class Notams {
     @Guard(
         NotBot,
         RequiredBotPerms({
-            textChannel: ["EMBED_LINKS"]
+            textChannel: ["EmbedLinks"]
         })
     )
     public async notam(
         @SlashOption("icao", {
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give NOTAMs for?",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
@@ -47,16 +47,16 @@ export class Notams {
 
         try {
             const notams = await this._av8Manager.getNotams(icao, upcoming);
-            const notamEmbeds: MessageEmbed[] = [];
+            const notamEmbeds: EmbedBuilder[] = [];
             for (const notam of notams) {
-                const notamEmbed = new MessageEmbed()
-                    .setTitle(`NOTAM: ${Formatters.inlineCode(notam.id)}`)
+                const notamEmbed = new EmbedBuilder()
+                    .setTitle(`NOTAM: ${inlineCode(notam.id)}`)
                     .setColor("#0099ff")
                     .setFooter({
                         text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
                     })
-                    .setDescription(Formatters.codeBlock(notam.raw))
-                    .addFields({ name: "Validity", value: this.getValidity(notam) })
+                    .setDescription(codeBlock(notam.raw))
+                    .addFields(ObjectUtil.singleFieldBuilder("Validity", this.getValidity(notam)))
                     .setTimestamp();
 
                 notamEmbeds.push(notamEmbed);
@@ -76,8 +76,8 @@ export class Notams {
             ).send();
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
-            const notamEmbed = new MessageEmbed()
-                .setTitle(`NOTAM: ${Formatters.inlineCode(icao)}`)
+            const notamEmbed = new EmbedBuilder()
+                .setTitle(`NOTAM: ${inlineCode(icao)}`)
                 .setColor("#ff0000")
                 .setFooter({
                     text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
@@ -94,9 +94,9 @@ export class Notams {
         let validityStr = notam.validity.phrase;
         if (notam.from !== "PERMANENT") {
             if (notam.to === "PERMANENT") {
-                validityStr += ` (Since ${Formatters.time(notam.from.unix())})`;
+                validityStr += ` (Since ${time(notam.from.unix())})`;
             } else {
-                validityStr += ` (${Formatters.time(notam.from.unix())} to ${Formatters.time(notam.to.unix())})`;
+                validityStr += ` (${time(notam.from.unix())} to ${time(notam.to.unix())})`;
             }
         }
 
