@@ -1,6 +1,5 @@
 import { Colors, WebhookClient } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
-import { injectable } from "tsyringe";
 
 import { Property } from "../model/framework/decorators/Property.js";
 import type { NODE_ENV } from "../model/Typeings.js";
