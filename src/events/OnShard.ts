@@ -2,14 +2,12 @@ import { Colors, WebhookClient } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { injectable } from "tsyringe";
 
-import { Mongo } from "../model/db/Mongo.js";
 import { Property } from "../model/framework/decorators/Property.js";
 import type { NODE_ENV } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 
 @Discord()
-@injectable()
 export class OnShard {
     @Property("SHARD_NOTIFICATION_WEBHOOK", false)
     private readonly shardNotificationWebhook: string;
@@ -19,7 +17,7 @@ export class OnShard {
 
     private readonly webhookClient: WebhookClient;
 
-    public constructor(private _mongo: Mongo) {
+    public constructor() {
         if (ObjectUtil.validString(this.shardNotificationWebhook)) {
             this.webhookClient = new WebhookClient({ url: this.shardNotificationWebhook });
         }
