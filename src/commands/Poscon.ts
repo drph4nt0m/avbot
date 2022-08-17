@@ -17,7 +17,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 export class Poscon {
     public constructor(private _posconManager: PosconManager, private _airportManager: AirportManager) {}
 
-    @Slash("poscon", {
+    @Slash({
         description: "Gives you the information for the chosen call sign on the POSCON network"
     })
     @Guard(
@@ -29,13 +29,15 @@ export class Poscon {
     )
     public async poscon(
         @SlashChoice("atc", "pilot")
-        @SlashOption("type", {
+        @SlashOption({
+            name: "type",
             description: "What type of client would you like the bot to give information for?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
-        @SlashOption("ident", {
+        @SlashOption({
+            name: "ident",
             description: "What call sign or sector ID would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, PosconManager),
             type: ApplicationCommandOptionType.String,

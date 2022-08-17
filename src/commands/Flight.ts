@@ -25,7 +25,7 @@ export class Flight {
         private _airportDataManager: AirportDataManager
     ) {}
 
-    @Slash("flight", {
+    @Slash({
         description: "[PREMIUM] Gives you the information for the chosen call sign of the real life flight"
     })
     @Guard(
@@ -40,7 +40,8 @@ export class Flight {
         })
     )
     public async flight(
-        @SlashOption("call-sign", {
+        @SlashOption({
+            name: "call-sign",
             description: "What call sign would you like the bot to give information for?",
             required: true
         })

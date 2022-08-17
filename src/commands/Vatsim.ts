@@ -17,7 +17,7 @@ import { InteractionUtils } from "../utils/Utils.js";
 export class Vatsim {
     public constructor(private _vatsimManager: VatsimManager, private _airportManager: AirportManager) {}
 
-    @Slash("vatsim", {
+    @Slash({
         description: "Gives you the information for the chosen call sign on the VATSIM network"
     })
     @Guard(
@@ -29,13 +29,15 @@ export class Vatsim {
     )
     public async vatsim(
         @SlashChoice("atc", "pilot")
-        @SlashOption("type", {
+        @SlashOption({
+            name: "type",
             description: "What type of client would you like the bot to give information for?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "atc" | "pilot",
-        @SlashOption("call-sign", {
+        @SlashOption({
+            name: "call-sign",
             description: "What call sign would you like the bot to give information for?",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, VatsimManager),
             type: ApplicationCommandOptionType.String,

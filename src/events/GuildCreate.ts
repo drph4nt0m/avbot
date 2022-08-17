@@ -17,7 +17,9 @@ export class GuildCreate {
 
     public constructor(private _onReady: OnReady) {}
 
-    @On("guildCreate")
+    @On({
+        event: "guildCreate"
+    })
     private async botJoins([guild]: ArgsOf<"guildCreate">, client: Client): Promise<void> {
         try {
             const welcomeEmbed = new EmbedBuilder()

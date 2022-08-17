@@ -15,7 +15,7 @@ import { InteractionUtils } from "../utils/Utils.js";
 export class Metar {
     public constructor(private _avwxManager: AvwxManager) {}
 
-    @Slash("metar", {
+    @Slash({
         description: "Gives you the latest METAR for the chosen airport"
     })
     @Guard(
@@ -25,14 +25,16 @@ export class Metar {
         })
     )
     public async metar(
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give METAR for?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
-        @SlashOption("raw-only", {
+        @SlashOption({
+            name: "raw-only",
             description: "Gives you only the raw METAR for the chosen airport",
             required: false
         })

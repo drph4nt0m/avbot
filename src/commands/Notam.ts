@@ -17,7 +17,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 export class Notams {
     public constructor(private _av8Manager: Av8Manager) {}
 
-    @Slash("notam", {
+    @Slash({
         description: "Gives you the active and upcoming NOTAMs for the chosen airport"
     })
     @Guard(
@@ -27,14 +27,16 @@ export class Notams {
         })
     )
     public async notam(
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give NOTAMs for?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
-        @SlashOption("upcoming", {
+        @SlashOption({
+            name: "upcoming",
             description: "Do you also want to get upcoming NOTAMs?",
             required: false
         })
