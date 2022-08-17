@@ -80,7 +80,7 @@ export class Time {
         icao: string,
         @SlashOption({
             name: "time",
-            description: 'Enter l"Enter local or zulu time as defined by your previous choices (\"HHmm\" format)"      type: ApplicationCommandOptionType.String,
+            description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
             required: true
         })
         time: string,
