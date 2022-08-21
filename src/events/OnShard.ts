@@ -22,7 +22,7 @@ export class OnShard {
         }
     }
 
-    @On("shardReady")
+    @On()
     private async shardReady([shardId]: ArgsOf<"shardReady">): Promise<void> {
         logger.info(`Shard ${shardId} ready!`);
         await InteractionUtils.sendWebhookMessage(
@@ -34,7 +34,7 @@ export class OnShard {
         );
     }
 
-    @On("shardResume")
+    @On()
     private async shardResume([shardId]: ArgsOf<"shardResume">): Promise<void> {
         logger.info(`Shard ${shardId} resumed!`);
         await InteractionUtils.sendWebhookMessage(
@@ -46,7 +46,7 @@ export class OnShard {
         );
     }
 
-    @On("shardDisconnect")
+    @On()
     private async shardDisconnect([, shardId]: ArgsOf<"shardDisconnect">): Promise<void> {
         logger.info(`Shard ${shardId} disconnected!`);
         await InteractionUtils.sendWebhookMessage(
@@ -58,7 +58,7 @@ export class OnShard {
         );
     }
 
-    @On("shardReconnecting")
+    @On()
     private async shardReconnecting([shardId]: ArgsOf<"shardReconnecting">): Promise<void> {
         logger.info(`Shard ${shardId} reconnecting...`);
         await InteractionUtils.sendWebhookMessage(
@@ -70,7 +70,7 @@ export class OnShard {
         );
     }
 
-    @On("shardError")
+    @On()
     private async shardError([, shardId]: ArgsOf<"shardError">): Promise<void> {
         logger.info(`Shard ${shardId} encountered a connection error!`);
         await InteractionUtils.sendWebhookMessage(

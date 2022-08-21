@@ -26,7 +26,8 @@ export class Atis {
 
     public constructor(private _avwxManager: AvwxManager) {}
 
-    @Slash("text", {
+    @Slash({
+        name: "text",
         description: "Gives you the live ATIS as text for the chosen airport"
     })
     @Guard(
@@ -36,7 +37,8 @@ export class Atis {
         })
     )
     public async atisText(
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: ApplicationCommandOptionType.String,
@@ -69,7 +71,8 @@ export class Atis {
         });
     }
 
-    @Slash("voice", {
+    @Slash({
+        name: "voice",
         description: "Gives you the live ATIS as voice for the chosen airport"
     })
     @Guard(
@@ -81,7 +84,8 @@ export class Atis {
         GuildOnly
     )
     public async atisVoice(
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give ATIS for?",
             type: ApplicationCommandOptionType.String,

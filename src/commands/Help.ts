@@ -26,7 +26,7 @@ export class Help {
         }
     }
 
-    @Slash("help", {
+    @Slash({
         description: "Get the description of all commands"
     })
     @Guard(NotBot, GuildOnly)
@@ -105,7 +105,9 @@ export class Help {
         return new ActionRowBuilder<SelectMenuBuilder>().addComponents(selectMenu);
     }
 
-    @SelectMenuComponent("help-category-selector")
+    @SelectMenuComponent({
+        id: "help-category-selector"
+    })
     private async selectCategory(interaction: SelectMenuInteraction, client: Client): Promise<InteractionResponse> {
         const catToShow = interaction.values[0];
         const categoryEmbed = await this.displayCategory(client, catToShow);

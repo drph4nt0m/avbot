@@ -27,7 +27,7 @@ export class Time {
 
     public constructor(private _avwxManager: AvwxManager, private _geonamesManager: GeonamesManager) {}
 
-    @Slash("zulu", {
+    @Slash({
         description: "Get the current zulu time"
     })
     @Guard(
@@ -51,7 +51,8 @@ export class Time {
         });
     }
 
-    @Slash("convert", {
+    @Slash({
+        name: "convert",
         description: "Get the zulu to local or local to zulu time conversions for any chosen airport"
     })
     @Guard(
@@ -62,22 +63,24 @@ export class Time {
     public async time(
         @SlashChoice({ name: "Local to Zulu", value: "Zulu" })
         @SlashChoice({ name: "Zulu to Local", value: "Local" })
-        @SlashOption("type", {
+        @SlashOption({
+            name: "type",
             description: "Convert time from what to what?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         type: "Zulu" | "Local",
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "Convert time for which ICAO?",
             type: ApplicationCommandOptionType.String,
             required: true
         })
         icao: string,
-        @SlashOption("time", {
+        @SlashOption({
+            name: "time",
             description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
-            type: ApplicationCommandOptionType.String,
             required: true
         })
         time: string,

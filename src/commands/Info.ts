@@ -10,7 +10,7 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 @Discord()
 @Category("Utility")
 export class Info {
-    @Slash("info", {
+    @Slash({
         description: "Provides information about AvBot, and links for adding the bot and joining the support server"
     })
     @Guard(

@@ -21,7 +21,7 @@ export class Nats {
 
     public constructor(private _natsManager: NatsManager) {}
 
-    @Slash("nats", {
+    @Slash({
         description: "Gives you the latest North Atlantic Tracks information"
     })
     @Guard(
@@ -31,7 +31,8 @@ export class Nats {
         })
     )
     public async nats(
-        @SlashOption("ident", {
+        @SlashOption({
+            name: "ident",
             description: "Which track would you like to get information about?",
             required: false
         })

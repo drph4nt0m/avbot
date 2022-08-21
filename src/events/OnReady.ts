@@ -30,7 +30,9 @@ export class OnReady {
         return client.initApplicationCommands();
     }
 
-    @On("ready")
+    @On({
+        event: "ready"
+    })
     private async initialise([client]: [Client]): Promise<void> {
         this.initDi();
         await this.initAppCommands(client);
@@ -38,7 +40,9 @@ export class OnReady {
         logger.info(`[${client.shard.ids}] Logged in as ${client.user.tag}! (${client.user.id})`);
     }
 
-    @On("interactionCreate")
+    @On({
+        event: "interactionCreate"
+    })
     private async intersectionInit([interaction]: ArgsOf<"interactionCreate">, client: Client): Promise<void> {
         try {
             await client.executeInteraction(interaction);

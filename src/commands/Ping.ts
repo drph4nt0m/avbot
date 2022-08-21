@@ -6,7 +6,7 @@ import { Client, Discord, Slash } from "discordx";
 @Discord()
 @Category("Utility")
 export class Ping {
-    @Slash("ping", {
+    @Slash({
         description: "Checks the AvBot's ping to the Discord server"
     })
     public async ping(interaction: CommandInteraction, client: Client): Promise<void> {

@@ -19,7 +19,8 @@ import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
 export class IcaoStation {
     public constructor(private _avwxManager: AvwxManager, private _airportManager: AirportManager) {}
 
-    @Slash("station", {
+    @Slash({
+        name: "station",
         description: "Gives you the station information for the chosen airport"
     })
     @Guard(
@@ -28,7 +29,8 @@ export class IcaoStation {
         })
     )
     public async icaoStation(
-        @SlashOption("icao", {
+        @SlashOption({
+            name: "icao",
             autocomplete: (interaction: AutocompleteInteraction) => InteractionUtils.search(interaction, AirportManager),
             description: "What ICAO would you like the bot to give station information for?",
             type: ApplicationCommandOptionType.String,
