@@ -67,7 +67,7 @@ export class Nats {
             .setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
             .setColor("#0099ff")
             .setFooter({
-                text: client.user.username
+                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
             })
             .setTimestamp();
         try {
@@ -86,6 +86,7 @@ export class Nats {
         if (!ObjectUtil.validString(ident)) {
             const allTracks = await this._natsManager.getAllTracks();
             ident = allTracks[0].ident;
+            embed.setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
         }
         const nat = await this._natsManager.getTrackInformation(ident);
         let route = "";
