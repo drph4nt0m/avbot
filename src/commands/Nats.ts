@@ -86,7 +86,7 @@ export class Nats {
         if (!ObjectUtil.validString(ident)) {
             const allTracks = await this._natsManager.getAllTracks();
             ident = allTracks[0].ident;
-            embed.setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
+            embed.setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`);
         }
         const nat = await this._natsManager.getTrackInformation(ident);
         let route = "";
