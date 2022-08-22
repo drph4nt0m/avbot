@@ -2,7 +2,7 @@ import { Category, NotBot } from "@discordx/utilities";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { ActionRowBuilder, codeBlock, EmbedBuilder, inlineCode, InteractionResponse, SelectMenuBuilder, SelectMenuComponentOptionData, SelectMenuInteraction, time } from "discord.js";
+import { ActionRowBuilder, codeBlock, EmbedBuilder, inlineCode, Message, SelectMenuBuilder, SelectMenuComponentOptionData, SelectMenuInteraction, time } from "discord.js";
 import { Client, Discord, Guard, SelectMenuComponent, Slash } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -42,6 +42,7 @@ export class Nats {
             .setTimestamp();
         try {
             const selectMenu = await this.getSelectDropdown();
+            await this.showEmbedBasedOnIdent(natsEmbed);
             return InteractionUtils.replyOrFollowUp(interaction, {
                 embeds: [natsEmbed],
                 components: [selectMenu]
@@ -58,7 +59,7 @@ export class Nats {
     @SelectMenuComponent({
         id: "nats-selector"
     })
-    private async selectCategory(interaction: SelectMenuInteraction, client: Client): Promise<InteractionResponse> {
+    private async selectCategory(interaction: SelectMenuInteraction, client: Client): Promise<Message> {
         await interaction.deferUpdate();
         const ident = interaction.values[0];
         const dropdown = await this.getSelectDropdown(ident);
@@ -70,30 +71,38 @@ export class Nats {
             })
             .setTimestamp();
         try {
-            const nat = await this._natsManager.getTrackInformation(ident);
-            let route = "";
-            nat.route.nodes.forEach((node) => {
-                route += `${node.ident} `;
+            await this.showEmbedBasedOnIdent(natsEmbed, ident);
+            return interaction.editReply({
+                embeds: [natsEmbed],
+                components: [dropdown]
             });
-            natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Route", codeBlock(route)));
-            if (nat.route.eastLevels.length > 0) {
-                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("East levels", `${nat.route.eastLevels.join(", ")}`));
-            }
-            if (nat.route.westLevels.length > 0) {
-                natsEmbed.addFields(ObjectUtil.singleFieldBuilder("West levels", `${nat.route.westLevels.join(", ")}`));
-            }
-
-            const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${time(dayjs(nat.validFrom).unix(), "R")})`;
-            const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${time(dayjs(nat.validTo).unix(), "R")})`;
-            natsEmbed.addFields(ObjectUtil.singleFieldBuilder("Validity", `${validFrom} to ${validTo}`));
         } catch (error) {
             logger.error(`[${client.shard.ids}] ${error}`);
             natsEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${error.message}`);
         }
-        return interaction.update({
-            embeds: [natsEmbed],
-            components: [dropdown]
+    }
+
+    private async showEmbedBasedOnIdent(embed: EmbedBuilder, ident?: string): Promise<void> {
+        if (!ObjectUtil.validString(ident)) {
+            const allTracks = await this._natsManager.getAllTracks();
+            ident = allTracks[0].ident;
+        }
+        const nat = await this._natsManager.getTrackInformation(ident);
+        let route = "";
+        nat.route.nodes.forEach((node) => {
+            route += `${node.ident} `;
         });
+        embed.addFields(ObjectUtil.singleFieldBuilder("Route", codeBlock(route)));
+        if (nat.route.eastLevels.length > 0) {
+            embed.addFields(ObjectUtil.singleFieldBuilder("East levels", `${nat.route.eastLevels.join(", ")}`));
+        }
+        if (nat.route.westLevels.length > 0) {
+            embed.addFields(ObjectUtil.singleFieldBuilder("West levels", `${nat.route.westLevels.join(", ")}`));
+        }
+
+        const validFrom = `${dayjs(nat.validFrom).utc().format("HHmm[Z]")} (${time(dayjs(nat.validFrom).unix(), "R")})`;
+        const validTo = `${dayjs(nat.validTo).utc().format("HHmm[Z]")} (${time(dayjs(nat.validTo).unix(), "R")})`;
+        embed.addFields(ObjectUtil.singleFieldBuilder("Validity", `${validFrom} to ${validTo}`));
     }
 
     private async getSelectDropdown(defaultValue?: string): Promise<ActionRowBuilder<SelectMenuBuilder>> {
