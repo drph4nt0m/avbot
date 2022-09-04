@@ -6,34 +6,38 @@
 <h3 align="center"3>Aviation enthusiast's friendly neighborhood bot</h3>
 
 <p align="center">
-  <a href="https://status.av8.dev"><img alt="Bot Status" title="Bot Status" src="https://betteruptime.com/status-badges/v1/monitor/ekgl.svg"></a>
+  <a href="https://status.av8.dev"><img alt="Bot Status" src="https://betteruptime.com/status-badges/v1/monitor/ekgl.svg"></a>
 </p>
 
 <p align="center">
-  <a href="#"><img alt="Version" title="Version" src="https://img.shields.io/github/package-json/v/drph4nt0m/avbot-v3/main?style=for-the-badge"></a>
-  <a href="https://github.com/drph4nt0m/avbot-v3/blob/main/LICENSE"><img alt="License" title="License" src="https://img.shields.io/badge/license-GPL--3.0--only-orange?style=for-the-badge"></a>
-  <a href="./CODE_OF_CONDUCT.md"><img alt="Contributor Covenant" title="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4?style=for-the-badge"></a>
+  <a href="#"><img alt="Version" src="https://img.shields.io/github/package-json/v/drph4nt0m/avbot-v3/main?style=for-the-badge"></a>
+  <a href="https://github.com/drph4nt0m/avbot-v3/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-GPL--3.0--only-orange?style=for-the-badge"></a>
+  <a href="./CODE_OF_CONDUCT.md"><img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img alt="CircleCI Build Status" title="CircleCI Build Status" src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge"></a>
-  <a href="https://depfu.com/github/drph4nt0m/avbot?project_id=15573"><img alt="Depfu - Summary of all dependencies" title="Depfu - Summary of all dependencies" src="https://img.shields.io/depfu/dependencies/github/drph4nt0m/avbot?style=for-the-badge"></a>
-  <a href="https://github.com/drph4nt0m/avbot/issues"><img alt="GitHub Issues" title="GitHub Issues" src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge"></a>
-  <a href="https://github.com/drph4nt0m/avbot/pulls"><img alt="GitHub Pull Requests" title="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge"></a>
+  <a href="https://circleci.com/gh/drph4nt0m/avbot/tree/main"><img alt="CircleCI Build Status" src="https://img.shields.io/circleci/build/github/drph4nt0m/avbot/main?style=for-the-badge"></a>
+  <a href="https://depfu.com/github/drph4nt0m/avbot?project_id=15573"><img alt="Depfu - Summary of all dependencies" src="https://img.shields.io/depfu/dependencies/github/drph4nt0m/avbot?style=for-the-badge"></a>
+  <a href="https://github.com/drph4nt0m/avbot/issues"><img alt="GitHub Issues" src="https://img.shields.io/github/issues/drph4nt0m/avbot?style=for-the-badge"></a>
+  <a href="https://github.com/drph4nt0m/avbot/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/drph4nt0m/avbot?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Active Issues" title="DeepSource Active Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
-  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Resolved Issues" title="DeepSource Resolved Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
-  <a href="https://snyk.io/test/github/drph4nt0m/avbot"><img alt="Snyk Vulnerabilities" title="Snyk Vulnerabilities" src="https://img.shields.io/snyk/vulnerabilities/github/drph4nt0m/avbot?style=flat-square"></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Active Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=active+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://deepsource.io/gh/drph4nt0m/avbot/?ref=repository-badge"><img alt="DeepSource Resolved Issues" src="https://deepsource.io/gh/drph4nt0m/avbot.svg/?label=resolved+issues&show_trend=true&token=s4CU8uBqMfWhlMsbMVrxksre"/></a>
+  <a href="https://snyk.io/test/github/drph4nt0m/avbot"><img alt="Snyk Vulnerabilities" src="https://img.shields.io/snyk/vulnerabilities/github/drph4nt0m/avbot?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <a href="https://app.circleci.com/insights/github/drph4nt0m/avbot/workflows/deploy/overview?branch=main&reporting-window=last-30-days&insights-snapshot=true"><img alt="CircleCI Build Status Insights" title="CircleCI Build Status Insights" src="https://dl.circleci.com/insights-snapshot/gh/drph4nt0m/avbot/main/deploy/badge.svg?window=30d"></a>
+  <a href="https://app.circleci.com/insights/github/drph4nt0m/avbot/workflows/deploy/overview?branch=main&reporting-window=last-30-days&insights-snapshot=true"><img alt="CircleCI Build Status Insights" src="https://dl.circleci.com/insights-snapshot/gh/drph4nt0m/avbot/main/deploy/badge.svg?window=30d"></a>
  </p>
 
 <p align="center">
-  <a href="https://discord.gg/fjNqtz6"><img alt="Discord Support Server" title="Discord Support Server" src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3"></a>
+  <a href="https://discord.gg/fjNqtz6"><img alt="Discord Support Server" src="https://discord.com/api/guilds/524087427875209227/embed.png?style=banner3"></a>
+ </p>
+ 
+ <p align="center">
+  <a href="https://www.digitalocean.com/?refcode=ff075d55e140&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img alt="DigitalOcean Referral Badge" src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" /></a>
  </p>
 
 ## Commands
