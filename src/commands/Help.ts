@@ -274,25 +274,28 @@ export class Help {
         if (ObjectUtil.isValidArray(applicationCommandPermissions)) {
             loop: for (const applicationCommandPermission of applicationCommandPermissions) {
                 switch (applicationCommandPermission.type) {
-                    case ApplicationCommandPermissionType.Channel:
+                    case ApplicationCommandPermissionType.Channel: {
                         if (applicationCommandPermission.id === channelId) {
                             addOrRemove(applicationCommandPermission.permission, toRemove, catCommand);
                             break loop;
                         }
                         break;
-                    case ApplicationCommandPermissionType.User:
+                    }
+                    case ApplicationCommandPermissionType.User: {
                         if (applicationCommandPermission.id === member.id) {
                             addOrRemove(applicationCommandPermission.permission, toRemove, catCommand);
                             break loop;
                         }
                         break;
-                    case ApplicationCommandPermissionType.Role:
+                    }
+                    case ApplicationCommandPermissionType.Role: {
                         const memberRoles = [...member.roles.cache.values()];
                         if (memberRoles.some((role) => role.id === applicationCommandPermission.id)) {
                             addOrRemove(applicationCommandPermission.permission, toRemove, catCommand);
                             break loop;
                         }
                         break;
+                    }
                 }
             }
         }
