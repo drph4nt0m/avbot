@@ -16,7 +16,10 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Time")
-@SlashGroup({ name: "time" })
+@SlashGroup({
+    name: "time",
+    description: "add description"
+})
 @SlashGroup("time")
 @injectable()
 export class Time {
@@ -81,7 +84,8 @@ export class Time {
         @SlashOption({
             name: "time",
             description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
-            required: true
+            required: true,
+            type: ApplicationCommandOptionType.String
         })
         time: string,
         interaction: CommandInteraction,

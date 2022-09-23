@@ -16,7 +16,10 @@ import { InteractionUtils } from "../utils/Utils.js";
 
 @Discord()
 @Category("Advisory")
-@SlashGroup({ name: "atis" })
+@SlashGroup({
+    name: "atis",
+    description: "add description"
+})
 @SlashGroup("atis")
 @injectable()
 export class Atis {

@@ -36,6 +36,7 @@ export class Metar {
         @SlashOption({
             name: "raw-only",
             description: "Gives you only the raw METAR for the chosen airport",
+            type: ApplicationCommandOptionType.Boolean,
             required: false
         })
         rawOnlyData: boolean,

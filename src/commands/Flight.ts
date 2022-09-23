@@ -1,6 +1,6 @@
 import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, EmbedBuilder, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -43,6 +43,7 @@ export class Flight {
         @SlashOption({
             name: "call-sign",
             description: "What call sign would you like the bot to give information for?",
+            type: ApplicationCommandOptionType.String,
             required: true
         })
         callSign: string,

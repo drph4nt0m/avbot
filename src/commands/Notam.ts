@@ -38,7 +38,8 @@ export class Notams {
         @SlashOption({
             name: "upcoming",
             description: "Do you also want to get upcoming NOTAMs?",
-            required: false
+            required: false,
+            type: ApplicationCommandOptionType.Boolean
         })
         upcoming: boolean,
         interaction: CommandInteraction,

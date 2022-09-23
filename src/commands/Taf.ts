@@ -37,7 +37,8 @@ export class Taf {
         @SlashOption({
             name: "raw-only",
             description: "Gives you only the raw TAF for the chosen airport",
-            required: false
+            required: false,
+            type: ApplicationCommandOptionType.Boolean
         })
         rawOnlyData: boolean,
         interaction: CommandInteraction,
