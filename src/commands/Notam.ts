@@ -10,6 +10,7 @@ import { Av8Manager } from "../model/framework/manager/Av8Manager.js";
 import type { Notam } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Advisory")
@@ -52,12 +53,9 @@ export class Notams {
             const notams = await this._av8Manager.getNotams(icao, upcoming);
             const notamEmbeds: EmbedBuilder[] = [];
             for (const notam of notams) {
-                const notamEmbed = new EmbedBuilder()
+                const notamEmbed = new AvBotEmbedBuilder("Av8 API")
                     .setTitle(`NOTAM: ${inlineCode(notam.id)}`)
                     .setColor("#0099ff")
-                    .setFooter({
-                        text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
-                    })
                     .setDescription(codeBlock(notam.raw))
                     .addFields(ObjectUtil.singleFieldBuilder("Validity", this.getValidity(notam)))
                     .setTimestamp();
@@ -79,12 +77,9 @@ export class Notams {
             ).send();
         } catch (err) {
             logger.error(`[${client.shard.ids}] ${err}`);
-            const notamEmbed = new EmbedBuilder()
+            const notamEmbed = new AvBotEmbedBuilder("Av8 API")
                 .setTitle(`NOTAM: ${inlineCode(icao)}`)
                 .setColor("#ff0000")
-                .setFooter({
-                    text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Av8 API`
-                })
                 .setDescription(`${interaction.member}, ${err.message}`)
                 .setTimestamp();
             return InteractionUtils.replyOrFollowUp(interaction, {

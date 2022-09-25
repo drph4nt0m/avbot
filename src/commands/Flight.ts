@@ -1,6 +1,6 @@
 import { Category, RateLimit, TIME_UNIT } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { ApplicationCommandOptionType, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -13,6 +13,7 @@ import { AviationStackManager } from "../model/framework/manager/AviationStackMa
 import { OpenSkyManager } from "../model/framework/manager/OpenSkyManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("IRL Aviation")
@@ -53,12 +54,9 @@ export class Flight {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const liveEmbed = new EmbedBuilder()
+        const liveEmbed = new AvBotEmbedBuilder("OpenSky Network API", "AviationStack", "AeroDataBox", "AirportData")
             .setTitle(`Flight: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: The OpenSky Network API | AviationStack | AeroDataBox | AirportData`
-            })
             .setTimestamp();
         let icao24 = null;
         try {

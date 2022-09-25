@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -10,6 +10,7 @@ import { VatsimManager } from "../model/framework/manager/VatsimManager.js";
 import type { VatsimAtc, VatsimPilot } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Flight Sim Network")
@@ -50,12 +51,9 @@ export class Vatsim {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const vatsimEmbed = new EmbedBuilder()
+        const vatsimEmbed = new AvBotEmbedBuilder("VATSIM API")
             .setTitle(`VATSIM: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: VATSIM API`
-            })
             .setTimestamp();
 
         try {

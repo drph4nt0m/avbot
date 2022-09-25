@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -11,6 +11,7 @@ import type { IvaoAtc, IvaoPilot } from "../model/Typeings.js";
 import { IvaoAtcRatingEnum, IvaoPilotRatingEnum } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Flight Sim Network")
@@ -51,12 +52,9 @@ export class Ivao {
         await interaction.deferReply();
         callSign = callSign.toUpperCase();
 
-        const ivaoEmbed = new EmbedBuilder()
+        const ivaoEmbed = new AvBotEmbedBuilder("IVAO API")
             .setTitle(`IVAO: ${inlineCode(callSign)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: IVAO API`
-            })
             .setTimestamp();
 
         try {

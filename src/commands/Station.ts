@@ -1,7 +1,7 @@
 import { Category } from "@discordx/utilities";
 import { codeBlock } from "common-tags";
 import type { CommandInteraction } from "discord.js";
-import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import accents from "remove-accents";
 import { injectable } from "tsyringe";
@@ -12,6 +12,7 @@ import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import type { AirportFrequency, Runway, Station } from "../model/Typeings.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("IRL Aviation")
@@ -43,12 +44,9 @@ export class IcaoStation {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const stationEmbed = new EmbedBuilder()
+        const stationEmbed = new AvBotEmbedBuilder("AVWX")
             .setTitle(`Station: ${inlineCode(icao)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-            })
             .setTimestamp();
         try {
             const station = await this._avwxManager.getStation(icao);
