@@ -83,7 +83,7 @@ export class Taf {
             let tempEmbed = new AvBotEmbedBuilder("AVWX")
                 .setTitle(`TAF: ${inlineCode(icao)}`)
                 .setColor("#0099ff")
-                .addFields(ObjectUtil.singleFieldBuilder("Raw Report", "```" + raw + "```"))
+                .addFields(ObjectUtil.singleFieldBuilder("Raw Report", codeBlock(raw)))
                 .setTimestamp();
 
             tafEmbeds.push(tempEmbed);
