@@ -39,7 +39,7 @@ export class Time {
             textChannel: ["EmbedLinks"]
         })
     )
-    public async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
+    public async zulu(interaction: CommandInteraction): Promise<void> {
         await interaction.deferReply();
         const localEmbed = new AvBotEmbedBuilder().setTitle(`Zulu time`).setColor("#0099ff").setDescription(dayjs().utc().format("HHmm[Z]")).setTimestamp();
 
