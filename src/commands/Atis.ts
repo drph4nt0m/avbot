@@ -19,7 +19,7 @@ import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 @Category("Advisory")
 @SlashGroup({
     name: "atis",
-    description: "add description"
+    description: "Get the live ATIS (Automatic Terminal Information Service) for any airport"
 })
 @SlashGroup("atis")
 @injectable()
