@@ -66,7 +66,7 @@ export class Taf {
                 tafEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: "```" + raw + "```"
+                        value: codeBlock(raw)
                     },
                     {
                         name: "Readable Report",
