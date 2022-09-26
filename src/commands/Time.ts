@@ -19,7 +19,7 @@ import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 @Category("Time")
 @SlashGroup({
     name: "time",
-    description: "add description"
+    description: "Get the current zulu time or a conversion from zulu to local time or local time to zulu time for any airport"
 })
 @SlashGroup("time")
 @injectable()
