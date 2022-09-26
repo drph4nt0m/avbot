@@ -128,7 +128,7 @@ export class Poscon {
                         },
                         {
                             name: "Departure Time",
-                            value: posconClient.flightplan ? posconClient.flightplan.dep_time + "Z" : "N/A",
+                            value: posconClient.flightplan ? `${posconClient.flightplan.dep_time}Z` : "N/A",
                             inline: true
                         },
                         {
