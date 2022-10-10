@@ -10,6 +10,7 @@ import { RequiredBotPerms } from "../guards/RequiredBotPerms.js";
 import { NatsManager } from "../model/framework/manager/NatsManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Advisory")
@@ -33,13 +34,7 @@ export class Nats {
     public async nats(interaction: CommandInteraction, client: Client): Promise<void> {
         await interaction.deferReply();
 
-        const natsEmbed = new EmbedBuilder()
-            .setTitle("NATs")
-            .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
-            })
-            .setTimestamp();
+        const natsEmbed = new AvBotEmbedBuilder("Flight Plan Database").setTitle("NATs").setColor("#0099ff").setTimestamp();
         try {
             const selectMenu = await this.getSelectDropdown();
             await this.showEmbedBasedOnIdent(natsEmbed);
@@ -63,12 +58,9 @@ export class Nats {
         await interaction.deferUpdate();
         const ident = interaction.values[0];
         const dropdown = await this.getSelectDropdown(ident);
-        const natsEmbed = new EmbedBuilder()
+        const natsEmbed = new AvBotEmbedBuilder("Flight Plan Database")
             .setTitle(`NAT: ${inlineCode(`Track ${ident}`)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: Flight Plan Database`
-            })
             .setTimestamp();
         try {
             await this.showEmbedBasedOnIdent(natsEmbed, ident);

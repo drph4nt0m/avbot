@@ -1,6 +1,6 @@
 import { singleton } from "tsyringe";
 
-import type { PropertyTYpe } from "../engine/IPropertyResolutionEngine.js";
+import type { PropertyType } from "../engine/IPropertyResolutionEngine.js";
 import { PropertyResolutionFactory } from "../factory/impl/PropertyResolutionFactory.js";
 
 @singleton()
@@ -13,10 +13,10 @@ export class PropertyResolutionManager {
     /**
      * Get system property
      * @param {string} prop
-     * @returns {PropertyTYpe}
+     * @returns {PropertyType}
      */
-    public getProperty(prop: string): PropertyTYpe {
-        let propValue: PropertyTYpe = null;
+    public getProperty(prop: string): PropertyType {
+        let propValue: PropertyType = null;
         for (const resolutionEngine of this._propertyResolutionFactory.engines) {
             const resolvedProp = resolutionEngine.getProperty(prop);
             if (resolvedProp !== null) {

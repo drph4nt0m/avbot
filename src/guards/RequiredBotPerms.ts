@@ -1,10 +1,11 @@
 import type { PermissionsType } from "@discordx/utilities";
 import type { CommandInteraction } from "discord.js";
-import { ChannelType, EmbedBuilder, GuildChannel, GuildMember, inlineCode, PermissionsBitField } from "discord.js";
+import { ChannelType, GuildChannel, GuildMember, inlineCode, PermissionsBitField } from "discord.js";
 import type { Client, GuardFunction, Next } from "discordx";
 
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 /**
  * THis ensures the bot has the required permissions to execute the command
@@ -52,27 +53,17 @@ export function RequiredBotPerms(permissions: {
                         );
                     }
                     if (!voiceChannel.joinable) {
-                        const embed = new EmbedBuilder()
+                        const embed = new AvBotEmbedBuilder()
                             .setTitle(inlineCode(arg.commandName))
                             .setColor("#ff0000")
                             .setDescription(`${member}, AvBot is unable to join the voice channel as it is already full.`)
-                            .setFooter({
-                                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
-                            })
                             .setTimestamp();
                         return InteractionUtils.replyOrFollowUp(arg, {
                             embeds: [embed]
                         });
                     }
                 } else {
-                    const embed = new EmbedBuilder()
-                        .setTitle(inlineCode(arg.commandName))
-                        .setColor("#ff0000")
-                        .setDescription(`${member}, you need to join a voice channel first.`)
-                        .setFooter({
-                            text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
-                        })
-                        .setTimestamp();
+                    const embed = new AvBotEmbedBuilder().setTitle(inlineCode(arg.commandName)).setColor("#ff0000").setDescription(`${member}, you need to join a voice channel first.`).setTimestamp();
                     return InteractionUtils.replyOrFollowUp(arg, {
                         embeds: [embed]
                     });

@@ -22,11 +22,6 @@ export class OnReady {
     public constructor(private _mongo: Mongo) {}
 
     public initAppCommands(client: Client): Promise<void> {
-        if (this.environment === "production") {
-            return client.initGlobalApplicationCommands({
-                log: true
-            });
-        }
         return client.initApplicationCommands();
     }
 
@@ -54,18 +49,26 @@ export class OnReady {
                 }
             }
         } catch (e) {
-            const me = interaction.guild.members.me;
+            if (e instanceof Error) {
+                logger.error(e.message);
+            } else {
+                logger.error(e);
+            }
+            const me = interaction?.guild?.members?.me ?? interaction.user;
             if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.MessageComponent) {
-                logger.error(`[${client.shard.ids}] ${e}`, interaction);
                 const channel = interaction.channel;
-                if (channel.type !== ChannelType.GuildText || !channel.permissionsFor(me).has("SendMessages")) {
+                if (channel && (channel.type !== ChannelType.GuildText || !channel.permissionsFor(me).has("SendMessages"))) {
                     logger.error(`[${client.shard.ids}] cannot send warning message to this channel`, interaction);
                     return;
                 }
-                return InteractionUtils.replyOrFollowUp(
-                    interaction,
-                    `Oops, something went wrong. The best way to report this problem is to join our support server at ${hideLinkEmbed("https://go.av8.dev/support")}.`
-                );
+                try {
+                    await InteractionUtils.replyOrFollowUp(
+                        interaction,
+                        `Oops, something went wrong. The best way to report this problem is to join our support server at ${hideLinkEmbed("https://go.av8.dev/support")}.`
+                    );
+                } catch (e) {
+                    logger.error(e);
+                }
             }
         }
     }

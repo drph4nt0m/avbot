@@ -1,5 +1,5 @@
 import { Category, NotBot } from "@discordx/utilities";
-import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, codeBlock, CommandInteraction, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -8,6 +8,7 @@ import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Advisory")
@@ -36,6 +37,7 @@ export class Metar {
         @SlashOption({
             name: "raw-only",
             description: "Gives you only the raw METAR for the chosen airport",
+            type: ApplicationCommandOptionType.Boolean,
             required: false
         })
         rawOnlyData: boolean,
@@ -44,7 +46,7 @@ export class Metar {
     ): Promise<void> {
         await interaction.deferReply();
         icao = icao.toUpperCase();
-        const metarEmbed = new EmbedBuilder()
+        const metarEmbed = new AvBotEmbedBuilder("AVWX")
             .setTitle(`METAR: ${inlineCode(icao)}`)
             .setColor("#0099ff")
             .setTimestamp();
@@ -68,9 +70,6 @@ export class Metar {
             logger.error(`[${client.shard.ids}] ${err}`);
             metarEmbed.setColor("#ff0000").setDescription(`${interaction.member}, ${err.message}`);
         }
-        metarEmbed.setFooter({
-            text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-        });
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [metarEmbed]
         });

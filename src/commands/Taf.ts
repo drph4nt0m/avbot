@@ -9,6 +9,7 @@ import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils, ObjectUtil } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Advisory")
@@ -37,7 +38,8 @@ export class Taf {
         @SlashOption({
             name: "raw-only",
             description: "Gives you only the raw TAF for the chosen airport",
-            required: false
+            required: false,
+            type: ApplicationCommandOptionType.Boolean
         })
         rawOnlyData: boolean,
         interaction: CommandInteraction,
@@ -46,12 +48,9 @@ export class Taf {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const tafEmbed = new EmbedBuilder()
+        const tafEmbed = new AvBotEmbedBuilder("AVWX")
             .setTitle(`TAF: ${inlineCode(icao)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-            })
             .setTimestamp();
         try {
             const { raw, readable } = await this._avwxManager.getTaf(icao);
@@ -67,7 +66,7 @@ export class Taf {
                 tafEmbed.addFields(
                     {
                         name: "Raw Report",
-                        value: "```" + raw + "```"
+                        value: codeBlock(raw)
                     },
                     {
                         name: "Readable Report",
@@ -81,13 +80,10 @@ export class Taf {
             }
 
             const tafEmbeds: EmbedBuilder[] = [];
-            let tempEmbed = new EmbedBuilder()
+            let tempEmbed = new AvBotEmbedBuilder("AVWX")
                 .setTitle(`TAF: ${inlineCode(icao)}`)
                 .setColor("#0099ff")
-                .addFields(ObjectUtil.singleFieldBuilder("Raw Report", "```" + raw + "```"))
-                .setFooter({
-                    text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-                })
+                .addFields(ObjectUtil.singleFieldBuilder("Raw Report", codeBlock(raw)))
                 .setTimestamp();
 
             tafEmbeds.push(tempEmbed);
@@ -99,13 +95,10 @@ export class Taf {
                 const currentLine = `${readableList[i]}. `;
                 buffer += currentLine;
                 if (buffer.length > 600) {
-                    tempEmbed = new EmbedBuilder()
+                    tempEmbed = new AvBotEmbedBuilder("AVWX")
                         .setTitle(`TAF: ${inlineCode(icao)}`)
                         .setColor("#0099ff")
                         .addFields(ObjectUtil.singleFieldBuilder(`Readable Report`, buffer))
-                        .setFooter({
-                            text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-                        })
                         .setTimestamp();
 
                     tafEmbeds.push(tempEmbed);
@@ -119,7 +112,7 @@ export class Taf {
             }
             for (let i = 0; i < tafEmbeds.length; i += 1) {
                 tafEmbeds[i].setFooter({
-                    text: `${client.user.username} • Page ${i + 1} of ${tafEmbeds.length} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
+                    text: `Page ${i + 1} of ${tafEmbeds.length}`
                 });
             }
 

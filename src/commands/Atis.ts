@@ -13,10 +13,14 @@ import { AirportManager } from "../model/framework/manager/AirportManager.js";
 import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Advisory")
-@SlashGroup({ name: "atis" })
+@SlashGroup({
+    name: "atis",
+    description: "Get the live ATIS (Automatic Terminal Information Service) for any airport"
+})
 @SlashGroup("atis")
 @injectable()
 export class Atis {
@@ -51,12 +55,9 @@ export class Atis {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const atisEmbed = new EmbedBuilder()
+        const atisEmbed = new AvBotEmbedBuilder("AVWX")
             .setTitle(`ATIS: ${inlineCode(icao)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-            })
             .setTimestamp();
         try {
             const { speech } = await this._avwxManager.getMetar(icao);
@@ -98,12 +99,9 @@ export class Atis {
         await interaction.deferReply();
         icao = icao.toUpperCase();
 
-        const atisEmbed = new EmbedBuilder()
+        const atisEmbed = new AvBotEmbedBuilder("AVWX")
             .setTitle(`ATIS: ${inlineCode(icao)}`)
             .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums • Source: AVWX`
-            })
             .setTimestamp();
         let atisFound = false;
         const voiceChannel = (interaction.member as GuildMember).voice.channel;

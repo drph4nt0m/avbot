@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 import type { CommandInteraction } from "discord.js";
-import { ApplicationCommandOptionType, AutocompleteInteraction, EmbedBuilder, inlineCode } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction, inlineCode } from "discord.js";
 import { Client, Discord, Guard, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
 
@@ -13,10 +13,14 @@ import { AvwxManager } from "../model/framework/manager/AvwxManager.js";
 import { GeonamesManager } from "../model/framework/manager/GeonamesManager.js";
 import logger from "../utils/LoggerFactory.js";
 import { InteractionUtils } from "../utils/Utils.js";
+import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 
 @Discord()
 @Category("Time")
-@SlashGroup({ name: "time" })
+@SlashGroup({
+    name: "time",
+    description: "Get the current zulu time or a conversion from zulu to local time or local time to zulu time for any airport"
+})
 @SlashGroup("time")
 @injectable()
 export class Time {
@@ -35,16 +39,9 @@ export class Time {
             textChannel: ["EmbedLinks"]
         })
     )
-    public async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
+    public async zulu(interaction: CommandInteraction): Promise<void> {
         await interaction.deferReply();
-        const localEmbed = new EmbedBuilder()
-            .setTitle(`Zulu time`)
-            .setColor("#0099ff")
-            .setDescription(dayjs().utc().format("HHmm[Z]"))
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
-            })
-            .setTimestamp();
+        const localEmbed = new AvBotEmbedBuilder().setTitle(`Zulu time`).setColor("#0099ff").setDescription(dayjs().utc().format("HHmm[Z]")).setTimestamp();
 
         return InteractionUtils.replyOrFollowUp(interaction, {
             embeds: [localEmbed]
@@ -81,7 +78,8 @@ export class Time {
         @SlashOption({
             name: "time",
             description: 'Enter local or zulu time as defined by your previous choices ("HHmm" format)',
-            required: true
+            required: true,
+            type: ApplicationCommandOptionType.String
         })
         time: string,
         interaction: CommandInteraction,
@@ -93,13 +91,7 @@ export class Time {
         const fromSuffix = type === "Local" ? "Z" : "hrs";
         const toSuffix = type === "Local" ? "hrs" : "Z";
 
-        const localEmbed = new EmbedBuilder()
-            .setTitle(`${type} Time`)
-            .setColor("#0099ff")
-            .setFooter({
-                text: `${client.user.username} • This is not a source for official briefing • Please use the appropriate forums`
-            })
-            .setTimestamp();
+        const localEmbed = new AvBotEmbedBuilder().setTitle(`${type} Time`).setColor("#0099ff").setTimestamp();
         try {
             this.validateTime(time, opposite);
         } catch (e) {

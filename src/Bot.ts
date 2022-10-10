@@ -27,9 +27,6 @@ class Bot {
             intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.DirectMessages, IntentsBitField.Flags.GuildVoiceStates],
             silent: this.environment !== "development"
         };
-        if (this.environment === "development") {
-            clientOps["botGuilds"] = [(client: Client): string[] => client.guilds.cache.map((guild) => guild.id)];
-        }
         const client = new Client(clientOps);
 
         if (!container.isRegistered(Client)) {
