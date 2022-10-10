@@ -128,7 +128,7 @@ export class Vatsim {
                         },
                         {
                             name: "Departure Time",
-                            value: vatsimClient.flight_plan ? vatsimClient.flight_plan?.deptime?.toString().padStart(4, "0") + "Z" : "NA",
+                            value: vatsimClient.flight_plan ? `${vatsimClient.flight_plan?.deptime?.toString().padStart(4, "0")}Z` : "NA",
                             inline: true
                         },
                         {

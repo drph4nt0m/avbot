@@ -131,7 +131,7 @@ export class Ivao {
                         },
                         {
                             name: "Departure Time",
-                            value: this.parseTime(ivaoClient.flightPlan.departureTime) + "Z",
+                            value: `${this.parseTime(ivaoClient.flightPlan.departureTime)}Z`,
                             inline: true
                         },
                         {

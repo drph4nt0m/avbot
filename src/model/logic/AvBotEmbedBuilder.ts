@@ -28,7 +28,7 @@ export class AvBotEmbedBuilder extends EmbedBuilder {
     }
 
     public override setFooter(options: EmbedFooterOptions | null): this {
-        let text: string = "";
+        let text = "";
         if (options) {
             text = `${options.text}\n`;
         }

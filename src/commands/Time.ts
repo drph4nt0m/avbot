@@ -19,7 +19,7 @@ import { AvBotEmbedBuilder } from "../model/logic/AvBotEmbedBuilder.js";
 @Category("Time")
 @SlashGroup({
     name: "time",
-    description: "add description"
+    description: "Get the current zulu time or a conversion from zulu to local time or local time to zulu time for any airport"
 })
 @SlashGroup("time")
 @injectable()
@@ -39,7 +39,7 @@ export class Time {
             textChannel: ["EmbedLinks"]
         })
     )
-    public async zulu(interaction: CommandInteraction, client: Client): Promise<void> {
+    public async zulu(interaction: CommandInteraction): Promise<void> {
         await interaction.deferReply();
         const localEmbed = new AvBotEmbedBuilder().setTitle(`Zulu time`).setColor("#0099ff").setDescription(dayjs().utc().format("HHmm[Z]")).setTimestamp();
 
