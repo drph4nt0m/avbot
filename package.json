@@ -57,7 +57,7 @@
         "reflect-metadata": "^0.1.13",
         "remove-accents": "^0.4.2",
         "tmp": "^0.2.1",
-        "toad-scheduler": "^1.6.1",
+        "toad-scheduler": "^2.2.0",
         "tsyringe": "^4.7.0",
         "winston": "^3.8.2"
     },
