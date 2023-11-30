@@ -32,7 +32,7 @@
     "dependencies": {
         "@discordjs/opus": "^0.8.0",
         "@discordjs/voice": "^0.11.0",
-        "@discordx/importer": "^1.1.10",
+        "@discordx/importer": "^1.2.0",
         "@discordx/pagination": "^3.0.0",
         "@discordx/utilities": "^5.0.0",
         "@overnightjs/core": "^1.7.6",
